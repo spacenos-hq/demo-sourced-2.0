@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourced by Dibbs 2.0 — Master Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0B0C0E;
+  --surface: #111316;
+  --surface2: #181B1F;
+  --surface3: #1E2228;
+  --border: rgba(255,255,255,.07);
+  --border2: rgba(255,255,255,.12);
+  --gold: #D4A843;
+  --gold2: #F0C96A;
+  --gold-dim: rgba(212,168,67,.15);
+  --gold-border: rgba(212,168,67,.25);
+  --white: #F2EDE4;
+  --mist: #7A8091;
+  --mist2: #9BA3B2;
+  --teal: #3ECFB2;
+  --teal-dim: rgba(62,207,178,.12);
+  --red: #E85D5D;
+  --red-dim: rgba(232,93,93,.12);
+  --blue: #5B9CF6;
+  --blue-dim: rgba(91,156,246,.12);
+  --green: #52C97B;
+  --green-dim: rgba(82,201,123,.12);
+  --amber: #F0A84E;
+  --amber-dim: rgba(240,168,78,.12);
+  --purple: #A87FE8;
+  --purple-dim: rgba(168,127,232,.12);
+  --r: 8px;
+  --r2: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--black); color:var(--white); overflow-x:hidden; line-height:1.6; }
+::selection { background:var(--gold-dim); color:var(--gold2); }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--surface); }
+::-webkit-scrollbar-thumb { background:var(--gold); border-radius:2px; }
+
+/* ── COVER ── */
+.cover {
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  background:var(--black);
+}
+.cover-noise {
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+.cover-grid {
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(212,168,67,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(212,168,67,.06) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  z-index:0;
+}
+.cover-glow {
+  position:absolute;
+  top:-20%;left:50%;transform:translateX(-50%);
+  width:900px;height:600px;
+  background:radial-gradient(ellipse, rgba(212,168,67,.12) 0%, transparent 65%);
+  z-index:0;pointer-events:none;
+}
+.cover-main {
+  position:relative;z-index:2;
+  padding:clamp(60px,8vw,120px) clamp(24px,6vw,80px) 0;
+}
+.cover-eyebrow {
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:32px;
+}
+.cover-eyebrow::before {
+  content:'';width:28px;height:1px;background:var(--gold);
+}
+h1.cover-title {
+  font-family:'Syne',sans-serif;
+  font-size:clamp(52px,9vw,108px);
+  font-weight:800;
+  line-height:.95;
+  letter-spacing:-.04em;
+  color:var(--white);
+  margin-bottom:8px;
+}
+h1.cover-title em { font-style:italic;color:var(--gold); font-weight:600; }
+.cover-subtitle {
+  font-family:'Syne',sans-serif;
+  font-size:clamp(16px,2.5vw,26px);
+  font-weight:400;
+  color:var(--mist);
+  margin-bottom:56px;
+  letter-spacing:-.01em;
+}
+.cover-meta-strip {
+  position:relative;z-index:2;
+  background:var(--surface);
+  border-top:1px solid var(--border2);
+  padding:20px clamp(24px,6vw,80px);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:0;
+}
+.cover-meta-item {
+  padding:0 24px 0 0;
+  border-right:1px solid var(--border);
+}
+.cover-meta-item:last-child{border-right:none;}
+.cmeta-label {
+  font-family:'DM Mono',monospace;font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mist);margin-bottom:5px;
+}
+.cmeta-val {
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
+  color:var(--white);
+}
+@media(max-width:720px){
+  .cover-meta-strip{grid-template-columns:1fr 1fr;gap:20px;}
+  .cover-meta-item{border-right:none;}
+}
+
+/* ── NAV ── */
+#nav {
+  position:sticky;top:0;z-index:200;
+  background:rgba(11,12,14,.96);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+  padding:0 clamp(24px,6vw,80px);
+  display:flex;align-items:center;gap:4px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+#nav::-webkit-scrollbar{display:none;}
+.nav-item {
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mist);
+  padding:14px 14px;
+  white-space:nowrap;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .2s;
+  text-decoration:none;
+  display:block;
+}
+.nav-item:hover{color:var(--white);}
+.nav-item.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* ── SECTIONS ── */
+.section {
+  padding:clamp(64px,8vw,112px) clamp(24px,6vw,80px);
+  border-bottom:1px solid var(--border);
+}
+.section:last-child{border-bottom:none;}
+.section-header {
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:24px;margin-bottom:48px;flex-wrap:wrap;
+}
+.section-label {
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+h2.section-title {
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,4vw,46px);
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:1.05;
+  color:var(--white);
+}
+.section-desc {
+  font-size:16px;color:var(--mist2);
+  max-width:520px;line-height:1.75;
+  margin-top:12px;
+}
+
+/* ── CALLOUT BOX ── */
+.callout {
+  border-radius:var(--r2);
+  padding:24px 28px;
+  margin:0 0 32px;
+  display:flex;gap:16px;align-items:flex-start;
+}
+.callout.gold{background:var(--gold-dim);border:1px solid var(--gold-border);}
+.callout.teal{background:var(--teal-dim);border:1px solid rgba(62,207,178,.25);}
+.callout.red{background:var(--red-dim);border:1px solid rgba(232,93,93,.2);}
+.callout.blue{background:var(--blue-dim);border:1px solid rgba(91,156,246,.2);}
+.callout-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.callout-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14.5px;color:var(--white);margin-bottom:5px;}
+.callout-body{font-size:13.5px;color:var(--mist2);line-height:1.65;}
+
+/* ── BADGES ── */
+.badge {
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  font-weight:500;letter-spacing:.08em;
+  padding:3px 9px;border-radius:4px;
+  white-space:nowrap;
+}
+.badge.p0{background:rgba(232,93,93,.18);color:#F08080;border:1px solid rgba(232,93,93,.25);}
+.badge.p1{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(240,168,78,.25);}
+.badge.p2{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(91,156,246,.2);}
+.badge.ops{background:rgba(168,127,232,.15);color:var(--purple);border:1px solid rgba(168,127,232,.2);}
+.badge.revenue{background:var(--green-dim);color:var(--green);border:1px solid rgba(82,201,123,.2);}
+.badge.quality{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(62,207,178,.2);}
+.badge.growth{background:var(--gold-dim);color:var(--gold2);border:1px solid var(--gold-border);}
+.badge.risk{background:var(--red-dim);color:var(--red);border:1px solid rgba(232,93,93,.2);}
+.badge.phase{background:var(--surface3);color:var(--mist2);border:1px solid var(--border2);}
+.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+
+/* ── CHIP ── */
+.chip {
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'DM Mono',monospace;font-size:10.5px;
+  padding:4px 10px;border-radius:20px;
+  background:var(--surface3);border:1px solid var(--border2);
+  color:var(--mist2);white-space:nowrap;
+}
+.chip.data{background:rgba(91,156,246,.1);border-color:rgba(91,156,246,.2);color:var(--blue);}
+.chip.action{background:rgba(212,168,67,.1);border-color:rgba(212,168,67,.2);color:var(--gold2);}
+.chip.tech{background:rgba(62,207,178,.08);border-color:rgba(62,207,178,.2);color:var(--teal);}
+.chip-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;}
+
+/* ── FEATURE CARDS ── */
+.feature-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  margin-bottom:12px;
+  overflow:hidden;
+  transition:border-color .2s;
+}
+.feature-card:hover{border-color:var(--border2);}
+.feature-card.open{border-color:var(--gold-border);}
+.fc-header {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;cursor:pointer;
+  gap:16px;
+  user-select:none;
+}
+.fc-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0;}
+.fc-num {
+  font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--mist);letter-spacing:.08em;
+  flex-shrink:0;min-width:28px;
+}
+.fc-title {
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:600;
+  color:var(--white);
+}
+.fc-badges{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;}
+.fc-chevron {
+  width:22px;height:22px;border-radius:50%;
+  background:var(--surface3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .25s;font-size:12px;color:var(--mist);
+}
+.feature-card.open .fc-chevron{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold);transform:rotate(180deg);}
+.fc-body {
+  display:none;
+  padding:0 24px 24px;
+  border-top:1px solid var(--border);
+}
+.fc-body.open{display:block;}
+.fc-desc{font-size:14px;color:var(--mist2);line-height:1.7;margin:18px 0 14px;}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+@media(max-width:640px){.fc-grid{grid-template-columns:1fr;}}
+.fc-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;}
+.fc-block-label{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);margin-bottom:8px;}
+.fc-block-content{font-size:13.5px;color:var(--mist2);line-height:1.65;}
+.fc-metric{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border);}
+.fc-metric:last-child{border-bottom:none;}
+.fc-metric-label{font-size:13px;color:var(--mist);}
+.fc-metric-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--white);}
+
+/* ── STATS GRID ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:48px;}
+@media(max-width:800px){.stats-grid{grid-template-columns:1fr 1fr;}}
+.stat-card{background:var(--surface);padding:28px 24px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);}
+.stat-n{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--gold2);letter-spacing:-.02em;line-height:1;}
+.stat-l{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist);margin-top:8px;}
+.stat-sub{font-size:12.5px;color:var(--mist2);margin-top:6px;line-height:1.5;}
+
+/* ── PITCH DECK SLIDES ── */
+.pitch-slide{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:36px;
+  margin-bottom:16px;
+  position:relative;
+  overflow:hidden;
+}
+.pitch-slide.featured{
+  background:linear-gradient(135deg,var(--surface2),var(--surface3));
+  border-color:var(--gold-border);
+}
+.pitch-slide::before{
+  content:'';position:absolute;top:0;left:0;width:3px;height:100%;
+  background:var(--gold);
+}
+.pitch-slide.featured::before{background:linear-gradient(180deg,var(--gold2),var(--teal));}
+.pitch-slide-num{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;display:block;
+}
+.pitch-slide-title{
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:700;
+  color:var(--white);margin-bottom:12px;letter-spacing:-.02em;
+}
+.pitch-slide-body{font-size:14px;color:var(--mist2);line-height:1.75;}
+.pitch-bullets{margin-top:16px;display:flex;flex-direction:column;gap:9px;}
+.pb{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--mist2);}
+.pb::before{content:'→';color:var(--gold);font-size:12px;flex-shrink:0;margin-top:2px;}
+.pitch-metrics-row{display:flex;gap:32px;margin-top:20px;flex-wrap:wrap;}
+.pm-box{text-align:center;}
+.pm-box-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--gold2);}
+.pm-box-l{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist);margin-top:3px;}
+
+/* ── ADMIN PANEL SPECS ── */
+.admin-section-title{
+  font-family:'Syne',sans-serif;font-size:18px;font-weight:700;
+  color:var(--white);margin-bottom:16px;margin-top:36px;
+  letter-spacing:-.01em;
+  display:flex;align-items:center;gap:10px;
+}
+.admin-section-title::before{content:'';width:4px;height:20px;background:var(--gold);border-radius:2px;flex-shrink:0;}
+.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:800px){.admin-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.admin-grid{grid-template-columns:1fr;}}
+.admin-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:18px 20px;
+  transition:all .2s;
+}
+.admin-card:hover{border-color:var(--border2);background:var(--surface3);}
+.admin-card-icon{font-size:20px;margin-bottom:10px;}
+.admin-card-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;}
+.admin-card-desc{font-size:13px;color:var(--mist2);line-height:1.6;}
+.data-schema{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.data-schema-header{
+  background:var(--surface3);
+  padding:12px 18px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mist2);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.data-row{
+  display:grid;grid-template-columns:200px 120px 1fr;
+  padding:11px 18px;
+  border-bottom:1px solid var(--border);
+  align-items:center;gap:12px;
+}
+.data-row:last-child{border-bottom:none;}
+.data-row:hover{background:var(--surface3);}
+.data-field{font-family:'DM Mono',monospace;font-size:12px;color:var(--teal);}
+.data-type{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);}
+.data-desc{font-size:12.5px;color:var(--mist2);}
+@media(max-width:700px){.data-row{grid-template-columns:1fr;gap:4px;}.data-type{display:inline;}}
+
+/* ── PHASING TABLE ── */
+.phase-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.phase-table th{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mist);
+  background:var(--surface2);
+  padding:12px 18px;text-align:left;
+  border-bottom:1px solid var(--border2);
+}
+.phase-table td{
+  padding:13px 18px;font-size:13.5px;
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+}
+.phase-table tr:hover td{background:var(--surface2);}
+.phase-table .phase-tag{
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.08em;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.ptag-1{color:var(--teal);}
+.ptag-2{color:var(--gold);}
+.ptag-3{color:var(--purple);}
+.phase-table .wk{font-family:'DM Mono',monospace;font-size:12px;color:var(--mist);}
+.phase-table .feat-list{display:flex;flex-direction:column;gap:4px;}
+.phase-table .feat-list li{font-size:12.5px;color:var(--mist2);list-style:none;display:flex;gap:6px;}
+.phase-table .feat-list li::before{content:'·';color:var(--gold);flex-shrink:0;}
+.phase-table .kpi{font-family:'DM Mono',monospace;font-size:12px;color:var(--green);}
+.phase-table .cost{font-family:'DM Mono',monospace;font-size:12px;color:var(--amber);}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0;}
+
+/* ── RISK MATRIX ── */
+.risk-row{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:16px 20px;
+  border-radius:var(--r);
+  background:var(--surface);
+  border:1px solid var(--border);
+  margin-bottom:10px;
+}
+.risk-score{
+  width:44px;height:44px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:800;
+  flex-shrink:0;
+}
+.rs-high{background:var(--red-dim);color:var(--red);border:1px solid rgba(232,93,93,.3);}
+.rs-med{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(240,168,78,.3);}
+.rs-low{background:var(--green-dim);color:var(--green);border:1px solid rgba(82,201,123,.3);}
+.risk-title{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--white);margin-bottom:4px;letter-spacing:.04em;}
+.risk-body{font-size:13px;color:var(--mist2);line-height:1.6;}
+.risk-mitigation{font-size:12px;color:var(--teal);margin-top:5px;}
+
+/* ── COMPARISON TABLE ── */
+.comp-table{width:100%;border-collapse:collapse;}
+.comp-table th{
+  font-family:'DM Mono',monospace;font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mist);padding:12px 16px;text-align:left;
+  border-bottom:1px solid var(--border2);background:var(--surface2);
+}
+.comp-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);}
+.comp-table tr.sourced-row td{background:var(--gold-dim);font-weight:600;}
+.comp-table tr:hover:not(.sourced-row) td{background:var(--surface2);}
+.ck{color:var(--teal);font-size:15px;}.cx{color:rgba(255,255,255,.18);font-size:15px;}.cpart{color:var(--amber);font-size:12px;}
+.cs-tag{background:var(--gold-dim);color:var(--gold2);border:1px solid var(--gold-border);font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;letter-spacing:.06em;}
+
+/* ── FOOTER ── */
+.doc-footer{
+  background:var(--surface);
+  border-top:1px solid var(--border2);
+  padding:32px clamp(24px,6vw,80px);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.doc-footer-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gold);}
+.doc-footer-note{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--mist);}
+
+/* ── ANIMATIONS ── */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.fade-in.visible{opacity:1;transform:none;}
+
+/* ── PROGRESS BAR ── */
+#doc-progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:999;width:0%;transition:width .1s;}
+
+/* ── BACK TO TOP ── */
+#btt{
+  position:fixed;bottom:28px;right:28px;z-index:100;
+  width:40px;height:40px;border-radius:8px;
+  background:var(--surface);border:1px solid var(--border2);
+  color:var(--mist);font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;opacity:0;pointer-events:none;
+}
+#btt.show{opacity:1;pointer-events:auto;}
+#btt:hover{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold);}
+
+/* responsive */
+@media(max-width:560px){
+  .fc-header{flex-direction:column;align-items:flex-start;gap:10px;}
+  .fc-badges{display:none;}
+  h1.cover-title{font-size:48px;}
+}
+</style>
+</head>
+<body>
+
+<div id="doc-progress"></div>
+<div id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<!-- ═══════════════════════════════════════
+     COVER
+═══════════════════════════════════════ -->
+<div class="cover" id="top">
+  <div class="cover-noise"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-main">
+    <div class="cover-eyebrow">Master Specification Document</div>
+    <h1 class="cover-title">Sourced<br>by <em>Dibbs</em> 2.0</h1>
+    <p class="cover-subtitle">Autonomous Procurement Platform for US Construction Contractors</p>
+  </div>
+  <div class="cover-meta-strip">
+    <div class="cover-meta-item"><div class="cmeta-label">Version</div><div class="cmeta-val">2.0 · March 2026</div></div>
+    <div class="cover-meta-item"><div class="cmeta-label">Build Horizon</div><div class="cmeta-val">18 Months</div></div>
+    <div class="cover-meta-item"><div class="cmeta-label">Phase 1 Budget</div><div class="cmeta-val">$24–28K</div></div>
+    <div class="cover-meta-item"><div class="cmeta-label">Target Market</div><div class="cmeta-val">$2T US Construction</div></div>
+    <div class="cover-meta-item"><div class="cmeta-label">Series A Target</div><div class="cmeta-val">$3–5M @ Month 18</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     STICKY NAV
+═══════════════════════════════════════ -->
+<nav id="nav">
+  <a class="nav-item active" href="#roadmap">01 · Roadmap</a>
+  <a class="nav-item" href="#pitch">02 · Investor Pitch</a>
+  <a class="nav-item" href="#admin">03 · Admin &amp; Data</a>
+  <a class="nav-item" href="#competition">04 · Competition</a>
+  <a class="nav-item" href="#risks">05 · Risks</a>
+  <a class="nav-item" href="#phasing">06 · Build Order</a>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     01 · PRODUCT ROADMAP
+═══════════════════════════════════════ -->
+<section class="section" id="roadmap">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">01 · Product Roadmap</div>
+      <h2 class="section-title">What We're Building &amp;<br>When It Ships</h2>
+      <p class="section-desc">Three sequential phases, each proving a hypothesis before unlocking the next spend. No big-bang launches. Revenue at every gate.</p>
+    </div>
+  </div>
+
+  <div class="callout gold fade-in">
+    <div class="callout-icon">⚡</div>
+    <div>
+      <div class="callout-title">North Star Metric</div>
+      <div class="callout-body">Every contractor posts a requirement and receives 3+ competitive bids with an AI-negotiated split deal — in under 24 hours, with zero phone calls. This is the single metric that proves product-market fit.</div>
+    </div>
+  </div>
+
+  <!-- PHASE 1 FEATURES -->
+  <div class="admin-section-title fade-in">Phase 01 — Foundation <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--mist);font-weight:400;">Months 1–7 · Rhode Island Pilot</span></div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">1.1</span>
+        <span class="fc-title">Contractor Mobile App (iOS + Android)</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p0">P0</span>
+        <span class="badge ops">Ops</span>
+        <span class="badge phase">Phase 1</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">The primary contractor interface. Voice or text input for RFQ creation. AI structures the requirement (category, quantity, spec, delivery date, location) automatically. Real-time bid tracking and one-tap deal confirmation.</div>
+      <div class="badge-row">
+        <span class="badge p0">P0 · Blocking</span>
+        <span class="badge ops">Ops</span>
+      </div>
+      <div class="chip-row">
+        <span class="chip tech">React Native</span>
+        <span class="chip tech">OpenAI Whisper</span>
+        <span class="chip tech">Push Notifications</span>
+        <span class="chip data">user_id</span>
+        <span class="chip data">rfq_id</span>
+        <span class="chip data">location</span>
+        <span class="chip data">trade_category</span>
+        <span class="chip action">Post RFQ</span>
+        <span class="chip action">Confirm Deal</span>
+        <span class="chip action">Rate Supplier</span>
+      </div>
+      <div class="fc-grid">
+        <div class="fc-block">
+          <div class="fc-block-label">Core Screens</div>
+          <div class="fc-block-content">Home feed · New RFQ (voice/text) · Bid comparison view · Deal confirmation · Order history · Supplier profiles</div>
+        </div>
+        <div class="fc-block">
+          <div class="fc-block-label">AI Capabilities</div>
+          <div class="fc-block-content">Voice-to-structured-RFQ · Category auto-detection · Quantity normalization · Spec disambiguation prompts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">1.2</span>
+        <span class="fc-title">Supplier Web Portal</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p0">P0</span>
+        <span class="badge ops">Ops</span>
+        <span class="badge phase">Phase 1</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">Web-based supplier dashboard. Suppliers see incoming RFQs matching their trade categories and geography, submit line-item bids, and receive deal confirmations. Includes auto-bid rules for Phase 2.</div>
+      <div class="chip-row">
+        <span class="chip tech">Next.js</span>
+        <span class="chip tech">Stripe</span>
+        <span class="chip data">supplier_id</span>
+        <span class="chip data">trade_categories[]</span>
+        <span class="chip data">service_radius_miles</span>
+        <span class="chip data">bid_win_rate</span>
+        <span class="chip action">Submit Bid</span>
+        <span class="chip action">Set Auto-Bid Rules</span>
+      </div>
+      <div class="fc-grid">
+        <div class="fc-block">
+          <div class="fc-block-label">Core Screens</div>
+          <div class="fc-block-content">Incoming RFQ feed · Bid submission form · Active orders · Win/loss history · Analytics dashboard · Profile & coverage settings</div>
+        </div>
+        <div class="fc-block">
+          <div class="fc-block-label">Phase 2 Additions</div>
+          <div class="fc-block-content">Auto-bid rules engine (if X category + Y radius → bid at Z% below list) · Competitor anonymized benchmarking · Lead page claiming</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">1.3</span>
+        <span class="fc-title">Google Maps Supplier Discovery Engine</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p0">P0</span>
+        <span class="badge growth">Growth</span>
+        <span class="badge phase">Phase 1</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">The cold-start breaker. When an RFQ is posted, the system checks the on-platform supplier pool. If there are fewer than 3 matching suppliers, the AI scrapes Google Maps for all relevant businesses within the contractor's radius, extracts contact info, and triggers outreach automatically.</div>
+      <div class="chip-row">
+        <span class="chip tech">Google Places API</span>
+        <span class="chip tech">Apify / Playwright</span>
+        <span class="chip data">supplier_name</span>
+        <span class="chip data">phone</span>
+        <span class="chip data">email</span>
+        <span class="chip data">lat_lng</span>
+        <span class="chip data">google_place_id</span>
+        <span class="chip action">Auto-scrape on RFQ post</span>
+        <span class="chip action">Deduplicate against supplier DB</span>
+      </div>
+      <div class="fc-grid">
+        <div class="fc-block">
+          <div class="fc-block-label">Trigger Logic</div>
+          <div class="fc-block-content">RFQ posted → check suppliers in DB matching [trade + radius] → if count &lt; 3 → scrape Google Maps for [trade category] + [city, state] → enrich with email finder → queue for outreach</div>
+        </div>
+        <div class="fc-block">
+          <div class="fc-block-label">Data Captured</div>
+          <div class="fc-block-content">Business name · Phone · Email (Apollo/Hunter enrichment) · Address · Google rating · Review count · Website · Place ID for SEO page creation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">1.4</span>
+        <span class="fc-title">AI Phone Call Outreach (TCPA-Compliant)</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p0">P0</span>
+        <span class="badge growth">Growth</span>
+        <span class="badge phase">Phase 1</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">The feature no competitor has built. After email outreach, an AI voice agent calls every off-platform supplier with a structured RFQ presentation. Uses press-1 opt-in to stay TCPA-compliant. Runs 24/7, zero human labor.</div>
+      <div class="callout teal" style="margin-top:16px;">
+        <div class="callout-icon">🔒</div>
+        <div>
+          <div class="callout-title">TCPA Compliance Framework</div>
+          <div class="callout-body">All calls use press-1 opt-in. Max 1 call per supplier per day. Full call log with timestamp, duration, and consent record. Opt-out honored immediately and stored permanently.</div>
+        </div>
+      </div>
+      <div class="chip-row">
+        <span class="chip tech">Bland.ai / Vapi</span>
+        <span class="chip tech">Twilio</span>
+        <span class="chip data">call_id</span>
+        <span class="chip data">outcome (opted_in / voicemail / no_answer)</span>
+        <span class="chip data">call_duration_secs</span>
+        <span class="chip data">opted_out_at</span>
+        <span class="chip action">Auto-dial on RFQ post</span>
+        <span class="chip action">Re-call for negotiation round</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">1.5</span>
+        <span class="fc-title">Split-Bid Auto-Negotiation Engine</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p0">P0</span>
+        <span class="badge revenue">Revenue</span>
+        <span class="badge phase">Phase 1</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">When multiple bids are received, the AI identifies the cheapest combination across suppliers by line item. It then calls the losing suppliers on specific line items and attempts to get them to sharpen pricing — creating a Dutch auction effect. Result: 12–22% average savings vs. best single bid.</div>
+      <div class="fc-grid">
+        <div class="fc-block">
+          <div class="fc-block-label">Algorithm</div>
+          <div class="fc-block-content">1. Parse all bids into line items<br>2. Find cheapest supplier per line item<br>3. Calculate optimal split combination<br>4. Identify "close second" items<br>5. Trigger negotiation calls on those items<br>6. Re-optimize after negotiation responses</div>
+        </div>
+        <div class="fc-block">
+          <div class="fc-block-label">Metrics Tracked</div>
+          <div class="fc-block-content">
+            <div class="fc-metric"><span class="fc-metric-label">Avg savings vs. single best bid</span><span class="fc-metric-val">12–22%</span></div>
+            <div class="fc-metric"><span class="fc-metric-label">Negotiation conversion rate</span><span class="fc-metric-val">Target 35%</span></div>
+            <div class="fc-metric"><span class="fc-metric-label">Avg bids per RFQ</span><span class="fc-metric-val">Target 4+</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 FEATURES -->
+  <div class="admin-section-title fade-in" style="margin-top:48px;">Phase 02 — Growth Engine <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--mist);font-weight:400;">Months 7–12 · RI + Massachusetts</span></div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">2.1</span>
+        <span class="fc-title">SEO Supplier Pages (Auto-Generated)</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p0">P0</span>
+        <span class="badge growth">Growth</span>
+        <span class="badge phase">Phase 2</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">A profile page created for every supplier in the US — whether they've joined or not. Pages are auto-generated from Google Maps data and rank for high-intent queries like "roofing suppliers Dallas TX bids." When a contractor lands and clicks "Request Bid," they're pulled into the Sourced RFQ flow. The supplier is then called to claim their page.</div>
+      <div class="chip-row">
+        <span class="chip tech">Next.js ISR</span>
+        <span class="chip tech">Sitemap.xml auto-gen</span>
+        <span class="chip data">page_views_30d</span>
+        <span class="chip data">rfq_clicks</span>
+        <span class="chip data">supplier_claimed (bool)</span>
+        <span class="chip action">Claim Page CTA</span>
+        <span class="chip action">Request Bid CTA</span>
+      </div>
+      <div class="callout gold" style="margin-top:16px;">
+        <div class="callout-icon">📊</div>
+        <div>
+          <div class="callout-title">The Yelp Playbook</div>
+          <div class="callout-body">Yelp created pages for every business in the US before businesses signed up. When traffic came in, businesses claimed their pages. Same strategy here — except Sourced proactively calls suppliers when their page gets traction. Target: 500+ pages by Month 12.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">2.2</span>
+        <span class="fc-title">Autoblog Engine (3–5 articles/week)</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p1">P1</span>
+        <span class="badge growth">Growth</span>
+        <span class="badge phase">Phase 2</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">AI-generated content targeting long-tail contractor searches: "how much does 3/4 inch plywood cost in Phoenix," "best lumber suppliers near me," "roofing material prices 2026." Each article drives organic traffic and internal links to supplier pages.</div>
+      <div class="chip-row">
+        <span class="chip tech">GPT-4o + Perplexity</span>
+        <span class="chip tech">Ghost CMS</span>
+        <span class="chip data">article_id</span>
+        <span class="chip data">keyword_target</span>
+        <span class="chip data">organic_impressions</span>
+        <span class="chip data">click_through_rate</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">2.3</span>
+        <span class="fc-title">Supplier Analytics Dashboard</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p1">P1</span>
+        <span class="badge revenue">Revenue</span>
+        <span class="badge phase">Phase 2</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">Unlocked at the $149/mo Supplier Pro tier. Shows win rate by category, average bid delta vs. competitors (anonymized), how often they're in the top 3, and which RFQ types they're losing. Makes the $149/mo subscription obviously worth it.</div>
+      <div class="chip-row">
+        <span class="chip data">win_rate_30d</span>
+        <span class="chip data">avg_bid_vs_winner_pct</span>
+        <span class="chip data">rfqs_received</span>
+        <span class="chip data">rfqs_bid</span>
+        <span class="chip data">rfqs_won</span>
+        <span class="chip data">revenue_won_30d</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 FEATURES -->
+  <div class="admin-section-title fade-in" style="margin-top:48px;">Phase 03 — Full Platform <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--mist);font-weight:400;">Months 12–18 · 5+ US States</span></div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">3.1</span>
+        <span class="fc-title">In-Platform Payments + Escrow</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p0">P0</span>
+        <span class="badge revenue">Revenue</span>
+        <span class="badge phase">Phase 3</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">Enables 1.5–2.5% transaction fee on all orders closed through Sourced. Contractor pays into escrow at confirmation; supplier receives payout at delivery. Creates the most valuable data asset: real transaction prices.</div>
+      <div class="fc-grid">
+        <div class="fc-block">
+          <div class="fc-block-label">Revenue Math</div>
+          <div class="fc-block-content">
+            <div class="fc-metric"><span class="fc-metric-label">Target GMV Month 18</span><span class="fc-metric-val">$5M/mo</span></div>
+            <div class="fc-metric"><span class="fc-metric-label">Transaction fee rate</span><span class="fc-metric-val">1.5–2.5%</span></div>
+            <div class="fc-metric"><span class="fc-metric-label">Monthly take rate</span><span class="fc-metric-val">$75–125K</span></div>
+          </div>
+        </div>
+        <div class="fc-block">
+          <div class="fc-block-label">Tech Stack</div>
+          <div class="fc-block-content">Stripe Connect (marketplace payments) · Escrow.com API or custom · Net-30 optional via Capchase or Pipe · Contractor credit risk scoring</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feature-card fade-in">
+    <div class="fc-header" onclick="toggleCard(this)">
+      <div class="fc-left">
+        <span class="fc-num">3.2</span>
+        <span class="fc-title">Pricing Data API ($2K+/mo)</span>
+      </div>
+      <div class="fc-badges">
+        <span class="badge p1">P1</span>
+        <span class="badge revenue">Revenue</span>
+        <span class="badge phase">Phase 3</span>
+      </div>
+      <div class="fc-chevron">▾</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-desc">By Month 18, Sourced will have the most granular real-time construction material pricing data in the US — sourced from actual transactions, not surveys. This data is worth $2K–$10K/month to insurance companies, lenders, claims adjusters, materials manufacturers, and research firms.</div>
+      <div class="chip-row">
+        <span class="chip data">material_type</span>
+        <span class="chip data">unit_price</span>
+        <span class="chip data">zip_code</span>
+        <span class="chip data">transaction_date</span>
+        <span class="chip data">supplier_type</span>
+        <span class="chip data">volume_qty</span>
+        <span class="chip tech">REST API</span>
+        <span class="chip tech">Webhooks</span>
+        <span class="chip tech">CSV export</span>
+      </div>
+      <div class="callout blue" style="margin-top:16px;">
+        <div class="callout-icon">💡</div>
+        <div>
+          <div class="callout-title">~100% Gross Margin</div>
+          <div class="callout-body">The data exists as a byproduct of the core business. Packaging it as an API has near-zero marginal cost. Target 10–20 API customers at $2–5K/month = $20–100K/month purely from data.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     02 · INVESTOR PITCH
+═══════════════════════════════════════ -->
+<section class="section" id="pitch">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">02 · Investor Pitch</div>
+      <h2 class="section-title">The Case for Sourced</h2>
+      <p class="section-desc">What we tell investors. Every slide mapped to the data behind it.</p>
+    </div>
+  </div>
+
+  <!-- Key stats -->
+  <div class="stats-grid fade-in">
+    <div class="stat-card">
+      <div class="stat-n">$2T</div>
+      <div class="stat-l">US Construction Market</div>
+      <div class="stat-sub">Materials procurement is 40–60% of project cost. That's $800B–$1.2T flowing through this problem every year.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">92%</div>
+      <div class="stat-l">Struggle to Source Materials</div>
+      <div class="stat-sub">NAHB survey. 3M+ contractors. The problem is universal, not niche.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">$275M</div>
+      <div class="stat-l">BuildingConnected Exit</div>
+      <div class="stat-sub">Autodesk acquisition 2018. Less capable product in a narrower market. The playbook already has an exit.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">230:1</div>
+      <div class="stat-l">LTV:CAC Ratio</div>
+      <div class="stat-sub">AI outreach CAC ~$15. Blended contractor LTV ~$3,450. Best-in-class SaaS is 3:1.</div>
+    </div>
+  </div>
+
+  <!-- Pitch slides -->
+  <div class="pitch-slide featured fade-in">
+    <span class="pitch-slide-num">Slide 01 · The Problem</span>
+    <div class="pitch-slide-title">A $2 Trillion Industry Running on Phone Tag</div>
+    <div class="pitch-slide-body">Construction contractors spend 6–10 hours per week chasing material quotes — calling suppliers one at a time, leaving voicemails, waiting 24–48 hours for responses, then manually comparing incompatible formats on a spreadsheet. After all that, they still get 1–2 bids and overpay 15–30% because they have no real supplier competition. 92% of US contractors say sourcing materials is their top operational pain point.</div>
+    <div class="pitch-metrics-row">
+      <div class="pm-box"><div class="pm-box-n">60 hrs</div><div class="pm-box-l">Time to close one order (old way)</div></div>
+      <div class="pm-box"><div class="pm-box-n">15–30%</div><div class="pm-box-l">Average overpayment without competition</div></div>
+      <div class="pm-box"><div class="pm-box-n">1–2</div><div class="pm-box-l">Average bids received per RFQ</div></div>
+    </div>
+  </div>
+
+  <div class="pitch-slide fade-in">
+    <span class="pitch-slide-num">Slide 02 · The Solution</span>
+    <div class="pitch-slide-title">Sourced: Autonomous Procurement in Under 24 Hours</div>
+    <div class="pitch-slide-body">Contractor posts what they need in 60 seconds. Sourced's AI finds suppliers (on and off platform), contacts every one of them via email + AI phone call, aggregates all bids side-by-side, identifies the best split deal across suppliers, and auto-negotiates pricing. Contractor taps "confirm." Average result: 4+ bids, 12–22% savings, under 24 hours. Zero phone calls from the contractor.</div>
+    <div class="pitch-bullets">
+      <div class="pb">Off-platform discovery: AI scrapes Google Maps and calls suppliers who've never heard of us — solving the cold-start problem on day one.</div>
+      <div class="pb">Split-bid engine: routes plywood to Supplier A and studs to Supplier B for the cheapest combined total — not available anywhere else.</div>
+      <div class="pb">AI phone negotiation: calls the losing supplier back to sharpen pricing. A Dutch auction in real time, fully automated.</div>
+    </div>
+  </div>
+
+  <div class="pitch-slide fade-in">
+    <span class="pitch-slide-num">Slide 03 · Market Size</span>
+    <div class="pitch-slide-title">TAM: $8B SOM in Year 5</div>
+    <div class="pitch-slide-body">The total US construction market is $2T. Materials procurement represents 40–60% of project costs — a $800B–$1.2T addressable spend. Our serviceable market is the SMB contractor segment: ~800,000 firms spending $250K+/year on materials. At 10% penetration with Contractor Pro subscriptions and 1.5% transaction fees:</div>
+    <div class="pitch-bullets">
+      <div class="pb"><strong style="color:var(--white);">Bottom-up:</strong> 800K contractors × $250K avg spend × 10% penetration × 1.5% fee = $300M ARR in transaction fees alone</div>
+      <div class="pb"><strong style="color:var(--white);">Subscription layer:</strong> 80K contractors × $99/mo = $95M ARR additional</div>
+      <div class="pb"><strong style="color:var(--white);">Data API:</strong> 200 enterprise customers × $3K/mo = $7.2M ARR at near-zero cost</div>
+    </div>
+  </div>
+
+  <div class="pitch-slide fade-in">
+    <span class="pitch-slide-num">Slide 04 · Business Model</span>
+    <div class="pitch-slide-title">Three Revenue Streams, Each Compounding</div>
+    <div class="pitch-slide-body">Subscriptions (immediate), transaction fees (scale), data API (near-zero cost). Each layer makes the next one more valuable.</div>
+    <div class="fc-grid" style="margin-top:20px;">
+      <div class="fc-block">
+        <div class="fc-block-label">Contractor Tiers</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">Pro</span><span class="fc-metric-val">$99/mo</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Business</span><span class="fc-metric-val">$199/mo</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">ROI on first use</span><span class="fc-metric-val">25–46×</span></div>
+        </div>
+      </div>
+      <div class="fc-block">
+        <div class="fc-block-label">Supplier Tiers</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">Basic (claimed page)</span><span class="fc-metric-val">Free</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Pro</span><span class="fc-metric-val">$149/mo</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Enterprise</span><span class="fc-metric-val">$249–499/mo</span></div>
+        </div>
+      </div>
+      <div class="fc-block">
+        <div class="fc-block-label">Transaction Fee</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">Rate</span><span class="fc-metric-val">1.5–2.5%</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">$5M GMV/mo</span><span class="fc-metric-val">$75–125K/mo</span></div>
+        </div>
+      </div>
+      <div class="fc-block">
+        <div class="fc-block-label">Data API</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">Entry price</span><span class="fc-metric-val">$2K/mo</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Gross margin</span><span class="fc-metric-val">~100%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pitch-slide fade-in">
+    <span class="pitch-slide-num">Slide 05 · Unit Economics</span>
+    <div class="pitch-slide-title">230:1 LTV:CAC — Best-in-Class</div>
+    <div class="pitch-slide-body">AI-powered outreach makes customer acquisition nearly free. The unit economics are exceptional even before network effects kick in.</div>
+    <div class="fc-grid" style="margin-top:20px;">
+      <div class="fc-block">
+        <div class="fc-block-label">Contractor Economics</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">CAC (AI outreach)</span><span class="fc-metric-val">~$15</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Monthly subscription</span><span class="fc-metric-val">$99–199</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Avg retention</span><span class="fc-metric-val">29 months</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">LTV</span><span class="fc-metric-val">~$3,450</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">LTV:CAC</span><span class="fc-metric-val">230:1</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Payback period</span><span class="fc-metric-val">&lt;1 month</span></div>
+        </div>
+      </div>
+      <div class="fc-block">
+        <div class="fc-block-label">Platform Gross Margins</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">SaaS subscriptions</span><span class="fc-metric-val">~85%</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Transaction fee</span><span class="fc-metric-val">~70%</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Data API</span><span class="fc-metric-val">~100%</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Blended (Year 2)</span><span class="fc-metric-val">~80%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pitch-slide fade-in">
+    <span class="pitch-slide-num">Slide 06 · Why Now</span>
+    <div class="pitch-slide-title">Three Enabling Technologies Converged in 2024–25</div>
+    <div class="pitch-slide-body">This product couldn't have been built in 2020. The specific combination of capabilities that make Sourced work only became reliable and affordable in the last 18 months.</div>
+    <div class="pitch-bullets">
+      <div class="pb"><strong style="color:var(--white);">AI voice agents</strong> (Bland.ai, Vapi) now pass the "I can't tell it's a bot" test. Cost: pennies per call. Was $5–10/call in 2022.</div>
+      <div class="pb"><strong style="color:var(--white);">Whisper + GPT-4o</strong> enables voice-to-structured-RFQ with 98%+ accuracy. Contractors don't need to type anything.</div>
+      <div class="pb"><strong style="color:var(--white);">Google Maps API + web scraping</strong> is now fast and cheap enough to run on every RFQ in real time — no pre-seeding required.</div>
+      <div class="pb"><strong style="color:var(--white);">SMB tech adoption</strong> accelerated post-COVID. Contractors now expect software to work on their phone on the job site.</div>
+    </div>
+  </div>
+
+  <div class="pitch-slide fade-in">
+    <span class="pitch-slide-num">Slide 07 · Traction Milestones</span>
+    <div class="pitch-slide-title">Proof Points at Each Gate</div>
+    <div class="pitch-slide-body">Series A ask of $3–5M at Month 18, contingent on hitting these gates:</div>
+    <div class="fc-grid" style="margin-top:16px;">
+      <div class="fc-block">
+        <div class="fc-block-label">Month 7 Gate (Phase 1)</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">Active contractors</span><span class="fc-metric-val">30+</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Active suppliers</span><span class="fc-metric-val">30+</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">Avg bids per RFQ</span><span class="fc-metric-val">3+</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">MRR</span><span class="fc-metric-val">$22K</span></div>
+        </div>
+      </div>
+      <div class="fc-block">
+        <div class="fc-block-label">Month 18 Gate (Series A)</div>
+        <div class="fc-block-content">
+          <div class="fc-metric"><span class="fc-metric-label">Active users</span><span class="fc-metric-val">200+</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">US states</span><span class="fc-metric-val">5+</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">SEO pages live</span><span class="fc-metric-val">10,000+</span></div>
+          <div class="fc-metric"><span class="fc-metric-label">ARR</span><span class="fc-metric-val">$500K+</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     03 · ADMIN & DATA INTELLIGENCE
+═══════════════════════════════════════ -->
+<section class="section" id="admin">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">03 · Admin &amp; Data Intelligence</div>
+      <h2 class="section-title">What We Know About<br>Every User</h2>
+      <p class="section-desc">The admin layer isn't just ops — it's a competitive moat. Every data point captured makes pricing, matching, and outreach smarter.</p>
+    </div>
+  </div>
+
+  <div class="callout gold fade-in">
+    <div class="callout-icon">🧠</div>
+    <div>
+      <div class="callout-title">The Data Flywheel</div>
+      <div class="callout-body">More contractors → more RFQs → more supplier bids → better price benchmarks → smarter negotiation → better contractor outcomes → more contractors. By Year 2, Sourced will have the most granular real-time construction material price database in the US — and it's a byproduct of the core business.</div>
+    </div>
+  </div>
+
+  <!-- CONTRACTOR USER PROFILING -->
+  <div class="admin-section-title fade-in">Contractor User Profile</div>
+  <div class="data-schema fade-in">
+    <div class="data-schema-header">📋 contractor_profiles table</div>
+    <div class="data-row"><span class="data-field">user_id</span><span class="data-type">uuid</span><span class="data-desc">Primary key, immutable. Used across all linked tables.</span></div>
+    <div class="data-row"><span class="data-field">contractor_type</span><span class="data-type">enum</span><span class="data-desc">GC / Trade Contractor / Developer / Owner-Builder</span></div>
+    <div class="data-row"><span class="data-field">company_size</span><span class="data-type">enum</span><span class="data-desc">Solo / 2–10 / 11–50 / 50+ employees</span></div>
+    <div class="data-row"><span class="data-field">service_zip_codes[]</span><span class="data-type">text[]</span><span class="data-desc">All zip codes where contractor posts RFQs. Used for supplier matching and geo targeting.</span></div>
+    <div class="data-row"><span class="data-field">primary_trades[]</span><span class="data-type">text[]</span><span class="data-desc">Auto-inferred from RFQ history: [lumber, plumbing, roofing, electrical, concrete...]</span></div>
+    <div class="data-row"><span class="data-field">avg_order_value_usd</span><span class="data-type">numeric</span><span class="data-desc">Rolling 90-day average. Used for upsell triggers and LTV model.</span></div>
+    <div class="data-row"><span class="data-field">monthly_rfq_count</span><span class="data-type">int</span><span class="data-desc">RFQs posted per month. Segmentation signal for power users.</span></div>
+    <div class="data-row"><span class="data-field">savings_lifetime_usd</span><span class="data-type">numeric</span><span class="data-desc">Total documented savings vs. first bid. Core retention / testimonial metric.</span></div>
+    <div class="data-row"><span class="data-field">churn_risk_score</span><span class="data-type">float</span><span class="data-desc">0.0–1.0. ML model using rfq_frequency, last_active_at, plan_tier.</span></div>
+    <div class="data-row"><span class="data-field">acquisition_source</span><span class="data-type">text</span><span class="data-desc">organic_seo / ai_outreach / referral / paid / direct. CAC attribution.</span></div>
+    <div class="data-row"><span class="data-field">plan_tier</span><span class="data-type">enum</span><span class="data-desc">free / pro_99 / business_199</span></div>
+    <div class="data-row"><span class="data-field">mrr_usd</span><span class="data-type">numeric</span><span class="data-desc">Current MRR from this user. Stripe synced.</span></div>
+    <div class="data-row"><span class="data-field">payment_method_on_file</span><span class="data-type">bool</span><span class="data-desc">Payment intent confirmed. Required before Phase 3 escrow flows.</span></div>
+  </div>
+
+  <!-- SUPPLIER USER PROFILING -->
+  <div class="admin-section-title fade-in">Supplier User Profile</div>
+  <div class="data-schema fade-in">
+    <div class="data-schema-header">🏪 supplier_profiles table</div>
+    <div class="data-row"><span class="data-field">supplier_id</span><span class="data-type">uuid</span><span class="data-desc">Primary key. Can exist before supplier signs up (from scrape).</span></div>
+    <div class="data-row"><span class="data-field">source</span><span class="data-type">enum</span><span class="data-desc">self_registered / google_maps_scrape / manual</span></div>
+    <div class="data-row"><span class="data-field">claimed (bool)</span><span class="data-type">bool</span><span class="data-desc">Has the supplier claimed their SEO profile page?</span></div>
+    <div class="data-row"><span class="data-field">categories[]</span><span class="data-type">text[]</span><span class="data-desc">Trade categories they supply. Multi-select from standardized taxonomy.</span></div>
+    <div class="data-row"><span class="data-field">service_radius_miles</span><span class="data-type">int</span><span class="data-desc">Max delivery radius. Used for RFQ matching.</span></div>
+    <div class="data-row"><span class="data-field">bid_response_rate</span><span class="data-type">float</span><span class="data-desc">% of RFQs they receive that they respond to. Ranking signal.</span></div>
+    <div class="data-row"><span class="data-field">avg_response_time_hrs</span><span class="data-type">float</span><span class="data-desc">Speed of bidding. Ranking signal. Surfaced in analytics dashboard.</span></div>
+    <div class="data-row"><span class="data-field">win_rate</span><span class="data-type">float</span><span class="data-desc">% of bids that result in a won order. Monetized via analytics tier.</span></div>
+    <div class="data-row"><span class="data-field">avg_price_index</span><span class="data-type">float</span><span class="data-desc">Their pricing relative to market average per category. Core to negotiation engine.</span></div>
+    <div class="data-row"><span class="data-field">google_rating</span><span class="data-type">float</span><span class="data-desc">Synced from Google Maps. Displayed on SEO profile page.</span></div>
+    <div class="data-row"><span class="data-field">call_outcome_last</span><span class="data-type">enum</span><span class="data-desc">opted_in / voicemail / no_answer / opted_out / wrong_number</span></div>
+    <div class="data-row"><span class="data-field">opted_out_at</span><span class="data-type">timestamptz</span><span class="data-desc">TCPA compliance. Never call again if set.</span></div>
+    <div class="data-row"><span class="data-field">seo_page_views_30d</span><span class="data-type">int</span><span class="data-desc">Organic traffic to their Sourced profile. Trigger for claim outreach.</span></div>
+  </div>
+
+  <!-- RFQ & ORDER DATA -->
+  <div class="admin-section-title fade-in">RFQ &amp; Order Data</div>
+  <div class="data-schema fade-in">
+    <div class="data-schema-header">📦 rfqs + orders tables</div>
+    <div class="data-row"><span class="data-field">rfq_id</span><span class="data-type">uuid</span><span class="data-desc">Primary RFQ identifier. Linked to contractor_id, bids[], orders[].</span></div>
+    <div class="data-row"><span class="data-field">line_items[]</span><span class="data-type">jsonb</span><span class="data-desc">[{material, quantity, unit, spec, delivery_date}]. AI-parsed from contractor input.</span></div>
+    <div class="data-row"><span class="data-field">bids_received_count</span><span class="data-type">int</span><span class="data-desc">Total bids received per RFQ. Key health metric (target 3+).</span></div>
+    <div class="data-row"><span class="data-field">final_price_usd</span><span class="data-type">numeric</span><span class="data-desc">Confirmed deal total. Used in savings calculation and transaction fee.</span></div>
+    <div class="data-row"><span class="data-field">savings_vs_highest_bid</span><span class="data-type">numeric</span><span class="data-desc">Documented savings. Core marketing metric. Target 12–22%.</span></div>
+    <div class="data-row"><span class="data-field">is_split_deal</span><span class="data-type">bool</span><span class="data-desc">Was final order split across multiple suppliers?</span></div>
+    <div class="data-row"><span class="data-field">negotiation_rounds</span><span class="data-type">int</span><span class="data-desc">How many AI negotiation calls were triggered. Tracks engine utilization.</span></div>
+    <div class="data-row"><span class="data-field">time_to_close_hrs</span><span class="data-type">float</span><span class="data-desc">Hours from RFQ post to deal confirmation. Target &lt;24 hours.</span></div>
+    <div class="data-row"><span class="data-field">off_platform_suppliers_count</span><span class="data-type">int</span><span class="data-desc">Suppliers found via Google Maps scrape for this RFQ. Cold-start metric.</span></div>
+  </div>
+
+  <!-- ADMIN CAPABILITIES -->
+  <div class="admin-section-title fade-in">Admin Dashboard Capabilities</div>
+  <div class="admin-grid fade-in">
+    <div class="admin-card"><div class="admin-card-icon">📊</div><div class="admin-card-title">Platform Health</div><div class="admin-card-desc">RFQs posted today · Avg bids per RFQ · Time-to-close median · Off-platform discovery rate · Negotiation conversion rate</div></div>
+    <div class="admin-card"><div class="admin-card-icon">💰</div><div class="admin-card-title">Revenue Console</div><div class="admin-card-desc">MRR by tier · Churn and expansion MRR · GMV processed · Transaction fee revenue · ARR trajectory vs. targets</div></div>
+    <div class="admin-card"><div class="admin-card-icon">🧑‍🤝‍🧑</div><div class="admin-card-title">User Segmentation</div><div class="admin-card-desc">Cohort analysis by acquisition source · LTV by contractor type · Churn risk score filter · Trade category penetration map</div></div>
+    <div class="admin-card"><div class="admin-card-icon">📞</div><div class="admin-card-title">AI Call Analytics</div><div class="admin-card-desc">Call volume by outcome · Opt-in rate by geography · Negotiation call ROI · TCPA compliance log · Opt-out rate by supplier type</div></div>
+    <div class="admin-card"><div class="admin-card-icon">🔍</div><div class="admin-card-title">SEO Intelligence</div><div class="admin-card-desc">Top-performing supplier pages · Organic keyword rankings · Page → RFQ conversion rate · Unclaimed high-traffic pages</div></div>
+    <div class="admin-card"><div class="admin-card-icon">🏷️</div><div class="admin-card-title">Pricing Intelligence</div><div class="admin-card-desc">Market price by material × region × date · Price index by supplier · Anomaly detection (price spikes) · API usage by customer</div></div>
+    <div class="admin-card"><div class="admin-card-icon">🚨</div><div class="admin-card-title">Ops Alerts</div><div class="admin-card-desc">RFQs with &lt;3 bids (trigger manual outreach) · Stalled deals · Disputed orders · Supplier response rate drops · System anomalies</div></div>
+    <div class="admin-card"><div class="admin-card-icon">🎯</div><div class="admin-card-title">Upsell Triggers</div><div class="admin-card-desc">Free contractors who posted 3+ RFQs → push Pro · Supplier with high win rate not on Pro → push analytics tier · High-GMV contractors → push Business tier</div></div>
+    <div class="admin-card"><div class="admin-card-icon">🗺️</div><div class="admin-card-title">Geographic Expansion</div><div class="admin-card-desc">Supply density by city · Demand vs. supply gap · "Next city" readiness score · Time-to-3-bids by market · New market launch checklist</div></div>
+  </div>
+
+  <div class="callout teal fade-in">
+    <div class="callout-icon">🔐</div>
+    <div>
+      <div class="callout-title">Data Privacy &amp; Compliance</div>
+      <div class="callout-body">All contractor and supplier data is stored with row-level security (Supabase RLS). TCPA opt-outs are enforced at the DB level — no code path can override them. GDPR-ready delete workflows. No contractor data is ever shared with suppliers (and vice versa) beyond what's in an active RFQ. API customers get aggregated, anonymized pricing data only — never PII.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     04 · COMPETITION
+═══════════════════════════════════════ -->
+<section class="section" id="competition">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">04 · Competitive Landscape</div>
+      <h2 class="section-title">No One Does What Sourced Does</h2>
+      <p class="section-desc">BuildingConnected proved the exit. Every existing player is missing the combination that makes Sourced structurally superior.</p>
+    </div>
+  </div>
+
+  <div class="callout gold fade-in">
+    <div class="callout-icon">🏆</div>
+    <div>
+      <div class="callout-title">The $275M Proof Point</div>
+      <div class="callout-body">Autodesk acquired BuildingConnected in 2018 for ~$275M. BuildingConnected connected GCs with subcontractors for bidding — no AI, no off-platform outreach, no negotiation, no SEO flywheel. Sourced does all four of those things plus handles materials procurement. The comparable exit has already happened with a less capable product.</div>
+    </div>
+  </div>
+
+  <div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r2);" class="fade-in">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Founded</th>
+          <th>Scale</th>
+          <th>Off-Platform Outreach</th>
+          <th>AI Negotiation</th>
+          <th>Split-Bid</th>
+          <th>SEO Pages</th>
+          <th>Voice RFQ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="sourced-row"><td><span class="cs-tag">★ Sourced</span></td><td>2026</td><td>Building</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
+        <tr><td>BuildingConnected</td><td>2012</td><td>$275M exit</td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Procore</td><td>2002</td><td>IPO $11B</td><td><span class="cx">✗</span></td><td><span class="cpart">Partial</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>PlanHub</td><td>2015</td><td>~$10–30M</td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>AMAST</td><td>2019</td><td>Early stage</td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Buildstock</td><td>2024</td><td>$1.6M seed</td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td></tr>
+        <tr><td>Yelp / Houzz</td><td>2004/2009</td><td>$B+ scale</td><td style="font-size:12px;color:var(--mist);">Partial (SEO only)</td><td><span class="cx">✗</span></td><td><span class="cx">✗</span></td><td><span class="ck">✓</span></td><td><span class="cx">✗</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     05 · RISKS
+═══════════════════════════════════════ -->
+<section class="section" id="risks">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">05 · Risk Register</div>
+      <h2 class="section-title">What Could Go Wrong &amp;<br>How We Mitigate It</h2>
+      <p class="section-desc">Scored by Probability × Impact (1–5 each). Anything above 12 is tracked weekly.</p>
+    </div>
+  </div>
+
+  <div class="risk-row fade-in">
+    <div class="risk-score rs-high">16</div>
+    <div>
+      <div class="risk-title">THIN SUPPLY — Not enough suppliers to deliver 3+ bids per RFQ</div>
+      <div class="risk-body">The core product promise breaks if contractors post and get 1–2 bids. Suppliers are inherently harder to acquire than contractors. P=4, I=4.</div>
+      <div class="risk-mitigation">→ Mitigation: Off-platform Google Maps outreach is the primary counter. Pre-seed 50+ suppliers in RI before first contractor onboards. Track avg bids/RFQ daily. Halt contractor expansion if it drops below 2.5.</div>
+    </div>
+  </div>
+
+  <div class="risk-row fade-in">
+    <div class="risk-score rs-high">15</div>
+    <div>
+      <div class="risk-title">TCPA VIOLATION — AI calling triggers regulatory action</div>
+      <div class="risk-body">TCPA fines are $500–$1,500 per call per violation. A class action from even 100 suppliers = $50K–$150K exposure. P=3, I=5.</div>
+      <div class="risk-mitigation">→ Mitigation: Press-1 opt-in architecture (never outbound without consent signal). Max 1 call/supplier/day. Full call log retained. Legal review of call scripts before launch. Opt-out list enforced at DB level, not app level.</div>
+    </div>
+  </div>
+
+  <div class="risk-row fade-in">
+    <div class="risk-score rs-high">12</div>
+    <div>
+      <div class="risk-title">SEO DISRUPTION — Google algorithm change de-ranks supplier pages</div>
+      <div class="risk-body">If Google classifies auto-generated supplier pages as thin content, organic traffic collapses. P=3, I=4.</div>
+      <div class="risk-mitigation">→ Mitigation: Enrich pages with real transaction data (prices, reviews, response rates) ASAP. Claimed pages get supplier-added content. Diversify traffic via autoblog, Reddit/social listening, and paid to reduce SEO dependency below 40%.</div>
+    </div>
+  </div>
+
+  <div class="risk-row fade-in">
+    <div class="risk-score rs-med">9</div>
+    <div>
+      <div class="risk-title">PROCORE ENTRY — Procore launches competitive procurement feature</div>
+      <div class="risk-body">Procore has $1B+ ARR and deep contractor relationships. If they launch a procurement module with off-platform outreach, they can out-distribute us. P=2, I=4 (they move slowly).</div>
+      <div class="risk-mitigation">→ Mitigation: 18-month window before they could ship anything comparable. Win enough contractors and suppliers fast enough that switching cost is real. AI negotiation + split-bid are hard to replicate. Focus on SMB contractors Procore ignores.</div>
+    </div>
+  </div>
+
+  <div class="risk-row fade-in">
+    <div class="risk-score rs-med">8</div>
+    <div>
+      <div class="risk-title">AI HALLUCINATION — Voice RFQ misinterprets material specs</div>
+      <div class="risk-body">Contractor says "I need 2x4s" and AI structures it as 2×4×8 when they meant 2×4×12. Wrong material ordered. P=4, I=2.</div>
+      <div class="risk-mitigation">→ Mitigation: Mandatory confirmation screen shows AI-parsed RFQ before submission. Contractor must explicitly approve each line item. Dispute resolution flow for wrong-spec deliveries. Supplier and contractor both confirm specs at deal closure.</div>
+    </div>
+  </div>
+
+  <div class="risk-row fade-in">
+    <div class="risk-score rs-low">4</div>
+    <div>
+      <div class="risk-title">PAYMENT FRAUD — Escrow funds misdirected in Phase 3</div>
+      <div class="risk-body">Payment fraud via fake supplier accounts. Low probability with Stripe KYC but non-zero. P=1, I=4.</div>
+      <div class="risk-mitigation">→ Mitigation: Stripe Connect with full KYC before any supplier can receive payouts. Payments held in escrow until delivery confirmed. Contractor confirms receipt before funds release. Max payout delay of 7 days for new suppliers.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     06 · BUILD ORDER / PHASING TABLE
+═══════════════════════════════════════ -->
+<section class="section" id="phasing">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">06 · Build Order</div>
+      <h2 class="section-title">Week-by-Week Execution Plan</h2>
+      <p class="section-desc">Sequenced by dependencies. Nothing starts until its prerequisite is tested and live.</p>
+    </div>
+  </div>
+
+  <div class="callout gold fade-in">
+    <div class="callout-icon">📌</div>
+    <div>
+      <div class="callout-title">Sequencing Principle</div>
+      <div class="callout-body">Supply before demand. We pre-seed suppliers in a market before we onboard a single contractor. This ensures the first contractor experience is 3+ bids — not 0. Never launch a city until the supply side is ready.</div>
+    </div>
+  </div>
+
+  <div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r2);" class="fade-in">
+    <table class="phase-table">
+      <thead>
+        <tr>
+          <th>Sprint</th>
+          <th>Phase</th>
+          <th>Weeks</th>
+          <th>What Ships</th>
+          <th>Gate / KPI</th>
+          <th>Est. Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 0</td>
+          <td><span class="phase-tag ptag-1">● Phase 1</span></td>
+          <td class="wk">Wk 1–2</td>
+          <td><ul class="feat-list"><li>Architecture &amp; DB schema (Supabase + Postgres)</li><li>Auth system (Supabase Auth)</li><li>Dev environment + CI/CD pipeline</li><li>Supplier scraping script (Google Maps API)</li></ul></td>
+          <td class="kpi">DB live · scraper outputs clean supplier records</td>
+          <td class="cost">$1,200</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 1</td>
+          <td><span class="phase-tag ptag-1">● Phase 1</span></td>
+          <td class="wk">Wk 3–5</td>
+          <td><ul class="feat-list"><li>Supplier web portal MVP (Next.js)</li><li>RFQ submission form (text only)</li><li>Bid submission interface</li><li>Supplier notification emails</li></ul></td>
+          <td class="kpi">10 suppliers can receive &amp; bid on a test RFQ</td>
+          <td class="cost">$3,500</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 2</td>
+          <td><span class="phase-tag ptag-1">● Phase 1</span></td>
+          <td class="wk">Wk 6–9</td>
+          <td><ul class="feat-list"><li>Contractor mobile app (React Native)</li><li>Voice RFQ (Whisper + GPT-4o structuring)</li><li>Bid comparison view</li><li>Deal confirmation flow</li></ul></td>
+          <td class="kpi">Contractor can post RFQ → receive bids → confirm deal</td>
+          <td class="cost">$5,000</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 3</td>
+          <td><span class="phase-tag ptag-1">● Phase 1</span></td>
+          <td class="wk">Wk 10–13</td>
+          <td><ul class="feat-list"><li>AI phone call outreach (Bland.ai + Twilio)</li><li>TCPA compliance framework + opt-out DB</li><li>Off-platform supplier email outreach</li><li>Call outcome logging</li></ul></td>
+          <td class="kpi">AI calls 20+ suppliers → 5+ opt-in → bid on RFQ</td>
+          <td class="cost">$4,500</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 4</td>
+          <td><span class="phase-tag ptag-1">● Phase 1</span></td>
+          <td class="wk">Wk 14–17</td>
+          <td><ul class="feat-list"><li>Split-bid optimization engine</li><li>AI negotiation call logic (re-engage losers)</li><li>Savings calculation + display</li><li>Admin dashboard v1</li></ul></td>
+          <td class="kpi">Avg savings &gt;10% vs. single best bid in pilot</td>
+          <td class="cost">$4,800</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 5</td>
+          <td><span class="phase-tag ptag-1">● Phase 1</span></td>
+          <td class="wk">Wk 18–22</td>
+          <td><ul class="feat-list"><li>Stripe subscription billing (contractor + supplier tiers)</li><li>Onboarding flows + email sequences</li><li>RI pilot launch: 30 contractors + 30 suppliers</li><li>Bug bashes + performance monitoring</li></ul></td>
+          <td class="kpi">$22K MRR · 3+ avg bids/RFQ · &lt;24hr avg close</td>
+          <td class="cost">$3,000</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 6</td>
+          <td><span class="phase-tag ptag-2">◆ Phase 2</span></td>
+          <td class="wk">Wk 23–27</td>
+          <td><ul class="feat-list"><li>SEO supplier page generator (Next.js ISR)</li><li>Sitemap auto-generation</li><li>Supplier page claim flow</li><li>First 500 pages published</li></ul></td>
+          <td class="kpi">500 pages indexed · 100+ organic impressions/wk</td>
+          <td class="cost">$3,200</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 7</td>
+          <td><span class="phase-tag ptag-2">◆ Phase 2</span></td>
+          <td class="wk">Wk 28–32</td>
+          <td><ul class="feat-list"><li>Autoblog engine (3–5 articles/week)</li><li>Supplier analytics dashboard (Pro tier)</li><li>Massachusetts market supply pre-seeding</li><li>Social listening (Reddit contractor communities)</li></ul></td>
+          <td class="kpi">MA launch-ready · 50+ suppliers seeded</td>
+          <td class="cost">$2,800</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 8</td>
+          <td><span class="phase-tag ptag-2">◆ Phase 2</span></td>
+          <td class="wk">Wk 33–38</td>
+          <td><ul class="feat-list"><li>MA market launch</li><li>Contractor analytics (Business tier)</li><li>Referral program</li><li>Month 12 ARR reporting</li></ul></td>
+          <td class="kpi">$116K ARR · 120 users · 500+ SEO pages</td>
+          <td class="cost">$2,000</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 9</td>
+          <td><span class="phase-tag ptag-3">▲ Phase 3</span></td>
+          <td class="wk">Wk 39–46</td>
+          <td><ul class="feat-list"><li>Stripe Connect payments + escrow</li><li>Enterprise multi-location accounts</li><li>TX + FL + CT market launches</li><li>Series A fundraise prep</li></ul></td>
+          <td class="kpi">Payments live · 5 states · $500K ARR</td>
+          <td class="cost">$4,500</td>
+        </tr>
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--white);">Sprint 10</td>
+          <td><span class="phase-tag ptag-3">▲ Phase 3</span></td>
+          <td class="wk">Wk 47–52</td>
+          <td><ul class="feat-list"><li>Pricing Data API (REST + webhooks)</li><li>First 10 enterprise API customers</li><li>Series A close target</li><li>National expansion playbook documented</li></ul></td>
+          <td class="kpi">$3–5M raised · API live · 15+ cities</td>
+          <td class="cost">$3,000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:32px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" class="fade-in">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--mist);margin-bottom:12px;text-transform:uppercase;">Phase 1 Total</div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--gold2);">$24–28K</div>
+      <div style="font-size:13px;color:var(--mist2);margin-top:6px;">Months 1–7 · Sprints 0–5</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--mist);margin-bottom:12px;text-transform:uppercase;">Phase 2 Total</div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--gold2);">$8–12K</div>
+      <div style="font-size:13px;color:var(--mist2);margin-top:6px;">Months 7–12 · Sprints 6–8 (+ Phase 1 MRR)</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;">
+      <div style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--mist);margin-bottom:12px;text-transform:uppercase;">Phase 3 Total</div>
+      <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--gold2);">Revenue-funded</div>
+      <div style="font-size:13px;color:var(--mist2);margin-top:6px;">Months 12–18 · Funded by $116K+ ARR</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+  <div class="doc-footer-note">Master Specification · v2.0 · March 2026 · Confidential</div>
+</div>
+
+<script>
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  document.getElementById('doc-progress').style.width=p+'%';
+  document.getElementById('btt').classList.toggle('show',window.scrollY>400);
+});
+
+// Fade-in observer
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.08});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+
+// Collapsible feature cards
+function toggleCard(header){
+  const card=header.closest('.feature-card');
+  const body=card.querySelector('.fc-body');
+  const isOpen=card.classList.contains('open');
+  card.classList.toggle('open',!isOpen);
+  body.classList.toggle('open',!isOpen);
+}
+
+// Sticky nav active state on scroll
+const sections=['roadmap','pitch','admin','competition','risks','phasing'];
+const navItems=document.querySelectorAll('.nav-item');
+const obs2=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      navItems.forEach(n=>{
+        n.classList.toggle('active',n.getAttribute('href')==='#'+id);
+      });
+    }
+  });
+},{threshold:.2,rootMargin:'-60px 0px -60% 0px'});
+sections.forEach(id=>{const el=document.getElementById(id);if(el)obs2.observe(el);});
+
+// Open first card in each section on load after slight delay
+setTimeout(()=>{
+  const firstCards=document.querySelectorAll('.feature-card');
+  if(firstCards.length>0){
+    const h=firstCards[0].querySelector('.fc-header');
+    toggleCard(h);
+  }
+},800);
+</script>
+</body>
+</html>
