@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex" />
+  <meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex" />
+  <meta name="bingbot" content="noindex,nofollow,noarchive,nosnippet,noimageindex" />
+  <title>Sourced by Dibbs 2.0 — Pitch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0B0C0E;
+      --surface: #111316;
+      --surface2: #181B1F;
+      --surface3: #1E2228;
+      --border: rgba(255,255,255,.07);
+      --border2: rgba(255,255,255,.12);
+      --gold: #D4A843;
+      --gold2: #F0C96A;
+      --gold-dim: rgba(212,168,67,.15);
+      --gold-border: rgba(212,168,67,.25);
+      --white: #F2EDE4;
+      --mist: #7A8091;
+      --mist2: #9BA3B2;
+      --teal: #3ECFB2;
+      --teal-dim: rgba(62,207,178,.12);
+      --red: #E85D5D;
+      --red-dim: rgba(232,93,93,.12);
+      --blue: #5B9CF6;
+      --blue-dim: rgba(91,156,246,.12);
+      --green: #52C97B;
+      --green-dim: rgba(82,201,123,.12);
+      --amber: #F0A84E;
+      --amber-dim: rgba(240,168,78,.12);
+      --r: 8px;
+      --r2: 12px;
+    }
+
+    html[data-theme="light"] {
+      --black: #F6F1E9;
+      --surface: #FFFFFF;
+      --surface2: #FBF7F0;
+      --surface3: #F2EBDD;
+      --border: rgba(26,22,18,.10);
+      --border2: rgba(26,22,18,.16);
+      --white: #1A1612;
+      --mist: #6B6258;
+      --mist2: #8A8076;
+      --gold-dim: rgba(212,168,67,.14);
+      --gold-border: rgba(212,168,67,.30);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--gold-dim); color: var(--gold2); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    #doc-progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:999;width:0%;transition:width .1s;}
+    #btt{
+      position:fixed;bottom:28px;right:28px;z-index:100;
+      width:40px;height:40px;border-radius:8px;
+      background:var(--surface);border:1px solid var(--border2);
+      color:var(--mist);font-size:16px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:all .2s;opacity:0;pointer-events:none;
+    }
+    #btt.show{opacity:1;pointer-events:auto;}
+    #btt:hover{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold);}
+
+    .cover{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      position:relative;
+      overflow:hidden;
+      background:var(--black);
+    }
+    .cover-noise{
+      position:absolute;inset:0;
+      background-image:url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E\");
+      pointer-events:none;z-index:0;
+    }
+    .cover-grid{
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(212,168,67,.06) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(212,168,67,.06) 1px,transparent 1px);
+      background-size:48px 48px;
+      mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+      z-index:0;
+    }
+    .cover-glow{
+      position:absolute;
+      top:-20%;left:50%;transform:translateX(-50%);
+      width:900px;height:600px;
+      background:radial-gradient(ellipse, rgba(212,168,67,.12) 0%, transparent 65%);
+      z-index:0;pointer-events:none;
+    }
+    .cover-glow{animation:glowPulse 8s ease-in-out infinite;}
+    @keyframes glowPulse{
+      0%,100%{opacity:.9;transform:translateX(-50%) scale(1);}
+      50%{opacity:1;transform:translateX(-50%) scale(1.06);}
+    }
+    .cover-main{
+      position:relative;z-index:2;
+      padding:clamp(72px,9vw,128px) clamp(24px,6vw,80px) 48px;
+      max-width:1240px;margin:0 auto;width:100%;
+    }
+    .cover-eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      font-family:'DM Mono',monospace;font-size:11px;
+      letter-spacing:.18em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:28px;
+    }
+    .cover-eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);}
+    h1.cover-title{
+      font-family:'Syne',sans-serif;
+      font-size:clamp(52px,8.5vw,104px);
+      font-weight:800;line-height:.95;letter-spacing:-.04em;
+      margin-bottom:12px;
+    }
+    h1.cover-title em{font-style:normal;color:var(--gold);font-weight:700;}
+    .cover-subtitle{
+      font-family:'Syne',sans-serif;
+      font-size:clamp(16px,2.2vw,24px);
+      color:var(--mist);
+      letter-spacing:-.01em;
+      max-width:860px;
+      margin-bottom:22px;
+    }
+    .cover-kicker{
+      font-family:'DM Mono',monospace;font-size:10px;
+      letter-spacing:.14em;text-transform:uppercase;
+      color:var(--mist2);
+      margin-top:10px;
+    }
+
+    #nav{
+      position:sticky;top:0;z-index:200;
+      background:rgba(11,12,14,.96);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border2);
+      padding:0 clamp(24px,6vw,80px);
+      display:flex;align-items:center;gap:4px;
+      overflow-x:auto;scrollbar-width:none;
+    }
+    html[data-theme="light"] #nav{background:rgba(246,241,233,.92);}
+    #nav::-webkit-scrollbar{display:none;}
+    .nav-item{
+      font-family:'DM Mono',monospace;font-size:11px;
+      letter-spacing:.1em;text-transform:uppercase;
+      color:var(--mist);
+      padding:14px 14px;white-space:nowrap;
+      border-bottom:2px solid transparent;
+      transition:all .2s;
+      display:block;
+    }
+    .nav-item:hover{color:var(--white);}
+    .nav-item.active{color:var(--gold);border-bottom-color:var(--gold);}
+    .nav-item{position:relative;}
+    .nav-item::after{
+      content:'';
+      position:absolute;left:14px;right:14px;bottom:6px;height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity:0;transform:translateY(3px);
+      transition:opacity .2s,transform .2s;
+      pointer-events:none;
+    }
+    .nav-item:hover::after{opacity:.6;transform:none;}
+    .nav-spacer{flex:1;}
+    .doc-switch{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      padding:6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border2);
+      margin-left:6px;
+    }
+    html[data-theme="light"] .doc-switch{background:rgba(26,22,18,.03);}
+    .doc-link{
+      padding:8px 12px;
+      border-radius:999px;
+      font-family:'DM Mono',monospace;
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--mist2);
+      border:1px solid transparent;
+      transition:all .2s;
+      white-space:nowrap;
+    }
+    .doc-link:hover{background:var(--surface2);color:var(--white);border-color:var(--border2);}
+    .doc-link.active{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold2);}
+    .theme-toggle{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:10px;margin-left:6px;
+      background:var(--surface);border:1px solid var(--border2);
+      color:var(--mist2);
+      font-family:'DM Mono',monospace;font-size:10px;
+      letter-spacing:.12em;text-transform:uppercase;
+      cursor:pointer;transition:all .2s;white-space:nowrap;
+    }
+    .theme-toggle:hover{background:var(--surface2);color:var(--white);}
+
+    .section{
+      padding:clamp(64px,8vw,112px) clamp(24px,6vw,80px);
+      border-bottom:1px solid var(--border);
+    }
+    .section-inner{max-width:1240px;margin:0 auto;}
+    .section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:48px;flex-wrap:wrap;}
+    .section-label{
+      font-family:'DM Mono',monospace;font-size:10px;
+      letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+      margin-bottom:10px;display:flex;align-items:center;gap:8px;
+    }
+    .section-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+    h2.section-title{
+      font-family:'Syne',sans-serif;
+      font-size:clamp(28px,4vw,46px);
+      font-weight:700;letter-spacing:-.03em;line-height:1.05;
+      margin:0;
+    }
+    .section-desc{font-size:16px;color:var(--mist2);max-width:620px;line-height:1.75;margin-top:12px;}
+
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:48px;}
+    @media(max-width:800px){.stats-grid{grid-template-columns:1fr 1fr;}}
+    .stat-card{background:var(--surface);padding:28px 24px;position:relative;overflow:hidden;}
+    .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);}
+    .stat-n{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--gold2);letter-spacing:-.02em;line-height:1;}
+    .stat-l{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist);margin-top:8px;}
+    .stat-sub{font-size:12.5px;color:var(--mist2);margin-top:6px;line-height:1.5;}
+
+    .pitch-slide{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--r2);
+      padding:34px;
+      margin-bottom:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .pitch-slide{transition:transform .22s ease,border-color .22s ease,background .22s ease;will-change:transform;}
+    .pitch-slide:hover{transform:translateY(-3px);border-color:var(--border2);background:var(--surface2);}
+    .pitch-slide::before{
+      content:'';
+      position:absolute;top:0;left:0;width:3px;height:100%;
+      background:var(--gold);
+    }
+    .pitch-slide.featured{
+      background:linear-gradient(135deg,var(--surface2),var(--surface3));
+      border-color:var(--gold-border);
+    }
+    .pitch-slide.featured::before{background:linear-gradient(180deg,var(--gold2),var(--teal));}
+    .pitch-slide-num{
+      font-family:'DM Mono',monospace;font-size:10px;
+      letter-spacing:.14em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:12px;display:block;
+    }
+    .pitch-slide-title{
+      font-family:'Syne',sans-serif;font-size:22px;font-weight:700;
+      color:var(--white);margin-bottom:12px;letter-spacing:-.02em;
+    }
+    .pitch-slide-body{font-size:14px;color:var(--mist2);line-height:1.75;}
+    .pitch-bullets{margin-top:16px;display:flex;flex-direction:column;gap:9px;}
+    .pb{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--mist2);}
+    .pb::before{content:'→';color:var(--gold);font-size:12px;flex-shrink:0;margin-top:2px;}
+
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media(max-width:900px){.two-col{grid-template-columns:1fr;}}
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--r2);
+      padding:18px 20px;
+    }
+    .card h4{
+      font-family:'DM Mono',monospace;
+      font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+      color:var(--mist);margin-bottom:10px;
+    }
+    .kpi{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+    .kpi:last-child{border-bottom:none;}
+    .kpi .l{font-size:13.5px;color:var(--mist2);line-height:1.5;}
+    .kpi .v{font-family:'DM Mono',monospace;font-size:13px;color:var(--white);white-space:nowrap;}
+
+    .cta{
+      background:var(--surface);
+      border-top:1px solid var(--border2);
+      padding:clamp(72px,9vw,128px) clamp(24px,6vw,80px);
+      position:relative;overflow:hidden;
+    }
+    .cta::before{
+      content:'';
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(212,168,67,.06) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(212,168,67,.06) 1px,transparent 1px);
+      background-size:52px 52px;
+      mask-image:radial-gradient(ellipse 90% 90% at 50% 50%, black, transparent);
+      opacity:.7;pointer-events:none;
+    }
+    .cta-inner{position:relative;z-index:2;max-width:980px;margin:0 auto;text-align:center;}
+    h2.cta-title{font-family:'Syne',sans-serif;font-size:clamp(34px,5.4vw,66px);line-height:1.05;letter-spacing:-.03em;margin-bottom:16px;}
+    h2.cta-title em{font-style:italic;color:var(--gold2);}
+    .cta-sub{font-size:16px;color:var(--mist2);max-width:720px;margin:0 auto 26px;line-height:1.75;}
+    .cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:14px 18px;border-radius:10px;
+      font-family:'DM Mono',monospace;font-size:11px;
+      letter-spacing:.12em;text-transform:uppercase;
+      border:1px solid var(--border2);
+      transition:all .2s;
+    }
+    .btn.primary{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold2);}
+    .btn.primary:hover{background:rgba(212,168,67,.22);}
+    .btn.ghost{background:transparent;color:var(--mist2);}
+    .btn.ghost:hover{background:var(--surface2);color:var(--white);}
+    .btn{will-change:transform;}
+    .btn:hover{transform:translateY(-2px);}
+    .btn:active{transform:translateY(0px);}
+    .doc-footer{
+      background:var(--black);
+      border-top:1px solid var(--border2);
+      padding:28px clamp(24px,6vw,80px);
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    }
+    .doc-footer-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gold);}
+    .doc-footer-note{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--mist);}
+
+    .fi{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+    .fi.vis{opacity:1;transform:none;}
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+    }
+  </style>
+</head>
+<body>
+  <div id="doc-progress"></div>
+  <div id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+  <div class="cover" id="top">
+    <div class="cover-noise"></div>
+    <div class="cover-grid"></div>
+    <div class="cover-glow"></div>
+    <div class="cover-main">
+      <div class="cover-eyebrow">Seed Round Pitch · Confidential · March 2026</div>
+      <h1 class="cover-title">Sourced<br>by <em>Dibbs</em> 2.0</h1>
+      <div class="cover-subtitle">Autonomous Procurement Intelligence for Construction. Contractors post what they need. AI finds suppliers everywhere — on and off platform — collects bids, and auto-negotiates the best deal in under 24 hours.</div>
+      <div class="cover-kicker">Built from `Sourced_McKinsey.pptx` (imported into a web pitch page)</div>
+    </div>
+  </div>
+
+  <nav id="nav">
+    <a class="nav-item active" href="#situation">01 · Situation</a>
+    <a class="nav-item" href="#complication">02 · Complication</a>
+    <a class="nav-item" href="#resolution">03 · Resolution</a>
+    <a class="nav-item" href="#numbers">04 · Numbers</a>
+    <a class="nav-item" href="#ask">05 · Ask</a>
+    <span class="nav-spacer"></span>
+    <div class="doc-switch" aria-label="Docs navigation">
+      <a class="doc-link" href="index.html">Overview</a>
+      <a class="doc-link active" href="pitch.html">Pitch</a>
+      <a class="doc-link" href="demand.html">Validation</a>
+      <a class="doc-link" href="plansheet.html">Spec</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">Theme</button>
+  </nav>
+
+  <section class="section" id="situation">
+    <div class="section-inner">
+      <div class="section-header fi">
+        <div>
+          <div class="section-label">01 · The Situation</div>
+          <h2 class="section-title">A $2 trillion market still runs on phone calls and spreadsheets.</h2>
+          <p class="section-desc">Contractors face a systematic sourcing disadvantage: too few bids, slow responses, and no pricing leverage.</p>
+        </div>
+      </div>
+
+      <div class="stats-grid fi">
+        <div class="stat-card"><div class="stat-n">$2T</div><div class="stat-l">Total addressable market</div><div class="stat-sub">US construction spend</div></div>
+        <div class="stat-card"><div class="stat-n">92%</div><div class="stat-l">Sourcing is #1 pain</div><div class="stat-sub">NAHB Member Survey</div></div>
+        <div class="stat-card"><div class="stat-n">230×</div><div class="stat-l">LTV:CAC ratio</div><div class="stat-sub">Target unit economics</div></div>
+        <div class="stat-card"><div class="stat-n">$275M</div><div class="stat-l">Comparable exit</div><div class="stat-sub">BuildingConnected (Autodesk)</div></div>
+      </div>
+
+      <div class="pitch-slide featured fi">
+        <span class="pitch-slide-num">Slide 03 · Situation — The Problem</span>
+        <div class="pitch-slide-title">Contractors lose 6–10 hours per week and overpay 15–30%.</div>
+        <div class="pitch-slide-body">Because the sourcing process hasn’t changed in 30 years, contractors waste unbillable time chasing quotes and routinely close orders without competitive pricing pressure.</div>
+        <div class="pitch-bullets">
+          <div class="pb">92% of contractors cite sourcing as their #1 operational pain (NAHB Member Survey)</div>
+          <div class="pb">6–10 unbillable hours wasted per week chasing supplier quotes (NAHB Member Survey)</div>
+          <div class="pb">15–30% average overpayment when only one supplier is contacted (Kojo / BuildingConnected)</div>
+          <div class="pb">79% adjust project plans because of material sourcing delays (AGC Industry Survey 2024)</div>
+        </div>
+      </div>
+
+      <div class="pitch-slide fi">
+        <span class="pitch-slide-num">Slide 04 · Situation — Voice of Customer</span>
+        <div class="pitch-slide-title">Customer proof exists — keep it in the library.</div>
+        <div class="pitch-slide-body">For investor discussions, we reference proof without duplicating it here. The full “voice of customer” receipts (Reddit + reviews) live in the Validation Library.</div>
+        <div class="pitch-bullets">
+          <div class="pb">Open the evidence library: <strong style="color:var(--white);font-weight:700;">demand.html</strong></div>
+          <div class="pb">Use this pitch for the narrative + numbers; use validation for depth.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="complication">
+    <div class="section-inner">
+      <div class="section-header fi">
+        <div>
+          <div class="section-label">02 · The Complication</div>
+          <h2 class="section-title">Existing solutions are passive directories — not procurement engines.</h2>
+          <p class="section-desc">No one has combined off-platform supplier discovery, AI phone outreach, and split-bid negotiation into a single automated loop.</p>
+        </div>
+      </div>
+
+      <div class="pitch-slide fi">
+        <span class="pitch-slide-num">Slide 06 · Market Opportunity</span>
+        <div class="pitch-slide-title">The largest undigitized opportunity in the US economy.</div>
+        <div class="pitch-slide-body">The market has never had true procurement competition. That creates a large white space for an AI-native procurement agent.</div>
+        <div class="two-col" style="margin-top:16px;">
+          <div class="card">
+            <h4>TAM / SAM / SOM</h4>
+            <div class="kpi"><div class="l">TAM — Total US Construction Spend</div><div class="v">$2T</div></div>
+            <div class="kpi"><div class="l">SAM — 800K SMB contractors × $250K/yr materials</div><div class="v">$200B</div></div>
+            <div class="kpi"><div class="l">SOM (Month 12) — subscriptions only</div><div class="v">$116K ARR</div></div>
+          </div>
+          <div class="card">
+            <h4>Year 5 Upside</h4>
+            <div class="kpi"><div class="l">Transaction fees alone at 10% penetration, 1.5% on $250K/yr</div><div class="v">$300M+ ARR</div></div>
+            <div class="kpi"><div class="l">Before subscriptions or data API</div><div class="v">+</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pitch-slide fi">
+        <span class="pitch-slide-num">Slide 08 · Why Now</span>
+        <div class="pitch-slide-title">A narrow 18-month window.</div>
+        <div class="pitch-slide-body">Three structural shifts in 2024–25 make this product feasible and affordable now.</div>
+        <div class="pitch-bullets">
+          <div class="pb"><strong style="color:var(--white);">AI voice agents</strong> now pass the “can’t tell it’s a bot” test and cost pennies per call.</div>
+          <div class="pb"><strong style="color:var(--white);">Google Maps scraping</strong> is fast/cheap enough to run on every RFQ → cold-start is solvable on Day 1.</div>
+          <div class="pb"><strong style="color:var(--white);">Price volatility</strong> makes competitive bids urgent; contractors now expect mobile-first software.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="resolution">
+    <div class="section-inner">
+      <div class="section-header fi">
+        <div>
+          <div class="section-label">03 · The Resolution</div>
+          <h2 class="section-title">Post once. AI closes the deal.</h2>
+          <p class="section-desc">Sourced replaces phone-tag procurement with an autonomous agent that sources, calls, compares, negotiates, and closes.</p>
+        </div>
+      </div>
+
+      <div class="pitch-slide featured fi">
+        <span class="pitch-slide-num">Slide 10 · The Solution</span>
+        <div class="pitch-slide-title">Autonomous procurement in under 24 hours.</div>
+        <div class="pitch-bullets">
+          <div class="pb"><strong style="color:var(--white);">01 · Post a Requirement:</strong> speak or type in 60 seconds; AI structures the RFQ.</div>
+          <div class="pb"><strong style="color:var(--white);">02 · AI Finds Suppliers:</strong> checks platform then scrapes Google Maps for every relevant supplier.</div>
+          <div class="pb"><strong style="color:var(--white);">03 · Automated Outreach:</strong> email + AI phone call; “press 1 to participate” (TCPA compliant).</div>
+          <div class="pb"><strong style="color:var(--white);">04 · All Bids in One Place:</strong> platform, email, phone responses compared side-by-side.</div>
+          <div class="pb"><strong style="color:var(--white);">05 · AI Negotiates:</strong> optimal split-bid + re-engagement calls to sharpen pricing.</div>
+          <div class="pb"><strong style="color:var(--white);">06 · Close:</strong> contractor taps Confirm; 12–22% average savings.</div>
+        </div>
+      </div>
+
+      <div class="pitch-slide fi">
+        <span class="pitch-slide-num">Slide 11 · Platform Model</span>
+        <div class="pitch-slide-title">A two-sided network with zero cold-start.</div>
+        <div class="pitch-slide-body">AI scrapes and calls suppliers before they ever sign up, so supply exists as soon as demand appears.</div>
+        <div class="two-col" style="margin-top:16px;">
+          <div class="card">
+            <h4>Contractors</h4>
+            <div class="kpi"><div class="l">Post a requirement in 60 seconds</div><div class="v">✓</div></div>
+            <div class="kpi"><div class="l">Get 3–5 bids in hours, not days</div><div class="v">✓</div></div>
+            <div class="kpi"><div class="l">AI negotiates best price; save 12–22%</div><div class="v">✓</div></div>
+          </div>
+          <div class="card">
+            <h4>Suppliers</h4>
+            <div class="kpi"><div class="l">Receive clean, structured RFQs</div><div class="v">✓</div></div>
+            <div class="kpi"><div class="l">Respond in minutes; win new business</div><div class="v">✓</div></div>
+            <div class="kpi"><div class="l">Get found before even signing up</div><div class="v">✓</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="numbers">
+    <div class="section-inner">
+      <div class="section-header fi">
+        <div>
+          <div class="section-label">04 · The Numbers</div>
+          <h2 class="section-title">Three revenue streams that compound.</h2>
+          <p class="section-desc">Subscriptions prove demand, transactions create price data, and a data API monetizes it at near-zero marginal cost.</p>
+        </div>
+      </div>
+
+      <div class="pitch-slide fi">
+        <span class="pitch-slide-num">Slide 13 · Business Model</span>
+        <div class="pitch-slide-title">Subscriptions → Transaction Fees → Data API</div>
+        <div class="two-col" style="margin-top:16px;">
+          <div class="card">
+            <h4>Subscriptions (Phase 1)</h4>
+            <div class="kpi"><div class="l">Contractor Pro</div><div class="v">$99 / mo</div></div>
+            <div class="kpi"><div class="l">Contractor Business</div><div class="v">$199 / mo</div></div>
+            <div class="kpi"><div class="l">Supplier Pro</div><div class="v">$149 / mo</div></div>
+            <div class="kpi"><div class="l">Gross margin</div><div class="v">~85%</div></div>
+          </div>
+          <div class="card">
+            <h4>Transactions + Data (Phase 3)</h4>
+            <div class="kpi"><div class="l">Transaction fee</div><div class="v">1.5–2.5%</div></div>
+            <div class="kpi"><div class="l">Target GMV / mo</div><div class="v">$5M</div></div>
+            <div class="kpi"><div class="l">Data API entry price</div><div class="v">$2K / mo</div></div>
+            <div class="kpi"><div class="l">Data gross margin</div><div class="v">~100%</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pitch-slide featured fi">
+        <span class="pitch-slide-num">Slide 14 · Unit Economics</span>
+        <div class="pitch-slide-title">230× LTV:CAC (target)</div>
+        <div class="pitch-slide-body">For every $1 spent acquiring a customer, Sourced returns $230 — far above typical SaaS benchmarks.</div>
+        <div class="pitch-bullets">
+          <div class="pb"><strong style="color:var(--white);">CAC:</strong> ~$15 (AI email + phone; no sales rep)</div>
+          <div class="pb"><strong style="color:var(--white);">LTV:</strong> ~$3,450 ($119 avg/mo × 29 months)</div>
+          <div class="pb"><strong style="color:var(--white);">Payback:</strong> &lt; 1 month</div>
+        </div>
+      </div>
+
+      <div class="pitch-slide fi">
+        <span class="pitch-slide-num">Slide 15–16 · Execution</span>
+        <div class="pitch-slide-title">Phase-gated milestones</div>
+        <div class="pitch-slide-body">Conservative path to $116K ARR by Month 12 from subscriptions, while building the SEO flywheel and supply-first GTM.</div>
+        <div class="pitch-bullets">
+          <div class="pb">M4: Beta live (15 contractors + 10 suppliers; warm network)</div>
+          <div class="pb">M7: Phase 1 KPI gate — 30/30 users; 3+ bids per RFQ; ~$2.2K MRR</div>
+          <div class="pb">M8: SEO pages live (500+ supplier pages)</div>
+          <div class="pb">M12: $116K ARR — 70 contractors + 50 suppliers (~$9.7K MRR)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ask">
+    <div class="section-inner">
+      <div class="section-header fi">
+        <div>
+          <div class="section-label">05 · The Ask</div>
+          <h2 class="section-title">Raising $500K–$1M seed to prove the loop.</h2>
+          <p class="section-desc">Seed capital validates supply seeding, 30/30 KPI, and revenue covering burn by Month 9.</p>
+        </div>
+      </div>
+
+      <div class="pitch-slide featured fi">
+        <span class="pitch-slide-num">Slide 17 · Use of Funds</span>
+        <div class="pitch-slide-title">$500K–$1M seed allocation</div>
+        <div class="two-col" style="margin-top:16px;">
+          <div class="card">
+            <h4>Use of Funds</h4>
+            <div class="kpi"><div class="l">Product & Development</div><div class="v">40%</div></div>
+            <div class="kpi"><div class="l">Go-to-Market</div><div class="v">20%</div></div>
+            <div class="kpi"><div class="l">Legal & Compliance (TCPA)</div><div class="v">15%</div></div>
+            <div class="kpi"><div class="l">Working Capital Buffer</div><div class="v">15%</div></div>
+            <div class="kpi"><div class="l">Phase 3 Prep (payments)</div><div class="v">10%</div></div>
+          </div>
+          <div class="card">
+            <h4>Milestone Gates</h4>
+            <div class="kpi"><div class="l">Month 4 — Beta live (warm network)</div><div class="v">M4</div></div>
+            <div class="kpi"><div class="l">Month 7 — 30/30 KPI + 3+ bids/RFQ</div><div class="v">M7</div></div>
+            <div class="kpi"><div class="l">Month 12 — $116K ARR + SEO flywheel live</div><div class="v">M12</div></div>
+            <div class="kpi"><div class="l">Month 18 — Series A ready ($3–5M)</div><div class="v">M18</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="cta">
+    <div class="cta-inner fi">
+      <div class="section-label" style="justify-content:center;">Closing</div>
+      <h2 class="cta-title">The market is real.<br>The window is <em>open.</em></h2>
+      <p class="cta-sub">Every day we wait, a contractor overpays for materials they should have sourced better.</p>
+      <div class="cta-actions">
+        <a class="btn primary" href="index.html">Back to Overview →</a>
+        <a class="btn ghost" href="plansheet.html">Open Master Spec</a>
+        <a class="btn ghost" href="demand.html">Open Validation Report</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="doc-footer">
+    <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+    <div class="doc-footer-note">Pitch · v1 · March 2026 · Confidential</div>
+  </div>
+
+  <script>
+    // Theme (persisted)
+    (function initTheme(){
+      const stored=localStorage.getItem('dibbs_theme');
+      const prefersLight=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;
+      const theme=stored||(prefersLight?'light':'dark');
+      document.documentElement.dataset.theme=theme;
+      const btn=document.getElementById('themeToggle');
+      const sync=()=>{ if(btn) btn.textContent=(document.documentElement.dataset.theme==='light'?'Light':'Night'); };
+      sync();
+      if(btn) btn.addEventListener('click',()=>{
+        const next=document.documentElement.dataset.theme==='light'?'dark':'light';
+        document.documentElement.dataset.theme=next;
+        localStorage.setItem('dibbs_theme',next);
+        sync();
+      });
+    })();
+
+    window.addEventListener('scroll',()=>{
+      const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+      document.getElementById('doc-progress').style.width=p+'%';
+      document.getElementById('btt').classList.toggle('show',window.scrollY>400);
+    });
+
+    const obs=new IntersectionObserver((entries)=>{
+      entries.forEach(x=>{ if(x.isIntersecting) x.target.classList.add('vis'); });
+    },{threshold:.08});
+    document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+    const sections=['situation','complication','resolution','numbers','ask','cta'];
+    const navItems=document.querySelectorAll('.nav-item');
+    const obs2=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const id=e.target.id;
+          navItems.forEach(n=>n.classList.toggle('active', n.getAttribute('href')==='#'+id));
+        }
+      });
+    },{threshold:.2,rootMargin:'-60px 0px -60% 0px'});
+    sections.forEach(id=>{const el=document.getElementById(id);if(el)obs2.observe(el);});
+  </script>
+</body>
+</html>
+

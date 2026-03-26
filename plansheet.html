@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+<meta name="bingbot" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
 <title>Sourced by Dibbs 2.0 — Master Specification</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
   --black: #0B0C0E;
@@ -36,9 +39,23 @@
   --r: 8px;
   --r2: 12px;
 }
+
+html[data-theme="light"] {
+  --black: #F6F1E9;
+  --surface: #FFFFFF;
+  --surface2: #FBF7F0;
+  --surface3: #F2EBDD;
+  --border: rgba(26,22,18,.10);
+  --border2: rgba(26,22,18,.16);
+  --white: #1A1612;
+  --mist: #6B6258;
+  --mist2: #8A8076;
+  --gold-dim: rgba(212,168,67,.14);
+  --gold-border: rgba(212,168,67,.30);
+}
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior: smooth; }
-body { font-family:'DM Sans',sans-serif; background:var(--black); color:var(--white); overflow-x:hidden; line-height:1.6; }
+body { font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--black); color:var(--white); overflow-x:hidden; line-height:1.6; }
 ::selection { background:var(--gold-dim); color:var(--gold2); }
 ::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:var(--surface); }
@@ -76,6 +93,11 @@ body { font-family:'DM Sans',sans-serif; background:var(--black); color:var(--wh
   background:radial-gradient(ellipse, rgba(212,168,67,.12) 0%, transparent 65%);
   z-index:0;pointer-events:none;
 }
+.cover-glow{animation:glowPulse 8s ease-in-out infinite;}
+@keyframes glowPulse{
+  0%,100%{opacity:.9;transform:translateX(-50%) scale(1);}
+  50%{opacity:1;transform:translateX(-50%) scale(1.06);}
+}
 .cover-main {
   position:relative;z-index:2;
   padding:clamp(60px,8vw,120px) clamp(24px,6vw,80px) 0;
@@ -99,7 +121,7 @@ h1.cover-title {
   color:var(--white);
   margin-bottom:8px;
 }
-h1.cover-title em { font-style:italic;color:var(--gold); font-weight:600; }
+h1.cover-title em { font-style:normal;color:var(--gold); font-weight:700; }
 .cover-subtitle {
   font-family:'Syne',sans-serif;
   font-size:clamp(16px,2.5vw,26px);
@@ -147,6 +169,18 @@ h1.cover-title em { font-style:italic;color:var(--gold); font-weight:600; }
   overflow-x:auto;
   scrollbar-width:none;
 }
+#nav .nav-spacer{flex:1;}
+html[data-theme="light"] #nav{background:rgba(246,241,233,.92);}
+.theme-toggle{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 12px;border-radius:10px;margin-left:6px;
+  background:var(--surface);border:1px solid var(--border2);
+  color:var(--mist2);
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.theme-toggle:hover{background:var(--surface2);color:var(--white);}
 #nav::-webkit-scrollbar{display:none;}
 .nav-item {
   font-family:'DM Mono',monospace;font-size:11px;
@@ -162,6 +196,35 @@ h1.cover-title em { font-style:italic;color:var(--gold); font-weight:600; }
 }
 .nav-item:hover{color:var(--white);}
 .nav-item.active{color:var(--gold);border-bottom-color:var(--gold);}
+.nav-item{position:relative;}
+.nav-item::after{
+  content:'';
+  position:absolute;left:14px;right:14px;bottom:6px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transform:translateY(3px);
+  transition:opacity .2s,transform .2s;
+  pointer-events:none;
+}
+.nav-item:hover::after{opacity:.6;transform:none;}
+#nav .doc-switch{
+  display:flex;align-items:center;gap:6px;
+  padding:6px;border-radius:999px;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border2);
+  margin-left:6px;
+}
+html[data-theme="light"] #nav .doc-switch{background:rgba(26,22,18,.03);}
+#nav .doc-link{
+  padding:8px 12px;border-radius:999px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mist2);
+  border:1px solid transparent;
+  transition:all .2s;white-space:nowrap;
+  text-decoration:none;
+}
+#nav .doc-link:hover{background:var(--surface2);color:var(--white);border-color:var(--border2);}
+#nav .doc-link.active{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold2);}
 
 /* ── SECTIONS ── */
 .section {
@@ -250,7 +313,8 @@ h2.section-title {
   overflow:hidden;
   transition:border-color .2s;
 }
-.feature-card:hover{border-color:var(--border2);}
+.feature-card{transition:transform .22s ease,border-color .22s ease;}
+.feature-card:hover{border-color:var(--border2);transform:translateY(-3px);}
 .feature-card.open{border-color:var(--gold-border);}
 .fc-header {
   display:flex;align-items:center;justify-content:space-between;
@@ -357,7 +421,8 @@ h2.section-title {
   padding:18px 20px;
   transition:all .2s;
 }
-.admin-card:hover{border-color:var(--border2);background:var(--surface3);}
+.admin-card{will-change:transform;}
+.admin-card:hover{border-color:var(--border2);background:var(--surface3);transform:translateY(-2px);}
 .admin-card-icon{font-size:20px;margin-bottom:10px;}
 .admin-card-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;}
 .admin-card-desc{font-size:13px;color:var(--mist2);line-height:1.6;}
@@ -475,6 +540,10 @@ h2.section-title {
 .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
 .fade-in.visible{opacity:1;transform:none;}
 
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+
 /* ── PROGRESS BAR ── */
 #doc-progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:999;width:0%;transition:width .1s;}
 
@@ -534,6 +603,14 @@ h2.section-title {
   <a class="nav-item" href="#competition">04 · Competition</a>
   <a class="nav-item" href="#risks">05 · Risks</a>
   <a class="nav-item" href="#phasing">06 · Build Order</a>
+  <span class="nav-spacer"></span>
+  <div class="doc-switch" aria-label="Docs navigation">
+    <a class="doc-link" href="index.html">Overview</a>
+    <a class="doc-link" href="pitch.html">Pitch</a>
+    <a class="doc-link" href="demand.html">Validation</a>
+    <a class="doc-link active" href="plansheet.html">Spec</a>
+  </div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">Theme</button>
 </nav>
 
 <!-- ═══════════════════════════════════════
@@ -916,169 +993,33 @@ h2.section-title {
     <div>
       <div class="section-label">02 · Investor Pitch</div>
       <h2 class="section-title">The Case for Sourced</h2>
-      <p class="section-desc">What we tell investors. Every slide mapped to the data behind it.</p>
+      <p class="section-desc">This doc is the build spec. The investor narrative and the full validation library live as separate artifacts to keep this page focused.</p>
     </div>
   </div>
 
-  <!-- Key stats -->
-  <div class="stats-grid fade-in">
-    <div class="stat-card">
-      <div class="stat-n">$2T</div>
-      <div class="stat-l">US Construction Market</div>
-      <div class="stat-sub">Materials procurement is 40–60% of project cost. That's $800B–$1.2T flowing through this problem every year.</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-n">92%</div>
-      <div class="stat-l">Struggle to Source Materials</div>
-      <div class="stat-sub">NAHB survey. 3M+ contractors. The problem is universal, not niche.</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-n">$275M</div>
-      <div class="stat-l">BuildingConnected Exit</div>
-      <div class="stat-sub">Autodesk acquisition 2018. Less capable product in a narrower market. The playbook already has an exit.</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-n">230:1</div>
-      <div class="stat-l">LTV:CAC Ratio</div>
-      <div class="stat-sub">AI outreach CAC ~$15. Blended contractor LTV ~$3,450. Best-in-class SaaS is 3:1.</div>
-    </div>
-  </div>
-
-  <!-- Pitch slides -->
-  <div class="pitch-slide featured fade-in">
-    <span class="pitch-slide-num">Slide 01 · The Problem</span>
-    <div class="pitch-slide-title">A $2 Trillion Industry Running on Phone Tag</div>
-    <div class="pitch-slide-body">Construction contractors spend 6–10 hours per week chasing material quotes — calling suppliers one at a time, leaving voicemails, waiting 24–48 hours for responses, then manually comparing incompatible formats on a spreadsheet. After all that, they still get 1–2 bids and overpay 15–30% because they have no real supplier competition. 92% of US contractors say sourcing materials is their top operational pain point.</div>
-    <div class="pitch-metrics-row">
-      <div class="pm-box"><div class="pm-box-n">60 hrs</div><div class="pm-box-l">Time to close one order (old way)</div></div>
-      <div class="pm-box"><div class="pm-box-n">15–30%</div><div class="pm-box-l">Average overpayment without competition</div></div>
-      <div class="pm-box"><div class="pm-box-n">1–2</div><div class="pm-box-l">Average bids received per RFQ</div></div>
+  <div class="callout gold fade-in">
+    <div class="callout-icon">📌</div>
+    <div>
+      <div class="callout-title">Use the right artifact for the right audience</div>
+      <div class="callout-body">To keep this spec clean, we don’t duplicate the full pitch narrative or validation receipts here. Use the links below when you need to show investors or prospects.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+        <a class="nav-item" href="pitch.html" style="border-bottom:none;padding:10px 12px;border-radius:10px;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold2);">Open Pitch →</a>
+        <a class="nav-item" href="demand.html" style="border-bottom:none;padding:10px 12px;border-radius:10px;background:var(--surface3);border:1px solid var(--border2);color:var(--mist2);">Open Validation Library</a>
+        <a class="nav-item" href="index.html" style="border-bottom:none;padding:10px 12px;border-radius:10px;background:transparent;border:1px solid var(--border2);color:var(--mist2);">Open Overview</a>
+      </div>
     </div>
   </div>
 
   <div class="pitch-slide fade-in">
-    <span class="pitch-slide-num">Slide 02 · The Solution</span>
-    <div class="pitch-slide-title">Sourced: Autonomous Procurement in Under 24 Hours</div>
-    <div class="pitch-slide-body">Contractor posts what they need in 60 seconds. Sourced's AI finds suppliers (on and off platform), contacts every one of them via email + AI phone call, aggregates all bids side-by-side, identifies the best split deal across suppliers, and auto-negotiates pricing. Contractor taps "confirm." Average result: 4+ bids, 12–22% savings, under 24 hours. Zero phone calls from the contractor.</div>
+    <span class="pitch-slide-num">Pitch index</span>
+    <div class="pitch-slide-title">What’s in the pitch</div>
+    <div class="pitch-slide-body">The investor deck is structured to match how investors decide: problem → why now → solution loop → economics → milestone gates → ask.</div>
     <div class="pitch-bullets">
-      <div class="pb">Off-platform discovery: AI scrapes Google Maps and calls suppliers who've never heard of us — solving the cold-start problem on day one.</div>
-      <div class="pb">Split-bid engine: routes plywood to Supplier A and studs to Supplier B for the cheapest combined total — not available anywhere else.</div>
-      <div class="pb">AI phone negotiation: calls the losing supplier back to sharpen pricing. A Dutch auction in real time, fully automated.</div>
-    </div>
-  </div>
-
-  <div class="pitch-slide fade-in">
-    <span class="pitch-slide-num">Slide 03 · Market Size</span>
-    <div class="pitch-slide-title">TAM: $8B SOM in Year 5</div>
-    <div class="pitch-slide-body">The total US construction market is $2T. Materials procurement represents 40–60% of project costs — a $800B–$1.2T addressable spend. Our serviceable market is the SMB contractor segment: ~800,000 firms spending $250K+/year on materials. At 10% penetration with Contractor Pro subscriptions and 1.5% transaction fees:</div>
-    <div class="pitch-bullets">
-      <div class="pb"><strong style="color:var(--white);">Bottom-up:</strong> 800K contractors × $250K avg spend × 10% penetration × 1.5% fee = $300M ARR in transaction fees alone</div>
-      <div class="pb"><strong style="color:var(--white);">Subscription layer:</strong> 80K contractors × $99/mo = $95M ARR additional</div>
-      <div class="pb"><strong style="color:var(--white);">Data API:</strong> 200 enterprise customers × $3K/mo = $7.2M ARR at near-zero cost</div>
-    </div>
-  </div>
-
-  <div class="pitch-slide fade-in">
-    <span class="pitch-slide-num">Slide 04 · Business Model</span>
-    <div class="pitch-slide-title">Three Revenue Streams, Each Compounding</div>
-    <div class="pitch-slide-body">Subscriptions (immediate), transaction fees (scale), data API (near-zero cost). Each layer makes the next one more valuable.</div>
-    <div class="fc-grid" style="margin-top:20px;">
-      <div class="fc-block">
-        <div class="fc-block-label">Contractor Tiers</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">Pro</span><span class="fc-metric-val">$99/mo</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Business</span><span class="fc-metric-val">$199/mo</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">ROI on first use</span><span class="fc-metric-val">25–46×</span></div>
-        </div>
-      </div>
-      <div class="fc-block">
-        <div class="fc-block-label">Supplier Tiers</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">Basic (claimed page)</span><span class="fc-metric-val">Free</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Pro</span><span class="fc-metric-val">$149/mo</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Enterprise</span><span class="fc-metric-val">$249–499/mo</span></div>
-        </div>
-      </div>
-      <div class="fc-block">
-        <div class="fc-block-label">Transaction Fee</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">Rate</span><span class="fc-metric-val">1.5–2.5%</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">$5M GMV/mo</span><span class="fc-metric-val">$75–125K/mo</span></div>
-        </div>
-      </div>
-      <div class="fc-block">
-        <div class="fc-block-label">Data API</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">Entry price</span><span class="fc-metric-val">$2K/mo</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Gross margin</span><span class="fc-metric-val">~100%</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pitch-slide fade-in">
-    <span class="pitch-slide-num">Slide 05 · Unit Economics</span>
-    <div class="pitch-slide-title">230:1 LTV:CAC — Best-in-Class</div>
-    <div class="pitch-slide-body">AI-powered outreach makes customer acquisition nearly free. The unit economics are exceptional even before network effects kick in.</div>
-    <div class="fc-grid" style="margin-top:20px;">
-      <div class="fc-block">
-        <div class="fc-block-label">Contractor Economics</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">CAC (AI outreach)</span><span class="fc-metric-val">~$15</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Monthly subscription</span><span class="fc-metric-val">$99–199</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Avg retention</span><span class="fc-metric-val">29 months</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">LTV</span><span class="fc-metric-val">~$3,450</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">LTV:CAC</span><span class="fc-metric-val">230:1</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Payback period</span><span class="fc-metric-val">&lt;1 month</span></div>
-        </div>
-      </div>
-      <div class="fc-block">
-        <div class="fc-block-label">Platform Gross Margins</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">SaaS subscriptions</span><span class="fc-metric-val">~85%</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Transaction fee</span><span class="fc-metric-val">~70%</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Data API</span><span class="fc-metric-val">~100%</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Blended (Year 2)</span><span class="fc-metric-val">~80%</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pitch-slide fade-in">
-    <span class="pitch-slide-num">Slide 06 · Why Now</span>
-    <div class="pitch-slide-title">Three Enabling Technologies Converged in 2024–25</div>
-    <div class="pitch-slide-body">This product couldn't have been built in 2020. The specific combination of capabilities that make Sourced work only became reliable and affordable in the last 18 months.</div>
-    <div class="pitch-bullets">
-      <div class="pb"><strong style="color:var(--white);">AI voice agents</strong> (Bland.ai, Vapi) now pass the "I can't tell it's a bot" test. Cost: pennies per call. Was $5–10/call in 2022.</div>
-      <div class="pb"><strong style="color:var(--white);">Whisper + GPT-4o</strong> enables voice-to-structured-RFQ with 98%+ accuracy. Contractors don't need to type anything.</div>
-      <div class="pb"><strong style="color:var(--white);">Google Maps API + web scraping</strong> is now fast and cheap enough to run on every RFQ in real time — no pre-seeding required.</div>
-      <div class="pb"><strong style="color:var(--white);">SMB tech adoption</strong> accelerated post-COVID. Contractors now expect software to work on their phone on the job site.</div>
-    </div>
-  </div>
-
-  <div class="pitch-slide fade-in">
-    <span class="pitch-slide-num">Slide 07 · Traction Milestones</span>
-    <div class="pitch-slide-title">Proof Points at Each Gate</div>
-    <div class="pitch-slide-body">Series A ask of $3–5M at Month 18, contingent on hitting these gates:</div>
-    <div class="fc-grid" style="margin-top:16px;">
-      <div class="fc-block">
-        <div class="fc-block-label">Month 7 Gate (Phase 1)</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">Active contractors</span><span class="fc-metric-val">30+</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Active suppliers</span><span class="fc-metric-val">30+</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">Avg bids per RFQ</span><span class="fc-metric-val">3+</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">MRR</span><span class="fc-metric-val">$22K</span></div>
-        </div>
-      </div>
-      <div class="fc-block">
-        <div class="fc-block-label">Month 18 Gate (Series A)</div>
-        <div class="fc-block-content">
-          <div class="fc-metric"><span class="fc-metric-label">Active users</span><span class="fc-metric-val">200+</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">US states</span><span class="fc-metric-val">5+</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">SEO pages live</span><span class="fc-metric-val">10,000+</span></div>
-          <div class="fc-metric"><span class="fc-metric-label">ARR</span><span class="fc-metric-val">$500K+</span></div>
-        </div>
-      </div>
+      <div class="pb">Situation: $2T market, sourcing failure is systemic</div>
+      <div class="pb">Complication: incumbents are passive; “why now” window is open</div>
+      <div class="pb">Resolution: autonomous procurement in &lt;24 hours</div>
+      <div class="pb">Numbers: subscriptions → transactions → data API</div>
+      <div class="pb">Ask: $500K–$1M to prove 30/30 KPI + revenue coverage</div>
     </div>
   </div>
 </section>
@@ -1444,6 +1385,23 @@ h2.section-title {
 </div>
 
 <script>
+// Theme (persisted)
+(function initTheme(){
+  const stored=localStorage.getItem('dibbs_theme');
+  const prefersLight=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;
+  const theme=stored||(prefersLight?'light':'dark');
+  document.documentElement.dataset.theme=theme;
+  const btn=document.getElementById('themeToggle');
+  const sync=()=>{if(btn)btn.textContent=(document.documentElement.dataset.theme==='light'?'Light':'Night');};
+  sync();
+  if(btn)btn.addEventListener('click',()=>{
+    const next=document.documentElement.dataset.theme==='light'?'dark':'light';
+    document.documentElement.dataset.theme=next;
+    localStorage.setItem('dibbs_theme',next);
+    sync();
+  });
+})();
+
 // Progress bar
 window.addEventListener('scroll',()=>{
   const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
