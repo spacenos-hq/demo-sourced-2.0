@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourced — AI Intelligence Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:   #07090C;
+  --s1:   #0D1117;
+  --s2:   #141920;
+  --s3:   #1A2230;
+  --s4:   #202A3A;
+  --w:    #E8EDF5;
+  --w2:   #8B98AB;
+  --w3:   #4A5568;
+  --w4:   #2D3748;
+  --g:    #C8A84B;
+  --g2:   #E6C96A;
+  --g3:   #8A6E28;
+  --gd:   rgba(200,168,75,.08);
+  --gb:   rgba(200,168,75,.20);
+  --t:    #2DD4BF;
+  --td:   rgba(45,212,191,.08);
+  --tb:   rgba(45,212,191,.20);
+  --b:    #60A5FA;
+  --bd:   rgba(96,165,250,.08);
+  --bb:   rgba(96,165,250,.20);
+  --r:    #F87171;
+  --p:    #A78BFA;
+  --pd:   rgba(167,139,250,.08);
+  --pb:   rgba(167,139,250,.20);
+  --ln:   rgba(255,255,255,.06);
+  --ln2:  rgba(255,255,255,.12);
+  --ln3:  rgba(255,255,255,.05);
+
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--w);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── GRID NOISE OVERLAY ───────────────────────────────────── */
+.noise-overlay {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ── GRID PATTERN ─────────────────────────────────────────── */
+.grid-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(200,168,75,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,168,75,.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── MAIN CONTAINER ───────────────────────────────────────── */
+.ai-section {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HERO BLOCK ───────────────────────────────────────────── */
+.hero {
+  padding: 100px 0 72px;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, rgba(200,168,75,.10) 0%, rgba(13,17,23,.88) 45%, transparent 100%);
+  border-bottom: 1px solid var(--ln);
+}
+
+.hero-glow {
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 940px; height: 460px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(230,201,106,.22) 0%, rgba(200,168,75,.08) 48%, transparent 76%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .22em; color: var(--g); text-transform: uppercase;
+  margin-bottom: 20px;
+  opacity: 0; animation: fade-up .6s ease forwards .1s;
+}
+.eyebrow::before, .eyebrow::after {
+  content: ''; width: 36px; height: 1px; background: var(--g); opacity: .5;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 800;
+  color: var(--w);
+  line-height: 1.04;
+  letter-spacing: -.025em;
+  margin-bottom: 18px;
+  opacity: 0; animation: fade-up .6s ease forwards .2s;
+  text-shadow: 0 2px 20px rgba(0,0,0,.38);
+}
+.hero-title .accent { color: var(--g); }
+
+.hero-sub {
+  font-size: 16px; color: #C8D2E0; max-width: 620px;
+  margin: 0 auto 40px; line-height: 1.75;
+  opacity: 0; animation: fade-up .6s ease forwards .3s;
+}
+
+.agent-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--gb);
+  background: var(--gd);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--g2);
+}
+
+/* ── KPI STRIP ────────────────────────────────────────────── */
+.kpi-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 80px;
+  opacity: 0; animation: fade-up .6s ease forwards .4s;
+}
+.kpi {
+  background: var(--s1); border: 1px solid var(--ln2); border-radius: var(--radius-md);
+  padding: 20px 18px; text-align: center; position: relative; overflow: hidden;
+  transition: border-color .25s, transform .25s;
+}
+.kpi::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+}
+.kpi:hover { border-color: var(--ln3); transform: translateY(-2px); }
+.kpi-gold::after { background: var(--g); }
+.kpi-teal::after { background: var(--t); }
+.kpi-blue::after { background: var(--b); }
+.kpi-red::after  { background: var(--r); }
+.kpi-num {
+  font-family: var(--font-display); font-size: 30px; font-weight: 800; line-height: 1;
+  margin-bottom: 6px;
+}
+.kpi-gold .kpi-num { color: var(--g); }
+.kpi-teal .kpi-num { color: var(--t); }
+.kpi-blue .kpi-num { color: var(--b); }
+.kpi-red  .kpi-num { color: var(--r); }
+.kpi-label {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .14em; color: var(--w3); text-transform: uppercase;
+}
+
+/* ── SECTION LABEL ────────────────────────────────────────── */
+.sec-tag {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .20em; color: var(--g); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.sec-tag::before { content: ''; width: 18px; height: 1px; background: var(--g); }
+
+.sec-head {
+  font-family: var(--font-display); font-size: 22px; font-weight: 800;
+  color: var(--w); line-height: 1.15; margin-bottom: 20px;
+}
+
+/* ── CARDS ────────────────────────────────────────────────── */
+.card {
+  background: var(--s1); border: 1px solid var(--ln2); border-radius: var(--radius-lg);
+  padding: 24px; position: relative; overflow: hidden;
+  transition: border-color .25s;
+}
+.card:hover { border-color: rgba(255,255,255,.18); }
+.card-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.cb-gold { background: var(--g); }
+.cb-teal { background: var(--t); }
+.cb-blue { background: var(--b); }
+.cb-purple { background: var(--p); }
+.card-micro {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .16em;
+  color: var(--w3); text-transform: uppercase; margin-bottom: 8px;
+}
+.card-title {
+  font-family: var(--font-display); font-size: 16px; font-weight: 700;
+  color: var(--w); margin-bottom: 16px; line-height: 1.2;
+}
+
+/* ── LAYOUT GRIDS ─────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.col-span-2 { grid-column: 1 / -1; }
+
+/* ── SECTION BLOCKS ───────────────────────────────────────── */
+.section-block {
+  padding: 72px 0;
+  border-top: 1px solid var(--ln);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.section-block.visible { opacity: 1; transform: translateY(0); }
+
+/* ── BADGE ────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  border-radius: 6px; padding: 3px 9px;
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .09em; font-weight: 500;
+}
+.badge-g { background: var(--gd); border: 1px solid var(--gb); color: var(--g2); }
+.badge-t { background: var(--td); border: 1px solid var(--tb); color: var(--t); }
+.badge-b { background: var(--bd); border: 1px solid var(--bb); color: var(--b); }
+.badge-p { background: var(--pd); border: 1px solid var(--pb); color: var(--p); }
+.badge-dim { background: var(--s2); border: 1px solid var(--ln2); color: var(--w3); }
+.badge-r { background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.2); color: var(--r); }
+
+/* ── LIVE DOT ─────────────────────────────────────────────── */
+.dot-live {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--t);
+  display: inline-block;
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.4; transform:scale(.8); }
+}
+
+/* ── DIVIDER ──────────────────────────────────────────────── */
+.divider { border: none; border-top: 1px solid var(--ln); margin: 28px 0; }
+.glowline {
+  height: 1px; margin: 8px 0; opacity: .35;
+  background: linear-gradient(90deg, transparent, var(--g), transparent);
+}
+
+/* ── ANIMATIONS ───────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes blink-cursor {
+  0%,100% { opacity:1; } 50% { opacity:0; }
+}
+@keyframes wave-bar {
+  0%,100% { transform:scaleY(.6); opacity:.5; }
+  50%      { transform:scaleY(1.4); opacity:1; }
+}
+@keyframes mic-ring-expand {
+  0%   { transform:scale(.8); opacity:.7; }
+  100% { transform:scale(1.3); opacity:0; }
+}
+@keyframes progress-fill {
+  from { width:0; } to { width:68%; }
+}
+@keyframes counter-up {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SCREEN 1 — VOICE RFQ PHONE MOCKUP
+══════════════════════════════════════════════════════════════ */
+.phone-frame {
+  max-width: 270px; margin: 0 auto;
+  background: var(--s3); border: 1px solid var(--ln2);
+  border-radius: 36px; padding: 16px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.05), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.phone-notch {
+  width: 80px; height: 6px; background: var(--s4);
+  border-radius: 3px; margin: 0 auto 14px;
+}
+.phone-status-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 4px; margin-bottom: 14px;
+}
+.phone-time {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--w);
+}
+.phone-icons { display: flex; gap: 5px; align-items: center; }
+.phone-signal { width: 14px; height: 10px; display: flex; gap: 2px; align-items: flex-end; }
+.phone-signal span { width: 3px; background: var(--w); border-radius: 1px; }
+.phone-signal span:nth-child(1) { height: 4px; }
+.phone-signal span:nth-child(2) { height: 6px; }
+.phone-signal span:nth-child(3) { height: 8px; }
+.phone-signal span:nth-child(4) { height: 10px; }
+.phone-battery {
+  font-family: var(--font-mono); font-size: 9px; color: var(--w2);
+}
+.phone-inner {
+  background: var(--s2); border-radius: 24px; padding: 20px 16px 18px;
+  border: 1px solid var(--ln);
+}
+.phone-app-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+}
+.phone-app-title {
+  font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--w);
+}
+.phone-app-badge { font-family: var(--font-mono); font-size: 9px; color: var(--g); }
+
+.mic-zone { display: flex; flex-direction: column; align-items: center; margin-bottom: 18px; }
+.mic-outer {
+  width: 78px; height: 78px; border-radius: 50%;
+  border: 2px solid var(--gb); background: var(--gd);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  animation: mic-outer-pulse 2.2s ease-in-out infinite;
+}
+@keyframes mic-outer-pulse {
+  0%,100% { border-color: rgba(200,168,75,.2); }
+  50%      { border-color: rgba(200,168,75,.5); }
+}
+.mic-ring {
+  position: absolute; border-radius: 50%; border: 1px solid var(--gb);
+  animation: mic-ring-expand 2.2s ease-in-out infinite;
+  opacity: 0;
+}
+.mic-ring-1 { width: 94px; height: 94px; animation-delay: 0s; }
+.mic-ring-2 { width: 112px; height: 112px; animation-delay: .4s; }
+.mic-btn {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--g);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform .2s;
+}
+.mic-btn:hover { transform: scale(1.08); }
+.mic-btn svg { width: 20px; height: 20px; stroke: var(--bg); stroke-width: 2; fill: none; stroke-linecap: round; }
+
+.waveform {
+  display: flex; align-items: center; gap: 3px; height: 28px; margin: 12px 0 8px;
+}
+.wb {
+  width: 3px; border-radius: 2px; background: var(--g);
+  animation: wave-bar .85s ease-in-out infinite;
+}
+.wb:nth-child(1){height:6px;animation-delay:.00s}
+.wb:nth-child(2){height:14px;animation-delay:.08s}
+.wb:nth-child(3){height:22px;animation-delay:.16s}
+.wb:nth-child(4){height:18px;animation-delay:.24s}
+.wb:nth-child(5){height:28px;animation-delay:.32s}
+.wb:nth-child(6){height:20px;animation-delay:.24s}
+.wb:nth-child(7){height:14px;animation-delay:.16s}
+.wb:nth-child(8){height:18px;animation-delay:.08s}
+.wb:nth-child(9){height:8px;animation-delay:.00s}
+
+.voice-status-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .15em;
+  color: var(--g); margin-bottom: 16px;
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+.parsed-block {
+  background: var(--s1); border: 1px solid var(--ln2); border-radius: 10px;
+  overflow: hidden;
+}
+.parsed-header {
+  background: var(--s3); padding: 7px 12px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.parsed-header-label {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .12em; color: var(--g);
+}
+.parsed-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; border-top: 1px solid var(--ln);
+}
+.parsed-key {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em;
+  color: var(--w3); text-transform: uppercase;
+}
+.parsed-val {
+  font-size: 11px; font-weight: 600; color: var(--g2);
+}
+.launch-btn {
+  width: 100%; margin-top: 14px; padding: 12px;
+  background: var(--g); border: none; border-radius: 9px;
+  font-family: var(--font-display); font-size: 12px; font-weight: 700;
+  color: var(--bg); cursor: pointer; letter-spacing: .02em;
+  transition: background .2s, transform .15s;
+}
+.launch-btn:hover { background: var(--g2); transform: translateY(-1px); }
+.launch-btn:active { transform: translateY(0); }
+
+/* ══════════════════════════════════════════════════════════════
+   AI STACK LAYERS
+══════════════════════════════════════════════════════════════ */
+.stack-layer {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; background: var(--s2); border: 1px solid var(--ln2);
+  border-radius: 9px; margin-bottom: 8px; position: relative; overflow: hidden;
+  transition: border-color .2s, background .2s;
+}
+.stack-layer:hover { background: var(--s3); border-color: rgba(255,255,255,.16); }
+.stack-layer::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+}
+.sl-gold::before  { background: var(--g); }
+.sl-teal::before  { background: var(--t); }
+.sl-blue::before  { background: var(--b); }
+.sl-num {
+  font-family: var(--font-mono); font-size: 9px; width: 18px;
+  text-align: center; flex-shrink: 0; font-weight: 500;
+}
+.sl-gold .sl-num { color: var(--g); }
+.sl-teal .sl-num { color: var(--t); }
+.sl-blue .sl-num { color: var(--b); }
+.sl-name {
+  font-size: 12px; font-weight: 600; color: var(--w);
+  width: 96px; flex-shrink: 0;
+}
+.sl-tech {
+  font-family: var(--font-mono); font-size: 9px; color: var(--w3);
+  flex: 1; letter-spacing: .03em;
+}
+.sl-cost { font-family: var(--font-mono); font-size: 9px; flex-shrink: 0; color: var(--w3); }
+.sl-ip {
+  background: var(--gd); border: 1px solid var(--gb); border-radius: 4px;
+  padding: 2px 8px; font-family: var(--font-mono); font-size: 8px;
+  color: var(--g2); letter-spacing: .1em;
+}
+.stack-flow-arrow {
+  text-align: center; color: var(--w4); font-size: 10px; margin: 2px 0;
+  letter-spacing: .25em;
+}
+.stack-cost-total {
+  margin-top: 12px; padding: 11px 14px;
+  background: var(--gd); border: 1px solid var(--gb); border-radius: 9px;
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--g2); letter-spacing: .07em; line-height: 1.8;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   OUTREACH SEQUENCE
+══════════════════════════════════════════════════════════════ */
+.outreach-step {
+  display: flex; align-items: center; gap: 13px;
+  padding: 12px 14px; background: var(--s2); border: 1px solid var(--ln2);
+  border-radius: 10px; margin-bottom: 10px;
+  transition: border-color .2s;
+}
+.outreach-step:hover { border-color: rgba(255,255,255,.18); }
+.outreach-step.highlight { border-color: var(--gb); }
+.os-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.os-icon svg { width: 16px; height: 16px; fill: none; stroke-width: 2; stroke-linecap: round; }
+.os-content { flex: 1; }
+.os-title { font-size: 12px; font-weight: 600; color: var(--w); }
+.os-sub { font-family: var(--font-mono); font-size: 9px; color: var(--w3); margin-top: 2px; }
+.os-time { font-family: var(--font-mono); font-size: 9px; color: var(--g); flex-shrink: 0; }
+.escalation-note {
+  font-family: var(--font-mono); font-size: 9px; color: var(--p);
+  padding: 9px 12px; background: var(--pd); border: 1px solid var(--pb);
+  border-radius: 7px; margin-top: 10px; line-height: 1.7; letter-spacing: .03em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DISCOVERY PANEL
+══════════════════════════════════════════════════════════════ */
+.discovery-panel {
+  background: var(--s2); border: 1px solid var(--ln2); border-radius: 10px; padding: 16px;
+}
+.disc-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.disc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 10px; background: var(--s1); border-radius: 6px;
+  margin-bottom: 5px; font-family: var(--font-mono); font-size: 10px;
+}
+.dr-label { color: var(--w3); }
+.dr-positive { color: var(--t); }
+.dr-negative { color: var(--w3); }
+.disc-total {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 10px; background: var(--gd); border: 1px solid var(--gb);
+  border-radius: 6px; margin-top: 6px; font-family: var(--font-mono); font-size: 10px;
+}
+.dt-label { color: var(--g); }
+.dt-val { font-size: 12px; font-weight: 500; color: var(--g2); }
+
+/* ══════════════════════════════════════════════════════════════
+   LIVE TRACKER
+══════════════════════════════════════════════════════════════ */
+.tracker-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 14px;
+}
+.tracker-title { font-size: 13px; font-weight: 600; color: var(--w); }
+.tracker-subtitle { font-family: var(--font-mono); font-size: 9px; color: var(--w3); margin-top: 3px; }
+.progress-track { height: 3px; background: var(--s3); border-radius: 2px; margin-bottom: 6px; overflow: hidden; }
+.progress-bar {
+  height: 100%; border-radius: 2px; background: var(--g);
+  animation: progress-fill 2.5s ease-out forwards;
+}
+.progress-note { font-family: var(--font-mono); font-size: 9px; color: var(--w3); margin-bottom: 14px; }
+.tracker-row {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 10px;
+  align-items: center; padding: 9px 11px; border-radius: 7px; margin-bottom: 5px;
+}
+.tracker-row:nth-child(odd) { background: var(--s2); }
+.tr-name { font-size: 12px; font-weight: 500; color: var(--w); }
+.tr-sub { font-family: var(--font-mono); font-size: 8px; color: var(--w3); margin-top: 2px; }
+.tr-price { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--g); text-align: right; }
+.tr-dash { color: var(--w3); font-size: 12px; text-align: right; }
+.tracker-footer { text-align: center; padding: 8px 0 2px; font-family: var(--font-mono); font-size: 9px; color: var(--w3); }
+
+/* ══════════════════════════════════════════════════════════════
+   BID TABLE / SPLIT ENGINE
+══════════════════════════════════════════════════════════════ */
+.bid-micro { font-family: var(--font-mono); font-size: 9px; color: var(--w3); margin-bottom: 12px; letter-spacing: .07em; }
+table.bids { width: 100%; border-collapse: collapse; font-size: 11px; }
+table.bids thead th {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .12em;
+  color: var(--w3); text-transform: uppercase;
+  padding: 7px 8px; border-bottom: 1px solid var(--ln2); text-align: left;
+}
+table.bids thead th:not(:first-child) { text-align: right; }
+table.bids tbody td { padding: 8px 8px; border-bottom: 1px solid var(--ln); }
+table.bids tbody td:not(:first-child) { text-align: right; font-family: var(--font-mono); font-size: 11px; color: var(--w2); }
+table.bids tbody .winner td { background: var(--gd); }
+table.bids tbody .winner td:first-child { border-left: 2px solid var(--g); }
+table.bids tbody .winner td:not(:first-child) { color: var(--g2); }
+.bid-name-normal { font-size: 12px; color: var(--w2); }
+.bid-name-winner { font-family: var(--font-mono); font-size: 9px; letter-spacing: .08em; color: var(--g); text-transform: uppercase; }
+.bid-total { font-family: var(--font-display); font-size: 13px; font-weight: 700; }
+.bid-total-normal { color: var(--w); }
+.bid-total-winner { color: var(--g2); }
+.save-stripe {
+  margin-top: 12px; padding: 12px 14px;
+  background: var(--td); border: 1px solid var(--tb); border-radius: 9px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.save-stripe-lhs .save-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; color: var(--t); }
+.save-stripe-lhs .save-sub { font-size: 10px; color: var(--w3); margin-top: 3px; }
+.save-stripe-amount { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--t); }
+
+/* ══════════════════════════════════════════════════════════════
+   NEGOTIATION TERMINAL
+══════════════════════════════════════════════════════════════ */
+.terminal {
+  background: #060809; border: 1px solid var(--ln2); border-radius: 13px; overflow: hidden;
+}
+.term-topbar {
+  background: var(--s2); padding: 10px 16px;
+  display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--ln);
+}
+.tdot { width: 11px; height: 11px; border-radius: 50%; }
+.tdot-r { background: #FF5F57; } .tdot-y { background: #FFBD2E; } .tdot-g { background: #28CA41; }
+.term-label { font-family: var(--font-mono); font-size: 9px; color: var(--w3); letter-spacing: .1em; margin-left: 8px; flex: 1; }
+.term-status-indicator { display: flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 9px; color: var(--t); }
+.term-body { padding: 18px 20px; font-family: var(--font-mono); font-size: 11.5px; line-height: 2.0; }
+.tl { display: block; }
+.tl-time  { color: var(--w3); }
+.tl-sys   { color: var(--b); }
+.tl-ai    { color: var(--g); }
+.tl-supp  { color: var(--t); }
+.tl-action{ color: var(--p); }
+.tl-win   { color: var(--t); font-weight: 600; }
+.tl-text  { color: var(--w2); }
+.cursor {
+  display: inline-block; width: 8px; height: 13px;
+  background: var(--g); vertical-align: middle;
+  animation: blink-cursor .9s step-end infinite;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DEAL CONFIRMATION
+══════════════════════════════════════════════════════════════ */
+.deal-hero {
+  background: var(--td); border: 1px solid var(--tb); border-radius: 11px;
+  padding: 18px; margin-bottom: 16px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.deal-save-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; color: var(--t); margin-bottom: 4px; }
+.deal-save-num { font-family: var(--font-display); font-size: 44px; font-weight: 800; color: var(--t); line-height: 1; }
+.deal-save-sub { font-size: 11px; color: var(--w3); margin-top: 4px; }
+.deal-meta-item { text-align: right; margin-bottom: 12px; }
+.deal-meta-item:last-child { margin-bottom: 0; }
+.deal-meta-num { font-family: var(--font-display); font-size: 22px; font-weight: 700; }
+.deal-meta-num.gold { color: var(--g); }
+.deal-meta-num.red  { color: var(--r); }
+.deal-meta-lbl { font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em; color: var(--w3); margin-top: 2px; }
+
+.deal-supplier-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 11px 13px; background: var(--s2); border: 1px solid var(--ln2);
+  border-radius: 9px; margin-bottom: 7px;
+  transition: border-color .2s;
+}
+.deal-supplier-row:hover { border-color: var(--gb); }
+.ds-name { font-size: 12px; font-weight: 600; color: var(--w); }
+.ds-items { font-family: var(--font-mono); font-size: 9px; color: var(--w3); margin-top: 2px; }
+.ds-price { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--g); }
+
+.deal-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 13px; background: var(--s3); border: 1px solid var(--ln2);
+  border-radius: 9px; margin: 10px 0 14px;
+}
+.dt-lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; color: var(--w2); }
+.dt-num { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--w); }
+.confirm-btn {
+  width: 100%; padding: 15px;
+  background: var(--t); border: none; border-radius: 10px;
+  font-family: var(--font-display); font-size: 15px; font-weight: 800;
+  color: #031a17; cursor: pointer;
+  letter-spacing: .04em;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: background .2s, transform .15s;
+}
+.confirm-btn:hover { background: #4AE6D1; transform: translateY(-2px); }
+.confirm-btn svg { width: 20px; height: 20px; stroke: #031a17; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ══════════════════════════════════════════════════════════════
+   DATA FLYWHEEL
+══════════════════════════════════════════════════════════════ */
+.flywheel-row {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0; align-items: center; margin: 14px 0;
+}
+.fw-node {
+  background: var(--s2); border: 1px solid var(--ln2); border-radius: 9px;
+  padding: 10px 8px; text-align: center;
+  transition: border-color .2s;
+}
+.fw-node.active { background: var(--gd); border-color: var(--gb); }
+.fw-node:hover { border-color: rgba(255,255,255,.2); }
+.fw-node-title { font-size: 11px; font-weight: 600; color: var(--w); margin-bottom: 2px; }
+.fw-node.active .fw-node-title { color: var(--g2); }
+.fw-node-sub { font-family: var(--font-mono); font-size: 8px; color: var(--w3); }
+.fw-arrow { text-align: center; color: var(--w3); font-size: 14px; padding: 0 4px; }
+
+.api-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 13px; background: var(--s2); border: 1px solid var(--ln2);
+  border-radius: 9px; margin-bottom: 7px; transition: border-color .2s;
+}
+.api-item:hover { border-color: rgba(255,255,255,.18); }
+.api-item.highlight { background: var(--gd); border-color: var(--gb); }
+.api-name { font-size: 12px; font-weight: 600; color: var(--w); }
+.api-item.highlight .api-name { color: var(--g2); }
+.api-desc { font-size: 10px; color: var(--w3); margin-top: 2px; }
+.api-yr {
+  font-family: var(--font-mono); font-size: 9px; padding: 3px 8px;
+  background: var(--s3); border: 1px solid var(--ln2);
+  border-radius: 5px; color: var(--w3); flex-shrink: 0;
+}
+.api-item.highlight .api-yr { background: var(--gd); border-color: var(--gb); color: var(--g); }
+
+.flywheel-footer {
+  margin-top: 14px; padding: 12px 14px;
+  background: var(--s2); border-radius: 9px; border: 1px solid var(--ln2);
+  font-size: 11px; color: var(--w3); line-height: 1.7;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 780px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .kpi-strip { grid-template-columns: repeat(2,1fr); }
+  .hero-title { font-size: 32px; }
+  .flywheel-row { grid-template-columns: 1fr; gap: 6px; }
+  .fw-arrow { transform: rotate(90deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .eyebrow, .hero-title, .hero-sub, .kpi-strip {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<section class="ai-section">
+  <div class="grid-bg"></div>
+
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="eyebrow">Sourced by Dibbs 2.0  ·  AI Agent Suite</div>
+      <h1 class="hero-title">Dibbs <span class="accent">Autopilot Sales Agent</span><br>&amp; Dibbs AI Marketing Agent</h1>
+      <p class="hero-sub">Built entirely in-house. No black-box vendors. Every layer owned, every dollar tracked, every deal making the next one smarter.</p>
+
+      <div class="kpi-strip">
+        <div class="kpi kpi-gold">
+          <div class="kpi-num">$0.09</div>
+          <div class="kpi-label">Per AI call (avg)</div>
+        </div>
+        <div class="kpi kpi-teal">
+          <div class="kpi-num">&lt;&nbsp;24h</div>
+          <div class="kpi-label">Deal close time</div>
+        </div>
+        <div class="kpi kpi-blue">
+          <div class="kpi-num">98%+</div>
+          <div class="kpi-label">Whisper accuracy</div>
+        </div>
+        <div class="kpi kpi-red">
+          <div class="kpi-num">0</div>
+          <div class="kpi-label">Contractor calls made</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: VOICE RFQ + AI STACK ──────────────────── -->
+  <div class="container">
+    <div class="section-block">
+      <div class="grid-2">
+
+        <!-- Voice RFQ -->
+        <div>
+          <div class="agent-tag">Dibbs 2.0 - A-pilot Sales Agent</div>
+          <div class="sec-tag">Screen 01  ·  Contractor App</div>
+          <h2 class="sec-head">Post in 60 seconds,<br>AI handles everything else</h2>
+
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-status-bar">
+              <span class="phone-time">9:41</span>
+              <div class="phone-icons">
+                <div class="phone-signal">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+                <span class="phone-battery">100%</span>
+              </div>
+            </div>
+            <div class="phone-inner">
+              <div class="phone-app-bar">
+                <span class="phone-app-title">New RFQ</span>
+                <span class="phone-app-badge">Sourced</span>
+              </div>
+
+              <div class="mic-zone">
+                <div class="mic-outer">
+                  <div class="mic-ring mic-ring-1"></div>
+                  <div class="mic-ring mic-ring-2"></div>
+                  <div class="mic-btn">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+                      <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="waveform">
+                  <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+                  <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+                  <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+                </div>
+              </div>
+
+              <div class="voice-status-label" style="text-align:center">● LISTENING  ·  AI PARSING</div>
+
+              <div class="parsed-block">
+                <div class="parsed-header">
+                  <span class="parsed-header-label">AI PARSED · RFQ #4821</span>
+                  <span class="badge badge-t" style="font-size:8px">STRUCTURED</span>
+                </div>
+                <div class="parsed-row">
+                  <span class="parsed-key">Material</span>
+                  <span class="parsed-val">3/4" Plywood CDX</span>
+                </div>
+                <div class="parsed-row">
+                  <span class="parsed-key">Quantity</span>
+                  <span class="parsed-val">200 sheets</span>
+                </div>
+                <div class="parsed-row">
+                  <span class="parsed-key">Location</span>
+                  <span class="parsed-val">Providence RI</span>
+                </div>
+                <div class="parsed-row">
+                  <span class="parsed-key">Deliver by</span>
+                  <span class="parsed-val">Fri Apr 4</span>
+                </div>
+              </div>
+
+              <button class="launch-btn">Confirm &amp; Launch AI Outreach →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Stack -->
+        <div>
+          <div class="sec-tag">Architecture  ·  In-house stack</div>
+          <h2 class="sec-head">Five layers we own.<br>Zero vendor dependencies.</h2>
+
+          <div class="stack-layer sl-blue">
+            <span class="sl-num">01</span>
+            <span class="sl-name">Telephony</span>
+            <span class="sl-tech">Twilio  ·  outbound calls, SMS, IVR</span>
+            <span class="sl-cost">~$0.01/min</span>
+          </div>
+          <div class="stack-flow-arrow">↓</div>
+          <div class="stack-layer sl-teal">
+            <span class="sl-num">02</span>
+            <span class="sl-name">Speech → Text</span>
+            <span class="sl-tech">Whisper self-hosted  ·  &lt;500ms GPU</span>
+            <span class="sl-cost" style="color:var(--t)">$0.00</span>
+          </div>
+          <div class="stack-flow-arrow">↓</div>
+          <div class="stack-layer sl-gold" style="border-color:var(--gb)">
+            <span class="sl-num">03</span>
+            <span class="sl-name">The Brain</span>
+            <span class="sl-tech">GPT-4o  +  Sourced negotiation logic</span>
+            <span class="sl-ip">OUR IP</span>
+          </div>
+          <div class="stack-flow-arrow">↓</div>
+          <div class="stack-layer sl-teal">
+            <span class="sl-num">04</span>
+            <span class="sl-name">Text → Speech</span>
+            <span class="sl-tech">OpenAI TTS  ·  passes human test</span>
+            <span class="sl-cost">~$0.015</span>
+          </div>
+          <div class="stack-flow-arrow">↓</div>
+          <div class="stack-layer sl-blue">
+            <span class="sl-num">05</span>
+            <span class="sl-name">Orchestration</span>
+            <span class="sl-tech">Node.js call manager  ·  TCPA-compliant</span>
+            <span class="sl-cost" style="color:var(--b)">owned</span>
+          </div>
+          <div class="stack-cost-total">
+            Total per call: $0.05–0.15  ·  No lock-in  ·  Full data ownership  ·  Logic compounds with every deal
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: OUTREACH + DISCOVERY ───────────────── -->
+    <div class="section-block">
+      <div class="grid-2">
+
+        <!-- Outreach Sequence -->
+        <div>
+          <div class="agent-tag">Dibbs 2.0 - AI Marketer Agent</div>
+          <div class="sec-tag">Outreach  ·  Escalation sequence</div>
+          <h2 class="sec-head">Email first. SMS second.<br>AI call as last resort.</h2>
+
+          <div class="outreach-step">
+            <div class="os-icon" style="background:var(--bd);border:1px solid var(--bb)">
+              <svg viewBox="0 0 24 24" stroke="#60A5FA">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m2 7 10 7 10-7"/>
+              </svg>
+            </div>
+            <div class="os-content">
+              <div class="os-title">Email outreach</div>
+              <div class="os-sub">Structured RFQ link  ·  All suppliers immediately</div>
+            </div>
+            <span class="os-time">T + 0</span>
+          </div>
+
+          <div class="outreach-step">
+            <div class="os-icon" style="background:var(--td);border:1px solid var(--tb)">
+              <svg viewBox="0 0 24 24" stroke="#2DD4BF">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+              </svg>
+            </div>
+            <div class="os-content">
+              <div class="os-title">SMS follow-up</div>
+              <div class="os-sub">If no email response  ·  Bid link in text</div>
+            </div>
+            <span class="os-time">T + 2h</span>
+          </div>
+
+          <div class="outreach-step highlight">
+            <div class="os-icon" style="background:var(--gd);border:1px solid var(--gb)">
+              <svg viewBox="0 0 24 24" stroke="#C8A84B">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.17 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.08 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l1.06-.36a2 2 0 012.11.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <div class="os-content">
+              <div class="os-title">AI phone call</div>
+              <div class="os-sub">Natural voice agent  ·  Escalation only  ·  TCPA-safe</div>
+            </div>
+            <span class="os-time">T + 6h</span>
+          </div>
+
+          <div class="escalation-note">
+            Most deals close on email alone. Phone is the last-resort escalation — keeps cost minimal and TCPA exposure low.
+          </div>
+        </div>
+
+        <!-- Discovery Engine -->
+        <div>
+          <div class="sec-tag">Discovery  ·  Google Maps engine</div>
+          <h2 class="sec-head">No cold-start problem.<br>Supply exists on Day 1.</h2>
+
+          <div class="discovery-panel">
+            <div class="disc-header">
+              <span class="badge badge-dim" style="font-size:9px">DISCOVERY RUN · RFQ #4821</span>
+              <span class="badge badge-g">T + 2 MIN</span>
+            </div>
+            <div class="disc-row">
+              <span class="dr-label">Google Maps scrape</span>
+              <span class="dr-positive">+23 suppliers</span>
+            </div>
+            <div class="disc-row">
+              <span class="dr-label">Platform members</span>
+              <span class="dr-positive">+6 suppliers</span>
+            </div>
+            <div class="disc-row">
+              <span class="dr-label">Deduplication</span>
+              <span class="dr-negative">−4 duplicates</span>
+            </div>
+            <div class="disc-total">
+              <span class="dt-label">Final outreach list</span>
+              <span class="dt-val">25 suppliers</span>
+            </div>
+          </div>
+
+          <p style="font-size:12px;color:var(--w3);margin-top:16px;line-height:1.75">
+            Runs on every RFQ in real time. No pre-seeding required. Every relevant local supplier is reachable on Day 1 — whether they have ever heard of Sourced or not.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: LIVE TRACKER + SPLIT BID ───────────── -->
+    <div class="section-block">
+      <div class="grid-2">
+
+        <!-- Live Tracker -->
+        <div>
+          <div class="sec-tag">Screen 02  ·  Live bid tracker</div>
+          <h2 class="sec-head">AI works in the background.<br>Contractor watches bids arrive.</h2>
+          <div class="card">
+            <div class="card-bar cb-teal"></div>
+            <div class="tracker-header">
+              <div>
+                <div class="tracker-title">RFQ #4821  ·  Plywood</div>
+                <div class="tracker-subtitle">200 sheets  ·  Providence RI</div>
+              </div>
+              <div class="badge badge-t"><span class="dot-live"></span>LIVE</div>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar"></div>
+            </div>
+            <div class="progress-note">AI outreach in progress  ·  17 of 25 suppliers contacted</div>
+            <div class="tracker-row">
+              <div>
+                <div class="tr-name">Atlas Lumber RI</div>
+                <div class="tr-sub">lumber · Providence</div>
+              </div>
+              <span class="badge badge-t">Bid in</span>
+              <span class="tr-price">$3,060</span>
+            </div>
+            <div class="tracker-row">
+              <div>
+                <div class="tr-name">Northeast Building Co.</div>
+                <div class="tr-sub">materials · Warwick</div>
+              </div>
+              <span class="badge badge-t">Bid in</span>
+              <span class="tr-price">$3,040</span>
+            </div>
+            <div class="tracker-row">
+              <div>
+                <div class="tr-name">Metro Supply Boston</div>
+                <div class="tr-sub">wholesale · Attleboro</div>
+              </div>
+              <span class="badge badge-g">Call active</span>
+              <span class="tr-dash">—</span>
+            </div>
+            <div class="tracker-row">
+              <div>
+                <div class="tr-name">Providence Hardware</div>
+                <div class="tr-sub">hardware · Providence</div>
+              </div>
+              <span class="badge badge-b">Email sent</span>
+              <span class="tr-dash">—</span>
+            </div>
+            <div class="tracker-row">
+              <div>
+                <div class="tr-name">RI Building Supply</div>
+                <div class="tr-sub">supply · Cranston</div>
+              </div>
+              <span class="badge badge-dim">Contacting…</span>
+              <span class="tr-dash">—</span>
+            </div>
+            <div class="tracker-footer">+ 20 more in queue</div>
+          </div>
+        </div>
+
+        <!-- Split-Bid Engine -->
+        <div>
+          <div class="sec-tag">Engine  ·  Combinatorial optimiser</div>
+          <h2 class="sec-head">Split-bid solver finds the deal<br>no human could compute.</h2>
+          <div class="card">
+            <div class="card-bar cb-gold"></div>
+            <div class="bid-micro">4 BIDS RECEIVED  ·  SOLVER RUNNING  ·  FRAMING PACKAGE  ·  PROVIDENCE RI</div>
+            <table class="bids">
+              <thead>
+                <tr>
+                  <th>Supplier</th>
+                  <th>Plywood</th>
+                  <th>Joists</th>
+                  <th>Hdw.</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="bid-name-normal">Atlas Lumber</span></td>
+                  <td>$1,820</td><td>$960</td><td>$280</td>
+                  <td><span class="bid-total bid-total-normal">$3,060</span></td>
+                </tr>
+                <tr>
+                  <td><span class="bid-name-normal">NE Building Co.</span></td>
+                  <td>$1,650</td><td>$1,080</td><td>$310</td>
+                  <td><span class="bid-total bid-total-normal">$3,040</span></td>
+                </tr>
+                <tr>
+                  <td><span class="bid-name-normal">Metro Supply</span></td>
+                  <td>$1,940</td><td>$880</td><td>$260</td>
+                  <td><span class="bid-total bid-total-normal">$3,080</span></td>
+                </tr>
+                <tr>
+                  <td><span class="bid-name-normal">Prov. Hardware</span></td>
+                  <td>$1,710</td><td>$1,020</td><td>$295</td>
+                  <td><span class="bid-total bid-total-normal">$3,025</span></td>
+                </tr>
+                <tr class="winner">
+                  <td><span class="bid-name-winner">✦ Split Deal</span></td>
+                  <td>NE Bldg</td>
+                  <td>Metro</td>
+                  <td>Metro</td>
+                  <td><span class="bid-total bid-total-winner">$2,790</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="save-stripe">
+              <div class="save-stripe-lhs">
+                <div class="save-label">AI SPLIT-BID SAVES</div>
+                <div class="save-sub">vs. best single-supplier  ·  7.9% below</div>
+              </div>
+              <div class="save-stripe-amount">$235</div>
+            </div>
+            <p style="margin-top:12px;font-size:11px;color:var(--w3);line-height:1.7">
+              Combinatorial solver finds the cheapest combination per line item across all suppliers — impossible to compute manually at speed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 4: NEGOTIATION TERMINAL ───────────────── -->
+    <div class="section-block">
+      <div class="sec-tag">Engine  ·  Autonomous negotiation</div>
+      <h2 class="sec-head">The AI calls the losers back, names a price,<br>and runs a Dutch auction in real time.</h2>
+      <div class="terminal">
+        <div class="term-topbar">
+          <div class="tdot tdot-r"></div>
+          <div class="tdot tdot-y"></div>
+          <div class="tdot tdot-g"></div>
+          <span class="term-label">sourced_negotiation_agent  ·  RFQ #4821  ·  round 2 of 2</span>
+          <div class="term-status-indicator">
+            <span class="dot-live"></span>
+            <span>ACTIVE</span>
+          </div>
+        </div>
+        <div class="term-body">
+          <span class="tl"><span class="tl-time">[T+08:14]  </span><span class="tl-sys">SYSTEM    </span><span class="tl-text">Split computed: NE Building plywood + Metro joists + hardware = $2,790</span></span>
+          <span class="tl"><span class="tl-time">[T+08:15]  </span><span class="tl-sys">SYSTEM    </span><span class="tl-text">Estimated floor: $2,540. Negotiation gap: $250. Initiating round 2.</span></span>
+          <span class="tl">&nbsp;</span>
+          <span class="tl"><span class="tl-time">[T+08:17]  </span><span class="tl-ai">AI AGENT  </span><span class="tl-text">Dialling Atlas Lumber RI  ·  target: joists below $880</span></span>
+          <span class="tl"><span class="tl-time">[T+08:17]  </span><span class="tl-ai">AI AGENT  </span><span class="tl-text">"Hi, this is procurement for job #4821. We have a competing bid at $880 for the floor joists — can you sharpen that?"</span></span>
+          <span class="tl"><span class="tl-time">[T+08:19]  </span><span class="tl-supp">ATLAS LBR </span><span class="tl-text">"We can do $835 if you bundle our hardware."</span></span>
+          <span class="tl"><span class="tl-time">[T+08:19]  </span><span class="tl-ai">AI AGENT  </span><span class="tl-text">"Hardware is already allocated. Can you do $835 on joists standalone?"</span></span>
+          <span class="tl"><span class="tl-time">[T+08:21]  </span><span class="tl-supp">ATLAS LBR </span><span class="tl-text">"...Fine. $840 is our floor."</span></span>
+          <span class="tl"><span class="tl-time">[T+08:21]  </span><span class="tl-action">ACTION    </span><span class="tl-text">Updated: NE Building $1,650 + Atlas $840 joists + Metro $260 hardware = $2,750</span></span>
+          <span class="tl"><span class="tl-time">[T+08:22]  </span><span class="tl-action">ACTION    </span><span class="tl-text">Gap to estimated floor: $210. Below $250 threshold. Negotiation complete.</span></span>
+          <span class="tl">&nbsp;</span>
+          <span class="tl"><span class="tl-time">[T+08:22]  </span><span class="tl-win">RESULT    Deal closed. $275 saved (9.1%) vs best single-supplier. 3-way split. 18hrs total. 0 contractor calls.</span></span>
+          <span class="tl" style="margin-top:4px"><span class="cursor"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 5: DEAL CONFIRM + DATA FLYWHEEL ────────── -->
+    <div class="section-block">
+      <div class="grid-2">
+
+        <!-- Deal Confirmation -->
+        <div>
+          <div class="sec-tag">Screen 03  ·  Deal confirmation</div>
+          <h2 class="sec-head">Contractor taps Confirm.<br>Zero phone calls made.</h2>
+
+          <div class="deal-hero">
+            <div>
+              <div class="deal-save-label">AI SAVED YOU</div>
+              <div class="deal-save-num">$275</div>
+              <div class="deal-save-sub">9.1% below best single-supplier  ·  18 hrs</div>
+            </div>
+            <div>
+              <div class="deal-meta-item">
+                <div class="deal-meta-num gold">3</div>
+                <div class="deal-meta-lbl">SUPPLIERS IN DEAL</div>
+              </div>
+              <div class="deal-meta-item">
+                <div class="deal-meta-num red">0</div>
+                <div class="deal-meta-lbl">CALLS YOU MADE</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="deal-supplier-row">
+            <div>
+              <div class="ds-name">Northeast Building Co.</div>
+              <div class="ds-items">200 sheets 3/4" plywood CDX</div>
+            </div>
+            <div class="ds-price">$1,650</div>
+          </div>
+          <div class="deal-supplier-row">
+            <div>
+              <div class="ds-name">Atlas Lumber RI</div>
+              <div class="ds-items">40× 2×10×16 floor joists</div>
+            </div>
+            <div class="ds-price">$840</div>
+          </div>
+          <div class="deal-supplier-row">
+            <div>
+              <div class="ds-name">Metro Supply Boston</div>
+              <div class="ds-items">Framing hardware + bolts</div>
+            </div>
+            <div class="ds-price">$260</div>
+          </div>
+
+          <div class="deal-total-row">
+            <span class="dt-lbl">TOTAL  ·  DELIVERED FRI APR 4</span>
+            <span class="dt-num">$2,750</span>
+          </div>
+
+          <button class="confirm-btn">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Confirm Deal
+          </button>
+        </div>
+
+        <!-- Data Flywheel -->
+        <div>
+          <div class="sec-tag">Moat  ·  The data flywheel</div>
+          <h2 class="sec-head">Every deal builds the price<br>intelligence layer.</h2>
+
+          <div class="flywheel-row">
+            <div class="fw-node active">
+              <div class="fw-node-title">RFQ posted</div>
+              <div class="fw-node-sub">material, qty, zip</div>
+            </div>
+            <div class="fw-arrow">→</div>
+            <div class="fw-node active">
+              <div class="fw-node-title">Bids logged</div>
+              <div class="fw-node-sub">price per line item</div>
+            </div>
+            <div class="fw-arrow">→</div>
+            <div class="fw-node active">
+              <div class="fw-node-title">Deal closed</div>
+              <div class="fw-node-sub">accepted price</div>
+            </div>
+          </div>
+          <div style="padding:9px 13px;background:var(--gd);border:1px solid var(--gb);border-radius:9px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12px;font-weight:600;color:var(--g2)">Negotiation floor learned  ·  Smarter next bid</span>
+            <span class="badge badge-g">compounds</span>
+          </div>
+
+          <div class="api-item">
+            <div>
+              <div class="api-name">Material price index</div>
+              <div class="api-desc">Real-time $/unit by zip code + trade category</div>
+            </div>
+            <span class="api-yr">Year 1</span>
+          </div>
+          <div class="api-item">
+            <div>
+              <div class="api-name">Supplier score model</div>
+              <div class="api-desc">Response rate, price competitiveness, reliability</div>
+            </div>
+            <span class="api-yr">Year 1</span>
+          </div>
+          <div class="api-item">
+            <div>
+              <div class="api-name">Negotiation floor models</div>
+              <div class="api-desc">AI learns each supplier's real floor over time</div>
+            </div>
+            <span class="api-yr">Year 2</span>
+          </div>
+          <div class="api-item highlight">
+            <div>
+              <div class="api-name">Data API  ·  $2K/mo entry</div>
+              <div class="api-desc">Insurance, lenders, research firms  ·  ~100% gross margin</div>
+            </div>
+            <span class="api-yr">Year 3</span>
+          </div>
+
+          <div class="flywheel-footer">
+            After 10,000 RFQs, Sourced has the most granular real-time construction materials price database in the US — built as a byproduct of the core business at near-zero marginal cost.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.section-block').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
