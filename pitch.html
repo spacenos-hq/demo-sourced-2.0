@@ -298,6 +298,58 @@
     .kpi .l{font-size:13.5px;color:var(--mist2);line-height:1.5;}
     .kpi .v{font-family:'DM Mono',monospace;font-size:13px;color:var(--white);white-space:nowrap;}
 
+    /* AI engine section (adapted from sourced_ai_section.html) */
+    .ai-engine-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:900px){.ai-engine-grid{grid-template-columns:1fr;}}
+    .ai-panel{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--r2);
+      padding:22px;
+      transition:transform .22s ease,border-color .22s ease,background .22s ease;
+    }
+    .ai-panel:hover{transform:translateY(-3px);border-color:var(--border2);background:var(--surface2);}
+    .ai-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+    @media(max-width:760px){.ai-kpis{grid-template-columns:1fr 1fr;}}
+    .ai-kpi{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center;}
+    .ai-kpi .n{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gold2);line-height:1;}
+    .ai-kpi .l{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist);margin-top:5px;}
+    .ai-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+    .ai-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);}
+    .ai-item .idx{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);margin-top:2px;min-width:20px;}
+    .ai-item .txt{font-size:13px;color:var(--mist2);line-height:1.55;}
+    .ai-item .txt strong{color:var(--white);font-weight:600;}
+    .ai-shot-grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    @media(max-width:900px){.ai-shot-grid{grid-template-columns:1fr;}}
+    .ai-shot{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .ai-shot img{
+      display:block;
+      width:100%;
+      height:auto;
+      aspect-ratio:16/10;
+      object-fit:cover;
+      background:var(--surface2);
+    }
+    .ai-shot figcaption{
+      padding:9px 10px;
+      border-top:1px solid var(--border);
+      font-family:'DM Mono',monospace;
+      font-size:9px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--mist);
+    }
+
     .cta{
       background:var(--surface);
       border-top:1px solid var(--border2);
@@ -507,6 +559,72 @@
             <div class="kpi"><div class="l">Get found before even signing up</div><div class="v">✓</div></div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ai-engine">
+    <div class="section-inner">
+      <div class="section-header fi">
+        <div>
+          <div class="section-label">03b · AI Engine</div>
+          <h2 class="section-title">How the in-house AI stack executes the loop.</h2>
+          <p class="section-desc">A lightweight operating view for investors: what is automated, what is owned, and why it compounds.</p>
+        </div>
+      </div>
+
+      <div class="ai-kpis fi">
+        <div class="ai-kpi"><div class="n">$0.09</div><div class="l">Avg AI call</div></div>
+        <div class="ai-kpi"><div class="n">&lt;24h</div><div class="l">Deal close</div></div>
+        <div class="ai-kpi"><div class="n">98%+</div><div class="l">Voice accuracy</div></div>
+        <div class="ai-kpi"><div class="n">0</div><div class="l">Contractor calls</div></div>
+      </div>
+
+      <div class="ai-engine-grid fi">
+        <div class="ai-panel">
+          <div class="section-label" style="margin-bottom:8px;">Stack</div>
+          <h2 class="section-title" style="font-size:28px;">Five layers, owned.</h2>
+          <div class="ai-list">
+            <div class="ai-item"><span class="idx">01</span><div class="txt"><strong>Telephony:</strong> Twilio outbound calls/SMS.</div></div>
+            <div class="ai-item"><span class="idx">02</span><div class="txt"><strong>Speech → Text:</strong> Whisper RFQ parsing.</div></div>
+            <div class="ai-item"><span class="idx">03</span><div class="txt"><strong>Decision Brain:</strong> negotiation + split-bid logic.</div></div>
+            <div class="ai-item"><span class="idx">04</span><div class="txt"><strong>Text → Speech:</strong> AI voice responses.</div></div>
+            <div class="ai-item"><span class="idx">05</span><div class="txt"><strong>Orchestration:</strong> workflow + compliance gates.</div></div>
+          </div>
+        </div>
+        <div class="ai-panel">
+          <div class="section-label" style="margin-bottom:8px;">Execution</div>
+          <h2 class="section-title" style="font-size:28px;">Autonomous procurement sequence.</h2>
+          <div class="ai-list">
+            <div class="ai-item"><span class="idx">A</span><div class="txt">Voice post in ~60 seconds.</div></div>
+            <div class="ai-item"><span class="idx">B</span><div class="txt">Supplier discovery: platform + maps.</div></div>
+            <div class="ai-item"><span class="idx">C</span><div class="txt">Outreach ladder: email → SMS → AI call.</div></div>
+            <div class="ai-item"><span class="idx">D</span><div class="txt">Bid normalization + comparison.</div></div>
+            <div class="ai-item"><span class="idx">E</span><div class="txt">Split-bid + negotiation closes the best deal.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="ai-shot-grid fi">
+        <figure class="ai-shot">
+          <img src="assets/ai-screens/ai-screen-01-rfq-stack.png" alt="AI screen: voice RFQ and stack architecture" loading="lazy">
+          <figcaption>Screen 01 · Voice RFQ + stack</figcaption>
+        </figure>
+        <figure class="ai-shot">
+          <img src="assets/ai-screens/ai-screen-02-outreach-discovery.png" alt="AI screen: outreach ladder and supplier discovery panel" loading="lazy">
+          <figcaption>Screen 02 · Outreach + discovery</figcaption>
+        </figure>
+        <figure class="ai-shot">
+          <img src="assets/ai-screens/ai-screen-03-tracker-split.png" alt="AI screen: live tracker and split-bid optimizer" loading="lazy">
+          <figcaption>Screen 03 · Live tracker + split bid</figcaption>
+        </figure>
+        <figure class="ai-shot">
+          <img src="assets/ai-screens/ai-screen-04-negotiation-terminal.png" alt="AI screen: autonomous negotiation terminal" loading="lazy">
+          <figcaption>Screen 04 · Negotiation terminal</figcaption>
+        </figure>
+        <figure class="ai-shot">
+          <img src="assets/ai-screens/ai-screen-05-confirmation-flywheel.png" alt="AI screen: deal confirmation and data flywheel" loading="lazy">
+          <figcaption>Screen 05 · Confirmation + flywheel</figcaption>
+        </figure>
       </div>
     </div>
   </section>
