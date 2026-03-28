@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — First requirement · What (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 4 · Wizard 2/3 · What + quantity</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="flow-screen">
+          <div class="screen__status" style="display:flex;justify-content:space-between;padding:10px 20px 0;padding-top:max(10px,env(safe-area-inset-top));font-family:var(--font-mono);font-size:11px;color:var(--heading)">
+            <span>9:41</span><span>●●●</span>
+          </div>
+          <p class="wizard-steps"><span class="is-active">What</span> · When · Where</p>
+          <header class="app-header" style="border:none">
+            <div class="app-header__mid" style="padding-left:0">
+              <p class="app-header__title">What do you need?</p>
+            </div>
+          </header>
+
+          <div class="flow-screen__scroll">
+            <div class="field">
+              <label class="field__label" for="mat">Material</label>
+              <input class="field__input" id="mat" type="text" placeholder="e.g. ¾-inch EMT conduit" />
+              <p class="field__hint">Autocomplete: type 3+ characters → up to 5 suggestions (mock)</p>
+            </div>
+            <p class="field__label" style="margin-bottom:6px">Common materials</p>
+            <div class="chip-scroller" id="chips">
+              <button type="button" class="mat-chip">Lumber</button>
+              <button type="button" class="mat-chip">Conduit</button>
+              <button type="button" class="mat-chip">Drywall</button>
+              <button type="button" class="mat-chip">Copper Pipe</button>
+              <button type="button" class="mat-chip">PVC</button>
+              <button type="button" class="mat-chip">Concrete</button>
+              <button type="button" class="mat-chip">Rebar</button>
+            </div>
+            <div class="field" style="display:flex;gap:10px;align-items:flex-end">
+              <div style="flex:1.5">
+                <label class="field__label" for="qty">Quantity</label>
+                <div style="display:flex;align-items:center;gap:4px">
+                  <button type="button" class="app-header__back" style="width:36px;height:40px" aria-label="Decrease">−</button>
+                  <input class="field__input" id="qty" type="number" value="500" style="text-align:center" />
+                  <button type="button" class="app-header__back" style="width:36px;height:40px" aria-label="Increase">+</button>
+                </div>
+              </div>
+              <div style="flex:1">
+                <label class="field__label" for="unit">Unit</label>
+                <select class="field__input" id="unit" style="padding:10px 12px">
+                  <option>linear feet</option>
+                  <option>units</option>
+                  <option>sheets</option>
+                  <option>bags</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-actions">
+            <a href="wizard-req-2.html" class="btn btn--primary">Next →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="wizard-welcome.html">← Welcome</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Wizard</span>Delivery next</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="wizard-req-2.html">When/where →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+  <script src="js/mockup-route-inits.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    MockupRouteInits.runStandalone("wizard-req-1");
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — Role selection (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 2 · Role selection</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <!-- In-device UI: docs/DESIGN_RULES.md via .device__screen--design-rules -->
+        <div class="flow-screen">
+          <div class="screen__status" style="display:flex;justify-content:space-between;padding:10px 20px 0;padding-top:max(10px,env(safe-area-inset-top));font-family:var(--font-mono);font-size:11px;color:var(--heading)">
+            <span>9:41</span><span>●●●</span>
+          </div>
+          <header class="app-header">
+            <a class="app-header__back" href="onboarding.html" aria-label="Back to onboarding">←</a>
+            <div class="app-header__mid"></div>
+            <div class="app-header__step" style="visibility:hidden"> </div>
+          </header>
+
+          <div class="role-body">
+            <p class="role-eyebrow">Account type</p>
+            <h1 class="role-h1">Who are you?</h1>
+            <p class="role-sub">Select how you use Sourced — buyer or seller. We’ll match screens, defaults, and notifications to that workflow.</p>
+
+            <div role="radiogroup" aria-label="Account role" id="roleGroup">
+              <button type="button" class="role-card" role="radio" aria-checked="false" data-role="contractor" id="rc">
+                <span class="role-card__check" aria-hidden="true">✓</span>
+                <div class="role-card__row">
+                  <span class="role-card__icon" aria-hidden="true"><span class="role-card__glyph">GC</span></span>
+                  <div>
+                    <p class="role-card__title">Contractor</p>
+                    <p class="role-card__sub">Source materials; compare bids; track delivery.</p>
+                    <ul class="role-card__bullets">
+                      <li>Post a requirement in about two minutes</li>
+                      <li>Typical run: multiple bids inside 24 hours</li>
+                      <li>Benchmark savings logged per order (e.g. ~14% in pilots)</li>
+                    </ul>
+                  </div>
+                </div>
+              </button>
+
+              <button type="button" class="role-card" role="radio" aria-checked="false" data-role="supplier" id="rs">
+                <span class="role-card__check" aria-hidden="true">✓</span>
+                <div class="role-card__row">
+                  <span class="role-card__icon" aria-hidden="true"><span class="role-card__glyph">SUP</span></span>
+                  <div>
+                    <p class="role-card__title">Supplier</p>
+                    <p class="role-card__sub">Receive qualified RFQs; submit pricing; fulfill orders.</p>
+                    <ul class="role-card__bullets">
+                      <li>Requests filtered to your categories and region</li>
+                      <li>Structured bids — less phone tag</li>
+                      <li>Order confirmation path for faster payment cycles</li>
+                    </ul>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="role-sticky">
+            <a href="#" class="btn btn--primary btn--disabled" id="roleContinue">Continue</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="onboarding.html">← Onboarding</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Role</span>Contractor / Supplier</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="signup-contractor.html">Sign up →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+  <script src="js/mockup-route-inits.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    MockupRouteInits.runStandalone("role-select");
+  });
+  </script>
+</body>
+</html>

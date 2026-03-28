@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sourced — AI Ops Live · Dibbs 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+/* Dibbs 2.0 design tokens — docs/DESIGN_RULES.md */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* Synced from fixed header height via script (fallback when JS off) */
+  --header-offset:72px;
+  --black:#0B0C0E;
+  --surface:#111316;
+  --surface2:#181B1F;
+  --surface3:#1E2228;
+  --white:#F2EDE4;
+  --mist:#7A8091;
+  --mist2:#9BA3B2;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --gold:#D4A843;
+  --gold2:#F0C96A;
+  --gold-dim:rgba(212,168,67,.15);
+  --gold-border:rgba(212,168,67,.25);
+  --teal:#3ECFB2;
+  --teal-dim:rgba(62,207,178,.12);
+  --blue:#5B9CF6;
+  --blue-dim:rgba(91,156,246,.12);
+  --red:#E85D5D;
+  --red-dim:rgba(232,93,93,.12);
+  --amber:#F0A84E;
+  --amber-dim:rgba(240,168,78,.12);
+  --purple:#A87FE8;
+  --purple-dim:rgba(168,127,232,.12);
+  --r:8px;
+  --r2:12px;
+  --bg:var(--black);
+  --bg2:var(--surface);
+  --panel:var(--surface);
+  --panel2:var(--surface2);
+  --g:var(--gold);
+  --g2:var(--gold2);
+  --g3:var(--gold-dim);
+  --g4:rgba(212,168,67,.06);
+  --text:var(--white);
+  --text2:var(--mist2);
+  --text3:var(--mist);
+  --sans:'Syne',system-ui,sans-serif;
+  --body:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --label:'DM Mono',ui-monospace,monospace;
+  --mono:var(--label);
+  --amber2:var(--amber-dim);
+  --red2:var(--red-dim);
+  --blue2:var(--blue-dim);
+  --purple2:var(--purple-dim);
+}
+html[data-theme="light"]{
+  --black:#F6F1E9;
+  --surface:#FFFFFF;
+  --surface2:#FBF7F0;
+  --surface3:#F2EBDD;
+  --border:rgba(26,22,18,.10);
+  --border2:rgba(26,22,18,.16);
+  --white:#1A1612;
+  --mist:#6B6258;
+  --mist2:#8A8076;
+  --gold-dim:rgba(212,168,67,.14);
+  --gold-border:rgba(212,168,67,.30);
+}
+html[data-theme="light"] body::before{opacity:.02}
+html[data-theme="light"] .map-title-block{background:rgba(255,255,255,.92);border-color:var(--border2)}
+html[data-theme="light"] .map-stat{background:var(--surface2)}
+html[data-theme="light"] header{background:rgba(246,241,233,.94)}
+html{scroll-behavior:smooth;background:var(--bg);scroll-padding-top:var(--header-offset)}
+body{font-family:var(--body);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5}
+::selection{background:var(--gold-dim);color:var(--gold2)}
+html[data-theme="light"] ::selection{color:var(--white)}
+
+/* subtle noise + gold grid (~6%) */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  opacity:.035;
+  pointer-events:none;
+  z-index:998;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(212,168,67,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(212,168,67,.055) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+  z-index:0;
+}
+
+#doc-progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:10001;width:0%;transition:width .12s ease-out}
+#cursor,#cursor-ring{display:none!important}
+
+/* HEADER */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  min-height:52px;background:rgba(11,12,14,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px;
+  padding:10px clamp(16px,4vw,28px);
+}
+.hlogo{font-family:var(--sans);font-size:15px;font-weight:800;color:var(--gold);letter-spacing:0.06em}
+.hlogo span{color:var(--text2);font-weight:500;font-size:10px;margin-left:8px;letter-spacing:0.12em;font-family:var(--label);text-transform:uppercase}
+.hnav{display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;margin-left:8px;padding-left:16px;border-left:1px solid var(--border)}
+.hnav a{
+  font-family:var(--label);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text2);
+  padding:6px 10px;border-radius:6px;transition:color .2s,background .2s
+}
+.hnav a:hover{color:var(--gold)}
+.hnav a[aria-current="page"]{color:var(--gold);box-shadow:inset 0 -2px 0 var(--gold)}
+.theme-toggle{
+  font-family:var(--label);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:6px 12px;border-radius:var(--r);cursor:pointer;
+  background:var(--surface2);border:1px solid var(--border2);color:var(--text2);
+  transition:color .2s,border-color .2s,background .2s
+}
+.theme-toggle:hover{color:var(--gold);border-color:var(--gold-border)}
+.hstatus{display:flex;align-items:center;gap:6px;font-size:10px;font-family:var(--label);letter-spacing:0.1em;text-transform:uppercase;color:var(--teal)}
+.hstatus-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse-dot 2.5s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(62,207,178,.45)}50%{box-shadow:0 0 0 5px rgba(62,207,178,0)}}
+.hright{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.h-quick{display:none;padding:6px 12px;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-family:var(--label);font-size:9.5px;border-radius:var(--r);cursor:pointer;letter-spacing:0.12em;text-transform:uppercase}
+.h-quick:hover{background:rgba(212,168,67,.22);color:var(--white)}
+.hstat{font-family:var(--label);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);border:1px solid var(--border);padding:5px 10px;border-radius:var(--r)}
+.hstat span{color:var(--gold);font-weight:600}
+#live-time{font-family:var(--label);font-size:9.5px;letter-spacing:0.08em;color:var(--text2)}
+
+/* MAIN LAYOUT */
+@keyframes page-in{from{opacity:0}to{opacity:1}}
+main{
+  padding-top:var(--header-offset);display:grid;grid-template-columns:320px 1fr 300px;grid-template-rows:auto auto auto;gap:0;min-height:100vh;position:relative;z-index:1;
+  animation:page-in .45s ease forwards;
+}
+
+/* NAV RAIL */
+.nav-rail{grid-row:1/-1;grid-column:1;border-right:1px solid var(--border);padding:16px 0;display:flex;flex-direction:column;gap:2px;background:var(--surface)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:11px;font-family:var(--body);color:var(--text2);cursor:pointer;transition:background .2s,color .2s;border-left:2px solid transparent;position:relative}
+.nav-item:hover{color:var(--gold);background:var(--g4)}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold-dim)}
+.nav-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);font-family:var(--label);font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 6px;border-radius:4px}
+.nav-badge.red{background:var(--red2);color:var(--red);border-color:rgba(232,93,93,.35)}
+.nav-section{font-family:var(--label);font-size:9px;color:var(--text3);letter-spacing:0.16em;padding:16px 20px 6px;text-transform:uppercase}
+
+/* CENTER CONTENT */
+.center-col{grid-column:2;grid-row:1/-1;overflow-y:auto;border-right:1px solid var(--border)}
+
+/* RIGHT PANEL */
+.right-col{grid-column:3;grid-row:1/-1;overflow-y:auto;padding:0}
+
+/* SECTIONS */
+.section{padding:20px;border-bottom:1px solid var(--border)}
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-title{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--text)}
+.section-sub{font-family:var(--label);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);margin-left:auto}
+
+/* ===== HERO MAP SECTION ===== */
+#map-section{
+  height:380px;
+  width:100%;
+  position:relative;
+  overflow:hidden;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+}
+/* Real map (Leaflet) + effects canvas stacked above tiles, below HUD */
+#map-leaflet{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+  background:var(--bg2);
+}
+#map-leaflet .leaflet-container{
+  font-family:var(--body);
+  background:var(--bg2);
+}
+#map-effects{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  display:block;
+  z-index:2;
+  pointer-events:none;
+}
+.map-zoom-floating{
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  z-index:12;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  pointer-events:auto;
+}
+.map-zoom-floating button{
+  width:30px;
+  height:30px;
+  border-radius:6px;
+  border:1px solid var(--border2);
+  background:var(--surface2);
+  color:var(--text);
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+  font-family:var(--sans);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .2s,color .2s,border-color .2s;
+}
+.map-zoom-floating button:hover{
+  background:var(--surface3);
+  color:var(--gold);
+  border-color:var(--gold-border);
+}
+.leaflet-control-attribution{
+  background:rgba(17,19,22,.82)!important;
+  color:var(--text3)!important;
+  font-size:9px!important;
+  line-height:1.3!important;
+  max-width:min(100%,280px);
+  white-space:normal!important;
+  padding:2px 6px!important;
+  border-radius:4px 0 0 0;
+}
+.leaflet-control-attribution a{color:var(--gold)!important}
+html[data-theme="light"] .leaflet-control-attribution{background:rgba(255,255,255,.92)!important}
+.map-overlay{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  background:radial-gradient(ellipse 100% 85% at 58% 48%,transparent 38%,rgba(17,19,22,.35) 70%,rgba(11,12,14,.78) 100%);
+}
+/* HUD only top-left — full-width bar was covering the whole canvas */
+.map-ui{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:auto;
+  z-index:11;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:0;
+  width:min(420px,calc(100% - 24px));
+  max-width:100%;
+  box-sizing:border-box;
+  pointer-events:none;
+}
+.map-title-block{
+  flex:0 0 auto;
+  min-width:0;
+  padding:12px 14px;
+  background:rgba(2,4,8,0.72);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.35);
+}
+.map-title{font-family:var(--sans);font-size:clamp(14px,3.8vw,20px);font-weight:800;color:var(--white);line-height:1.1}
+.map-title em{color:var(--g);font-style:normal}
+.map-subtitle{font-size:10px;color:var(--text2);margin-top:4px;line-height:1.35}
+.map-stats{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-top:12px;
+  width:100%;
+  max-width:100%;
+}
+.map-stat{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--gold);
+  padding:8px 10px;
+  border-radius:var(--r);
+  font-size:10px;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  box-sizing:border-box;
+  isolation:isolate;
+}
+.map-stat .v{color:var(--g);font-size:clamp(14px,3.5vw,16px);font-weight:700;display:block;font-family:var(--sans);line-height:1}
+.map-stat .l{
+  display:block;
+  margin-top:4px;
+  color:var(--text2);
+  font-family:var(--label);
+  font-size:8px;
+  letter-spacing:0.12em;
+  line-height:1.2;
+  text-transform:uppercase;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+  max-width:100%;
+}
+/* Wider viewports: single-row stats inside the fixed-width HUD */
+@media(min-width:520px){
+  .map-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:360px){
+  .map-stat{padding:6px 8px}
+  .map-title-block{padding:10px 12px}
+}
+.map-pin{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:10}
+.pin-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;border:1px solid;animation:pin-pulse 2s infinite}
+.pin-core{width:10px;height:10px;border-radius:50%;position:relative}
+.pin-label{position:absolute;left:50%;transform:translateX(-50%);top:18px;background:var(--surface2);border:1px solid var(--border2);padding:3px 8px;font-family:var(--label);font-size:8.5px;border-radius:4px;white-space:nowrap;pointer-events:none}
+@keyframes pin-pulse{0%{transform:translate(-50%,-50%) scale(1);opacity:0.8}50%{transform:translate(-50%,-50%) scale(1.8);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+.pin-info-card{position:absolute;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r2);padding:12px;width:min(220px,calc(100vw - 48px));font-size:10px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:20;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.pin-info-card.show{opacity:1}
+.info-name{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px}
+.info-row{display:flex;gap:6px;margin-bottom:4px;align-items:center}
+.info-label{color:var(--text2);flex:0 0 60px}
+.info-val{color:var(--text);flex:1}
+.info-status{display:flex;align-items:center;gap:4px;margin-top:8px}
+.fetching-tag{font-size:9px;color:var(--amber);background:var(--amber2);border:1px solid rgba(240,168,78,.28);padding:2px 6px;border-radius:var(--r)}
+.fetching-tag.done{color:var(--gold);background:var(--gold-dim);border-color:var(--gold-border)}
+.agent-beam{position:absolute;pointer-events:none;z-index:5}
+
+/* ===== AGENT ACTIVITY FEED ===== */
+.agent-feed{height:280px;overflow-y:auto;scrollbar-width:none}
+.agent-feed::-webkit-scrollbar{display:none}
+.feed-item{display:flex;gap:10px;padding:8px 16px;border-bottom:1px solid var(--border);animation:feedin 0.4s ease;position:relative;overflow:hidden}
+.feed-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--g)}
+.feed-item.amber::before{background:var(--amber)}
+.feed-item.blue::before{background:var(--blue)}
+.feed-item.purple::before{background:var(--purple)}
+.feed-item.red::before{background:var(--red)}
+@keyframes feedin{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+.feed-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.feed-body{flex:1;min-width:0}
+.feed-agent{font-family:var(--label);font-size:9px;color:var(--text2);letter-spacing:0.12em;text-transform:uppercase}
+.feed-text{font-size:11px;color:var(--text);margin:2px 0;line-height:1.4}
+.feed-text .hl{color:var(--g)}
+.feed-text .hl-amber{color:var(--amber)}
+.feed-text .hl-blue{color:var(--blue)}
+.feed-meta{font-size:9px;color:var(--text3)}
+.feed-time{font-size:9px;color:var(--text3);flex-shrink:0;margin-top:2px}
+
+/* ===== EMAIL COMPOSE LIVE ===== */
+.email-composer{background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.email-header{background:var(--gold-dim);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;align-items:center;gap:8px}
+.email-header-label{font-family:var(--label);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);flex:1}
+.email-status-badge{font-family:var(--label);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--amber);background:var(--amber2);border:1px solid rgba(240,168,78,.22);padding:2px 8px;border-radius:var(--r)}
+.email-status-badge.sent{color:var(--gold);background:var(--gold-dim);border-color:var(--gold-border)}
+.email-field{padding:6px 12px;border-bottom:1px solid var(--border);display:flex;gap:8px;font-size:10px}
+.email-field-label{color:var(--text3);flex:0 0 30px}
+.email-field-val{color:var(--text);flex:1}
+.email-body{padding:12px;font-size:10px;color:var(--text2);line-height:1.7;min-height:80px}
+.email-body .cursor-blink{display:inline-block;width:6px;height:11px;background:var(--g);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.email-actions{padding:8px 12px;display:flex;gap:8px;border-top:1px solid var(--border)}
+
+/* ===== CALL PANEL ===== */
+.call-card{background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.call-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right,rgba(212,168,67,.06) 0%,transparent 55%)}
+.call-label{font-family:var(--label);font-size:9.5px;color:var(--text2);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.call-live-dot{width:5px;height:5px;background:var(--red);border-radius:50%;animation:pulse-dot 1s infinite}
+.call-target{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px}
+.call-number{font-size:11px;color:var(--text2);margin-bottom:12px}
+.call-waveform{height:36px;display:flex;align-items:center;gap:2px;margin-bottom:10px}
+.call-bar{width:3px;border-radius:2px;background:var(--g);opacity:0.7;animation:wave-bar 0.8s ease-in-out infinite;transform-origin:bottom center}
+@keyframes wave-bar{0%,100%{transform:scaleY(0.35);opacity:0.45}50%{transform:scaleY(1);opacity:0.95}}
+.call-transcript{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:10px;max-height:100px;overflow-y:auto;scrollbar-width:none}
+.call-transcript::-webkit-scrollbar{display:none}
+.t-agent{color:var(--g);margin-bottom:4px}
+.t-human{color:var(--text);margin-bottom:4px}
+.call-outcome{margin-top:8px;display:flex;gap:6px}
+
+/* ===== AGENT STATUS ===== */
+.agent-card{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);align-items:flex-start;cursor:pointer;transition:background 0.2s}
+.agent-card:hover{background:var(--g4)}
+.agent-avatar{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;position:relative}
+.agent-avatar::after{content:'';position:absolute;bottom:-2px;right:-2px;width:8px;height:8px;border-radius:50%;border:2px solid var(--panel);background:var(--g)}
+.agent-avatar.busy::after{background:var(--amber);animation:pulse-dot 1s infinite}
+.agent-avatar.idle::after{background:var(--text3)}
+.agent-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px}
+.agent-task{font-size:10px;color:var(--text2);margin-bottom:6px;line-height:1.3}
+.agent-progress-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.agent-progress-fill{height:100%;background:var(--g);border-radius:2px;transition:width 1s}
+.agent-progress-fill.amber{background:var(--amber)}
+
+/* ===== BID CARDS ===== */
+.bid-cards-wrapper{display:flex;flex-direction:column;gap:8px}
+.bid-card{background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;transition:border-color .25s,transform .25s;cursor:pointer;position:relative;overflow:hidden}
+.bid-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.bid-card.best{border-color:var(--gold-border);background:var(--gold-dim)}
+.bid-card.best::before{content:'RECOMMENDED';position:absolute;top:8px;right:8px;font-family:var(--label);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);background:var(--surface);border:1px solid var(--gold-border);padding:2px 6px;border-radius:4px}
+.bid-card::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,168,67,.04),transparent);transform:translateX(-100%);transition:transform 0.5s ease}
+.bid-card:hover::after{transform:translateX(100%)}
+.bid-supplier{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px}
+.bid-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.bid-price{font-size:20px;font-weight:700;font-family:var(--sans);color:var(--g)}
+.bid-savings{font-size:10px;color:var(--g);background:var(--g3);padding:2px 6px;border-radius:2px}
+.bid-meta{display:flex;gap:8px;margin-top:6px}
+.bid-tag{font-size:9px;color:var(--text2);border:1px solid var(--border);padding:2px 8px;border-radius:2px}
+.bid-accept-btn{width:100%;margin-top:8px;padding:8px;background:var(--gold);color:var(--black);font-family:var(--label);font-size:9.5px;font-weight:600;border:1px solid var(--gold2);border-radius:var(--r);cursor:pointer;letter-spacing:0.1em;text-transform:uppercase;transition:background .2s,transform .2s;opacity:0;max-height:0;overflow:hidden}
+.bid-card.best .bid-accept-btn{opacity:1;max-height:40px}
+.bid-accept-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* ===== REQUIREMENT FORM ===== */
+.req-form{background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.req-steps{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.req-step{flex:1;padding:8px 12px;font-size:9px;text-align:center;color:var(--text3);border-right:1px solid var(--border);cursor:pointer;transition:all 0.2s;position:relative}
+.req-step:last-child{border-right:none}
+.req-step.done{color:var(--g)}
+.req-step.active{color:var(--g);background:var(--g4)}
+.req-step.done::after{content:'✓';position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:8px;color:var(--g)}
+.req-field{padding:10px 14px;border-bottom:1px solid var(--border)}
+.req-label{font-size:9px;color:var(--text2);margin-bottom:4px;letter-spacing:0.05em}
+.req-input{width:100%;background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:12px;outline:none}
+.req-input::placeholder{color:var(--text3)}
+.req-field.focused{background:var(--gold-dim)}
+.req-field.filled .req-label{color:var(--g)}
+.req-post-btn{margin:12px;padding:10px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--label);font-size:10px;border-radius:var(--r);cursor:pointer;letter-spacing:0.12em;text-transform:uppercase;width:calc(100% - 24px);transition:color .3s;position:relative;overflow:hidden}
+.req-post-btn::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;z-index:-1}
+.req-post-btn:hover{color:var(--black)}
+.req-post-btn:hover::before{transform:scaleX(1)}
+
+/* ===== LIVE STATUS ===== */
+.live-status{padding:16px;background:var(--panel2);border:1px solid var(--border);border-radius:var(--r2)}
+.ls-title{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--white);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ls-step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.ls-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:1px}
+.ls-dot.done{background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold)}
+.ls-dot.active{background:var(--amber2);border:1px solid rgba(240,168,78,.4);color:var(--amber);animation:spin 2s linear infinite}
+.ls-dot.pending{background:var(--border);border:1px solid var(--text3);color:var(--text3)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.ls-label{font-size:11px;color:var(--text)}
+.ls-sublabel{font-size:9px;color:var(--text2);margin-top:2px}
+.ls-count{font-size:9px;color:var(--g);margin-top:2px}
+
+/* ===== SAVINGS REVEAL ===== */
+.savings-reveal{background:var(--panel2);border:1px solid var(--gold-border);border-radius:var(--r2);padding:16px;text-align:center;position:relative;overflow:hidden}
+.savings-reveal::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(212,168,67,.08) 0%,transparent 72%)}
+.savings-amount{font-family:var(--sans);font-size:48px;font-weight:800;color:var(--g);line-height:1;margin-bottom:4px}
+.savings-label{font-size:10px;color:var(--text2)}
+.savings-detail{font-size:11px;color:var(--text);margin-top:8px}
+.particle{position:absolute;width:4px;height:4px;border-radius:50%;pointer-events:none;animation:particle-fly 1s ease-out forwards}
+@keyframes particle-fly{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+
+/* ===== TABS ===== */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab{padding:10px 16px;font-family:var(--label);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab:hover{color:var(--gold2)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ===== GLOW EFFECTS (subtle gold, 8s) ===== */
+.glow-g{text-shadow:0 0 18px rgba(212,168,67,.35)}
+.box-glow{box-shadow:0 0 24px rgba(212,168,67,.08)}
+.glow-pulse{animation:glow-pulse-anim 8s ease-in-out infinite}
+@keyframes glow-pulse-anim{0%,100%{box-shadow:0 0 12px rgba(212,168,67,.06);transform:scale(1)}50%{box-shadow:0 0 20px rgba(212,168,67,.12);transform:scale(1.02)}}
+
+/* ===== TERMINAL LOG ===== */
+.terminal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:12px;font-family:var(--label);font-size:10px;height:160px;overflow-y:auto;scrollbar-width:none}
+.terminal::-webkit-scrollbar{display:none}
+.t-line{color:var(--text2);margin-bottom:3px;line-height:1.4}
+.t-line .t-green{color:var(--g)}
+.t-line .t-amber{color:var(--amber)}
+.t-line .t-blue{color:var(--blue)}
+.t-line .t-red{color:var(--red)}
+.t-line .t-gray{color:var(--text3)}
+.t-prompt{color:var(--g)}
+
+/* ===== KPI ROW (spec: 2px gutter, gold top accent) ===== */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border-bottom:1px solid var(--border);scroll-margin-top:12px}
+.kpi{background:var(--panel);padding:14px 16px;text-align:center;border-top:2px solid var(--gold);position:relative}
+.kpi-val{font-family:var(--sans);font-size:22px;font-weight:800;color:var(--gold);display:block;margin-bottom:2px;line-height:1}
+.kpi-val.amber{color:var(--amber)}
+.kpi-val.blue{color:var(--blue)}
+.kpi-val.red{color:var(--red)}
+.kpi-label{font-family:var(--label);font-size:9.5px;color:var(--text2);letter-spacing:0.14em;text-transform:uppercase}
+.kpi-delta{font-family:var(--label);font-size:9px;margin-top:4px;letter-spacing:0.06em}
+.kpi-delta.up{color:var(--teal)}
+.kpi-delta.down{color:var(--red)}
+
+/* ===== NOTIFICATION TOAST ===== */
+#toast-container{position:fixed;top:calc(var(--header-offset) + 8px);right:16px;z-index:200;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r2);padding:10px 14px;font-size:13px;font-family:var(--body);color:var(--text);display:flex;align-items:flex-start;gap:8px;min-width:260px;max-width:300px;animation:toast-in 0.3s ease;backdrop-filter:blur(10px)}
+.toast.removing{animation:toast-out 0.3s ease forwards}
+@keyframes toast-in{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toast-out{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(20px)}}
+.toast-icon{font-size:14px;flex-shrink:0}
+.toast-body{flex:1}
+.toast-title{font-family:var(--sans);font-weight:600;color:var(--white);margin-bottom:2px}
+.toast-text{color:var(--text2)}
+
+/* ===== HOVER TOOLTIP ===== */
+.tooltip{position:relative}
+.tooltip-text{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border2);padding:6px 10px;font-family:var(--label);font-size:9px;border-radius:var(--r);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;color:var(--text);z-index:50}
+.tooltip:hover .tooltip-text{opacity:1}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1180px){
+  main{grid-template-columns:minmax(200px,260px) 1fr minmax(220px,280px)}
+}
+@media(max-width:900px){
+  main{display:flex;flex-direction:column;min-height:calc(100vh - var(--header-offset));grid-template-columns:unset}
+  .nav-rail{
+    display:flex!important;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+    grid-row:unset;grid-column:unset;border-right:none;border-bottom:1px solid var(--border);
+    padding:8px 10px;gap:2px;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:thin;
+    max-height:none;background:var(--surface)
+  }
+  .nav-rail .nav-section{display:none}
+  .nav-rail .nav-item{
+    flex-shrink:0;border-left:none;border-bottom:2px solid transparent;padding:10px 14px;white-space:nowrap
+  }
+  .nav-rail .nav-item.active{border-left-color:transparent;border-bottom-color:var(--gold)}
+  .nav-rail .nav-footer-quick{display:none}
+  .center-col{flex:1;min-height:0;overflow-y:auto;border-right:none}
+  .right-col{
+    display:block!important;flex-shrink:0;max-height:none;overflow-y:visible;border-top:1px solid var(--border);
+    padding-bottom:max(24px,env(safe-area-inset-bottom))
+  }
+  .h-quick{display:inline-block}
+  .hstat{font-size:9px;padding:3px 8px}
+}
+@media(max-width:520px){
+  .hlogo span{display:none}
+  .hright > .hstat:nth-child(3),
+  .hright > .hstat:nth-child(4){display:none}
+}
+@media(max-width:640px){
+  .kpi-row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:380px){
+  .kpi-row{grid-template-columns:1fr}
+}
+
+/* REDUCED MOTION — docs/DESIGN_RULES.md */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  main { animation: none; }
+  .glow-pulse, .hstatus-dot, .pin-ring, .call-bar, .call-live-dot, .feed-item,
+  .particle, .ls-dot.active, .cursor-blink { animation: none !important; }
+  .bid-card:hover { transform: none; }
+  .bid-card::after { transition: none; }
+}
+@media(max-width:720px){
+  .hnav{display:none}
+}
+</style>
+</head>
+<body>
+<script>
+(function(){
+  var k='dibbs_theme';
+  var t=localStorage.getItem(k);
+  document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');
+})();
+</script>
+<div id="doc-progress" aria-hidden="true"></div>
+<div id="toast-container"></div>
+
+<header id="site-header">
+  <div class="hlogo">SOURCED <span>AI procurement ops · live</span></div>
+  <nav class="hnav" aria-label="Dibbs 2.0 site">
+    <a href="../index.html">Overview</a>
+    <a href="../site/pitch.html">Pitch</a>
+    <a href="../site/demand.html">Validation</a>
+    <a href="../site/plansheet.html">Spec</a>
+    <a href="../mockup/index.html">Mockups</a>
+    <a href="index.html">Ref hub</a>
+    <a href="sourced-ai-live.html" aria-current="page">Ops live</a>
+    <a href="post-requirement.html">Post requirement</a>
+  </nav>
+  <div class="hstatus"><div class="hstatus-dot"></div>All agents active</div>
+  <div class="hright">
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle light or dark theme">Theme</button>
+    <div class="hstat">Suppliers online <span id="h-suppliers">247</span></div>
+    <div class="hstat">Bids/hour <span id="h-bph">38</span></div>
+    <div class="hstat">Savings today <span id="h-savings">$14,220</span></div>
+    <div id="live-time"></div>
+    <button type="button" class="h-quick" onclick="triggerQuickPost()" aria-label="Post requirement">＋ Post</button>
+  </div>
+</header>
+<script>
+(function(){
+  var hdr=document.getElementById('site-header');
+  if(!hdr)return;
+  function sync(){
+    var h=Math.ceil(hdr.getBoundingClientRect().height);
+    if(h>0)document.documentElement.style.setProperty('--header-offset',h+'px');
+  }
+  sync();
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(sync).observe(hdr);
+  window.addEventListener('resize',sync,{passive:true});
+  window.addEventListener('orientationchange',sync,{passive:true});
+  document.fonts&&document.fonts.ready.then(sync).catch(function(){});
+})();
+</script>
+
+<main>
+  <!-- LEFT NAV -->
+  <nav class="nav-rail">
+    <div class="nav-section">CONTROL</div>
+    <div class="nav-item active" onclick="switchPanel(this,'ops')"><div class="nav-icon">⬡</div>AI Operations<div class="nav-badge" id="nav-ops-count">3</div></div>
+    <div class="nav-item" onclick="switchPanel(this,'map')"><div class="nav-icon">◎</div>Live Map<div class="nav-badge">RI</div></div>
+    <div class="nav-item" onclick="switchPanel(this,'reqs')"><div class="nav-icon">◫</div>Requirements<div class="nav-badge red">2</div></div>
+    <div class="nav-item" onclick="switchPanel(this,'bids')"><div class="nav-icon">⬙</div>Bid Comparison</div>
+
+    <div class="nav-section">AGENTS</div>
+    <div class="nav-item" onclick="switchPanel(this,'sales')"><div class="nav-icon">◈</div>Sales Agent<div class="nav-badge" id="nav-sales">CALLING</div></div>
+    <div class="nav-item" onclick="switchPanel(this,'marketing')"><div class="nav-icon">◉</div>Marketing Agent<div class="nav-badge">EMAILING</div></div>
+    <div class="nav-item" onclick="switchPanel(this,'procurement')"><div class="nav-icon">⬡</div>Procurement Agent<div class="nav-badge">7 ACTIVE</div></div>
+
+    <div class="nav-section">INTELLIGENCE</div>
+    <div class="nav-item" onclick="switchPanel(this,'terminal')"><div class="nav-icon">▶</div>Agent Terminal</div>
+    <div class="nav-item" onclick="switchPanel(this,'savings')"><div class="nav-icon">◊</div>Savings Engine</div>
+
+    <div class="nav-footer-quick" style="margin-top:auto;padding:16px 20px;border-top:1px solid var(--border)">
+      <div style="font-size:9px;color:var(--text3);margin-bottom:8px;letter-spacing:0.08em">REQUIREMENT QUICK POST</div>
+      <button type="button" onclick="triggerQuickPost()" style="width:100%;padding:8px;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-family:var(--label);font-size:9.5px;border-radius:8px;cursor:pointer;letter-spacing:0.12em;text-transform:uppercase;transition:background 0.2s,color 0.2s" onmouseover="this.style.background='var(--gold2)';this.style.color='#0B0C0E'" onmouseout="this.style.background='var(--gold-dim)';this.style.color='var(--gold)'">+ Post requirement</button>
+    </div>
+  </nav>
+
+  <!-- CENTER COLUMN -->
+  <div class="center-col">
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi"><span class="kpi-val" id="kpi-active">7</span><div class="kpi-label">ACTIVE REQUIREMENTS</div><div class="kpi-delta up" id="kpi-active-d">+2 this hour</div></div>
+      <div class="kpi"><span class="kpi-val amber" id="kpi-bids">23</span><div class="kpi-label">BIDS IN REVIEW</div><div class="kpi-delta up">↑ 12 new</div></div>
+      <div class="kpi"><span class="kpi-val blue" id="kpi-calls">4</span><div class="kpi-label">LIVE CALLS</div><div class="kpi-delta up">AI AGENTS</div></div>
+      <div class="kpi"><span class="kpi-val" id="kpi-saved">$1,240</span><div class="kpi-label">SESSION SAVINGS</div><div class="kpi-delta up">14% avg below market</div></div>
+    </div>
+
+    <!-- MAP SECTION -->
+    <div id="map-section">
+      <div id="map-leaflet" role="img" aria-label="Map of Rhode Island with live supplier pins"></div>
+      <canvas id="map-effects" aria-hidden="true"></canvas>
+      <div class="map-zoom-floating">
+        <button type="button" id="map-zoom-in" aria-label="Zoom map in">+</button>
+        <button type="button" id="map-zoom-out" aria-label="Zoom map out">−</button>
+      </div>
+      <div class="map-overlay"></div>
+      <div class="map-ui">
+        <div class="map-title-block">
+          <div class="map-eyebrow">Live intelligence · Rhode Island</div>
+          <div class="map-title">AI scanning <em>Rhode Island</em> for suppliers</div>
+          <div class="map-subtitle">Finding, verifying, and contacting suppliers in real-time</div>
+          <div class="map-stats">
+            <div class="map-stat"><span class="v" id="ms-found">34</span><span class="l">FOUND</span></div>
+            <div class="map-stat"><span class="v" id="ms-verified">21</span><span class="l">VERIFIED</span></div>
+            <div class="map-stat"><span class="v" id="ms-contacted">18</span><span class="l">CONTACTED</span></div>
+            <div class="map-stat"><span class="v" id="ms-responding">9</span><span class="l">RESPONDING</span></div>
+          </div>
+        </div>
+      </div>
+      <div id="pin-info" class="pin-info-card"></div>
+    </div>
+
+    <!-- TAB PANELS -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab(this,'tab-ops')">⬡ AI Operations</div>
+      <div class="tab" onclick="switchTab(this,'tab-sales')">◈ Sales Agent Live</div>
+      <div class="tab" onclick="switchTab(this,'tab-marketing')">✉ Marketing Agent</div>
+      <div class="tab" onclick="switchTab(this,'tab-procurement')">⬙ Procurement Engine</div>
+      <div class="tab" onclick="switchTab(this,'tab-bids')">◊ Bid Comparison</div>
+    </div>
+
+    <!-- OPS TAB -->
+    <div id="tab-ops" class="tab-content active section">
+      <div class="section-head">
+        <div class="section-title">AGENT ACTIVITY FEED</div>
+        <div class="section-sub">REAL-TIME · AUTO-SCROLL</div>
+      </div>
+      <div class="agent-feed" id="agent-feed">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- SALES AGENT TAB -->
+    <div id="tab-sales" class="tab-content section">
+      <div class="section-head">
+        <div class="section-title">◈ SALES AGENT — AUTO CALLING ENGINE</div>
+        <div class="section-sub" style="color:var(--red);">● 4 CALLS ACTIVE</div>
+      </div>
+
+      <div class="call-card glow-pulse" id="main-call">
+        <div class="call-label"><div class="call-live-dot"></div>LIVE CALL · AGENT AURORA-3</div>
+        <div class="call-target" id="call-target">East Bay Electrical Supply</div>
+        <div class="call-number" id="call-number">+1 (401) 555-0192</div>
+        <div class="call-waveform" id="call-waveform"></div>
+        <div class="call-transcript" id="call-transcript">
+          <div class="t-agent">AGENT: Good morning, I'm calling from Sourced on behalf of a contractor in Providence looking for 500 linear feet of EMT conduit, ¾ inch. Is this something East Bay can supply?</div>
+          <div class="t-human">REP: Yes, we carry that. What's the delivery window?</div>
+          <div class="t-agent">AGENT: They need delivery by Friday April 4th. Can you provide a competitive price quote? We're comparing across 12 suppliers today.</div>
+        </div>
+        <div class="call-outcome">
+          <span style="font-family:var(--label);font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);padding:2px 8px;border-radius:6px">Quote requested</span>
+          <span style="font-family:var(--label);font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;background:var(--amber-dim);color:var(--amber);border:1px solid rgba(240,168,78,.28);padding:2px 8px;border-radius:6px" id="call-duration">2:47</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+        <div class="call-card" style="opacity:0.7">
+          <div class="call-label"><div class="call-live-dot"></div>AGENT NOVA-1 · CALLING</div>
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Providence Hardware Co.</div>
+          <div style="font-size:9px;color:var(--text2)">Goal: Copper pipe pricing for 200 units</div>
+          <div style="margin-top:8px"><div class="call-waveform" style="height:20px" id="mini-wave1"></div></div>
+        </div>
+        <div class="call-card" style="opacity:0.7">
+          <div class="call-label"><div class="call-live-dot"></div>AGENT NOVA-2 · CALLING</div>
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Newport Supply Group</div>
+          <div style="font-size:9px;color:var(--text2)">Goal: Drywall sheets, 4×8, quantity 300</div>
+          <div style="margin-top:8px"><div class="call-waveform" style="height:20px" id="mini-wave2"></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div class="section-head"><div class="section-title" style="font-size:11px">CALLS COMPLETED TODAY</div></div>
+        <div id="calls-completed" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+    </div>
+
+    <!-- MARKETING AGENT TAB -->
+    <div id="tab-marketing" class="tab-content section">
+      <div class="section-head">
+        <div class="section-title">✉ MARKETING AGENT — EMAIL ENGINE</div>
+        <div class="section-sub">47 SENT TODAY</div>
+      </div>
+
+      <div class="email-composer" id="email-live">
+        <div class="email-header">
+          <div class="email-header-label">COMPOSING · AGENT HERMES-1</div>
+          <div class="email-status-badge" id="email-status">COMPOSING</div>
+        </div>
+        <div class="email-field"><div class="email-field-label">TO:</div><div class="email-field-val" id="email-to">sarah.chen@RIConstructionGroup.com</div></div>
+        <div class="email-field"><div class="email-field-label">SUBJ:</div><div class="email-field-val" id="email-subj">Competitive bid opportunity: 500ft EMT Conduit, Providence, April 4</div></div>
+        <div class="email-body" id="email-body">
+          Hi Sarah,<br><br>
+          I'm reaching out on behalf of a Providence-based general contractor looking to procure <strong style="color:var(--g)">500 linear feet of ¾-inch EMT conduit</strong> for delivery by April 4th.<br><br>
+          Your company matched our verified supplier criteria for this material. If RI Construction Group can fulfill this order, we'd love to include your bid in our comparison — contractors on Sourced are actively selecting suppliers right now.<br><br>
+          <span id="email-cursor"><span class="cursor-blink"></span></span>
+        </div>
+        <div class="email-actions">
+          <button onclick="simulateSend()" style="padding:6px 14px;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-family:var(--label);font-size:9px;border-radius:8px;cursor:pointer;letter-spacing:0.1em;text-transform:uppercase">Send now ↗</button>
+          <button style="padding:6px 14px;background:transparent;border:1px solid var(--border);color:var(--text2);font-family:var(--mono);font-size:9px;border-radius:3px;cursor:pointer">SCHEDULE</button>
+          <span style="margin-left:auto;font-size:9px;color:var(--text3)">SOURCED AI · PERSONALIZED</span>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div style="font-size:9px;color:var(--text2);margin-bottom:10px;letter-spacing:0.08em">EMAIL PIPELINE · TODAY</div>
+        <div id="email-pipeline" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+    </div>
+
+    <!-- PROCUREMENT TAB -->
+    <div id="tab-procurement" class="tab-content section">
+      <div class="section-head">
+        <div class="section-title">⬡ PROCUREMENT ENGINE — ACTIVE CYCLES</div>
+        <div class="section-sub">7 REQUIREMENTS IN PROGRESS</div>
+      </div>
+
+      <div id="procurement-cycles" style="display:flex;flex-direction:column;gap:10px">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- BIDS TAB -->
+    <div id="tab-bids" class="tab-content section">
+      <div class="section-head">
+        <div class="section-title">◊ BID COMPARISON — LIVE RESULTS</div>
+        <div class="section-sub">4 BIDS · REQUIREMENT #REQ-2024-089</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:16px">
+        <div style="font-size:9px;color:var(--text2);margin-bottom:4px">REQUIREMENT #REQ-2024-089</div>
+        <div style="font-family:var(--sans);font-size:15px;font-weight:700;color:var(--white);margin-bottom:2px">500 ft ¾" EMT Conduit</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:9px;color:var(--text2)">Delivery: April 4, 2026</span>
+          <span style="font-size:9px;color:var(--text2)">·</span>
+          <span style="font-size:9px;color:var(--text2)">Providence, RI</span>
+          <span style="font-size:9px;color:var(--text2)">·</span>
+          <span style="font-size:9px;color:var(--amber)">Expires in <span id="bid-expiry">17:44:22</span></span>
+        </div>
+      </div>
+      <div class="bid-cards-wrapper" id="bid-cards"><!-- JS --></div>
+    </div>
+
+  </div><!-- /center -->
+
+  <!-- RIGHT COLUMN -->
+  <div class="right-col">
+
+    <!-- POST REQUIREMENT -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">POST REQUIREMENT</div></div>
+      <div class="req-form" id="req-form">
+        <div class="req-steps">
+          <div class="req-step done" id="rstep1">01 WHAT</div>
+          <div class="req-step active" id="rstep2">02 WHEN</div>
+          <div class="req-step pending" id="rstep3">03 WHERE</div>
+        </div>
+        <div class="req-field filled">
+          <div class="req-label">MATERIAL</div>
+          <input class="req-input" value="½-inch copper pipe, type L" readonly>
+        </div>
+        <div class="req-field filled">
+          <div class="req-label">QUANTITY</div>
+          <input class="req-input" value="200 linear feet" readonly>
+        </div>
+        <div class="req-field focused" id="req-date-field">
+          <div class="req-label">DELIVERY DATE</div>
+          <input class="req-input" id="req-date-input" placeholder="April 8, 2026" onfocus="this.closest('.req-field').classList.add('focused')" onblur="this.closest('.req-field').classList.remove('focused')" onchange="advanceReqStep()">
+        </div>
+        <div class="req-field">
+          <div class="req-label">DELIVERY ADDRESS</div>
+          <input class="req-input" placeholder="Auto-filled: 142 Atwells Ave, Providence" readonly style="color:var(--text3)">
+        </div>
+        <button class="req-post-btn" id="req-post-btn" onclick="postRequirement()">POST & LET AI HANDLE IT →</button>
+      </div>
+    </div>
+
+    <!-- AGENTS STATUS -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">AGENT STATUS</div><div class="section-sub">4 RUNNING</div></div>
+
+      <div class="agent-card">
+        <div class="agent-avatar busy">◈</div>
+        <div style="flex:1">
+          <div class="agent-name">PROCUREMENT AGENT · SIGMA-7</div>
+          <div class="agent-task">Collecting bids for REQ-2024-089 · 500ft EMT Conduit</div>
+          <div class="agent-progress-bar"><div class="agent-progress-fill" id="prog-sigma" style="width:78%"></div></div>
+          <div style="font-size:9px;color:var(--text3);margin-top:3px">12 suppliers contacted · 4 bids received</div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-avatar busy" style="background:var(--amber-dim);border:1px solid rgba(240,168,78,.32)">◉</div>
+        <div style="flex:1">
+          <div class="agent-name">SALES AGENT · AURORA-3</div>
+          <div class="agent-task">Live call with East Bay Electrical Supply · Quote negotiation</div>
+          <div class="agent-progress-bar"><div class="agent-progress-fill amber" id="prog-aurora" style="width:45%"></div></div>
+          <div style="font-size:9px;color:var(--text3);margin-top:3px">Duration: <span id="aurora-duration">2:47</span> · Status: NEGOTIATING</div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-avatar busy" style="background:var(--blue-dim);border:1px solid rgba(91,156,246,.32)">✉</div>
+        <div style="flex:1">
+          <div class="agent-name">MARKETING AGENT · HERMES-1</div>
+          <div class="agent-task">Composing outreach to 14 suppliers in pipeline</div>
+          <div class="agent-progress-bar"><div class="agent-progress-fill" id="prog-hermes" style="width:62%;background:var(--blue)"></div></div>
+          <div style="font-size:9px;color:var(--text3);margin-top:3px">47 sent · 14 queued · 12% response rate</div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-avatar" style="background:var(--purple-dim);border:1px solid rgba(168,127,232,.32)">◊</div>
+        <div style="flex:1">
+          <div class="agent-name">MARKET INTEL · ORACLE-1</div>
+          <div class="agent-task">Updating price benchmarks for 8 material categories</div>
+          <div class="agent-progress-bar"><div class="agent-progress-fill" id="prog-oracle" style="width:91%;background:var(--purple)"></div></div>
+          <div style="font-size:9px;color:var(--text3);margin-top:3px">RI market data · Updated 4 min ago</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVINGS REVEAL -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">SAVINGS ENGINE</div></div>
+      <div class="savings-reveal glow-pulse">
+        <div class="savings-label">TOTAL SAVED · THIS SESSION</div>
+        <div class="savings-amount" id="savings-num">$1,240</div>
+        <div class="savings-detail">Across 3 completed orders · avg <span style="color:var(--g)">14.2%</span> below market</div>
+        <div style="margin-top:12px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+          <span style="font-family:var(--label);font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);padding:3px 8px;border-radius:6px">Lumber: −18%</span>
+          <span style="font-family:var(--label);font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);padding:3px 8px;border-radius:6px">Conduit: −12%</span>
+          <span style="font-family:var(--label);font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border);padding:3px 8px;border-radius:6px">Drywall: −9%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERMINAL -->
+    <div class="section">
+      <div class="section-head"><div class="section-title">AGENT TERMINAL</div><div class="section-sub">LIVE OUTPUT</div></div>
+      <div class="terminal" id="terminal-log">
+        <div class="t-line"><span class="t-gray">[00:00:01]</span> <span class="t-green">SIGMA-7</span> Procurement cycle initiated for REQ-2024-089</div>
+        <div class="t-line"><span class="t-gray">[00:00:03]</span> <span class="t-blue">ORACLE-1</span> Fetching RI market price for EMT conduit 3/4"</div>
+        <div class="t-line"><span class="t-gray">[00:00:05]</span> <span class="t-green">SIGMA-7</span> Querying Google Maps API: "electrical supply Rhode Island"</div>
+      </div>
+    </div>
+
+  </div><!-- /right -->
+
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+// ===== THEME (localStorage: dibbs_theme) + progress bar =====
+const THEME_KEY='dibbs_theme';
+function applyThemeLabel(){
+  const b=document.getElementById('theme-toggle');
+  if(!b)return;
+  const light=document.documentElement.getAttribute('data-theme')==='light';
+  b.textContent=light?'Dark':'Light';
+  b.setAttribute('aria-pressed',light?'true':'false');
+}
+document.getElementById('theme-toggle')?.addEventListener('click',()=>{
+  const next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',next);
+  try{localStorage.setItem(THEME_KEY,next);}catch(e){}
+  applyThemeLabel();
+  if(typeof syncLiveMapBasemap==='function')syncLiveMapBasemap();
+});
+applyThemeLabel();
+
+(function(){
+  const bar=document.getElementById('doc-progress');
+  const cc=document.querySelector('.center-col');
+  if(!bar||!cc)return;
+  function tick(){
+    const max=cc.scrollHeight-cc.clientHeight;
+    const pct=max<=0?100:Math.min(100,Math.round((cc.scrollTop/max)*100));
+    bar.style.width=pct+'%';
+  }
+  cc.addEventListener('scroll',tick,{passive:true});
+  window.addEventListener('resize',tick);
+  tick();
+})();
+
+// ===== LIVE TIME =====
+function updateTime(){const n=new Date();document.getElementById('live-time').textContent=n.toLocaleTimeString('en-US',{hour12:false})}
+setInterval(updateTime,1000);updateTime();
+
+// ===== LIVE MAP (Leaflet + OSM/Carto tiles, canvas overlay for beams/pins) =====
+const mapSection=document.getElementById('map-section');
+const effectsCanvas=document.getElementById('map-effects');
+const effectsCtx=effectsCanvas?effectsCanvas.getContext('2d'):null;
+let liveMap=null;
+let baseDarkLayer=null;
+let baseLightLayer=null;
+let Wm=1,Hm=1;
+let hoveredNode=null;
+
+const nodes=[
+  {lat:41.635,lng:-71.274,name:'East Bay Electrical',type:'supplier',status:'calling',phone:'(401) 555-0192',email:'info@eastbay-elec.com',cat:'Electrical',price:'$4.10/unit'},
+  {lat:41.824,lng:-71.415,name:'Providence Hardware Co.',type:'supplier',status:'emailed',phone:'(401) 555-0341',email:'quotes@providencehardware.com',cat:'General',price:'$4.40/unit'},
+  {lat:41.489,lng:-71.313,name:'Newport Supply Group',type:'supplier',status:'fetching',phone:'fetching…',email:'fetching…',cat:'Electrical',price:'pending'},
+  {lat:41.780,lng:-71.437,name:'Cranston Building Supply',type:'supplier',status:'bid_received',phone:'(401) 555-0874',email:'bids@cbsupply.net',cat:'General',price:'$3.95/unit'},
+  {lat:41.700,lng:-71.392,name:'Warwick Materials LLC',type:'supplier',status:'emailed',phone:'(401) 555-0512',email:'warwick@materials.com',cat:'Plumbing',price:'$4.55/unit'},
+  {lat:41.821,lng:-71.498,name:'Johnston Pipe & Supply',type:'supplier',status:'bid_received',phone:'(401) 555-0223',email:'admin@johnstonpipe.com',cat:'Plumbing',price:'$4.20/unit'},
+  {lat:42.003,lng:-71.513,name:'Woonsocket Hardware',type:'supplier',status:'fetching',phone:'fetching…',email:'fetching…',cat:'General',price:'pending'},
+  {lat:41.451,lng:-71.449,name:'Narragansett Supply',type:'supplier',status:'calling',phone:'(401) 555-0781',email:'sales@narrasupply.com',cat:'Electrical',price:'pending'},
+  {lat:41.826,lng:-71.405,name:'CONTRACTOR SITE',type:'contractor',status:'active',phone:'Marcus T.',email:'Providence, RI',cat:'GC',price:''}
+];
+
+const statusColor={'calling':'#E85D5D','emailed':'#F0A84E','fetching':'#5B9CF6','bid_received':'#3ECFB2','active':'#D4A843'};
+const beams=[];
+nodes.forEach((n,i)=>{if(n.type==='supplier'){beams.push({from:8,to:i,progress:Math.random(),speed:0.004+Math.random()*0.003,color:statusColor[n.status]})}});
+const CONTRACTOR_IDX=8;
+const reduceMotion=typeof window.matchMedia==='function'&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resizeEffectsCanvas(){
+  if(!effectsCanvas||!effectsCtx||!mapSection)return;
+  const w=Math.max(1,Math.floor(mapSection.clientWidth));
+  const h=Math.max(1,Math.floor(mapSection.clientHeight));
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  effectsCanvas.width=Math.floor(w*dpr);
+  effectsCanvas.height=Math.floor(h*dpr);
+  effectsCanvas.style.width=w+'px';
+  effectsCanvas.style.height=h+'px';
+  Wm=w;Hm=h;
+  effectsCtx.setTransform(dpr,0,0,dpr,0,0);
+  if(liveMap)liveMap.invalidateSize({animate:false});
+}
+
+function nodeContainerPoint(map,n){
+  if(!map||!n.lat)return null;
+  return map.latLngToContainerPoint(L.latLng(n.lat,n.lng));
+}
+
+function updatePinInfoCard(){
+  const info=document.getElementById('pin-info');
+  if(!info)return;
+  if(hoveredNode===null||!liveMap){
+    info.classList.remove('show');
+    return;
+  }
+  const n=nodes[hoveredNode];
+  const pt=nodeContainerPoint(liveMap,n);
+  if(!pt){info.classList.remove('show');return;}
+  let left=pt.x+14,top=pt.y-88;
+  left=Math.max(8,Math.min(left,mapSection.clientWidth-info.offsetWidth-8));
+  top=Math.max(8,Math.min(top,mapSection.clientHeight-info.offsetHeight-8));
+  info.style.left=left+'px';
+  info.style.top=top+'px';
+  info.className='pin-info-card show';
+  info.innerHTML=`<div class="info-name">${n.name}</div>
+      <div class="info-row"><div class="info-label">Category</div><div class="info-val">${n.cat}</div></div>
+      <div class="info-row"><div class="info-label">Phone</div><div class="info-val" style="color:${n.phone.includes('fetch')?'var(--blue)':'var(--text)'}">${n.phone}${n.phone.includes('fetch')?'<span style="display:inline-block;width:8px;height:8px;border:1px solid var(--blue);border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite;margin-left:4px;vertical-align:middle"></span>':''}</div></div>
+      <div class="info-row"><div class="info-label">Email</div><div class="info-val" style="color:${n.email.includes('fetch')?'var(--blue)':'var(--text)'};">${n.email}</div></div>
+      <div class="info-row"><div class="info-label">Price</div><div class="info-val" style="color:var(--g)">${n.price||'Fetching bid…'}</div></div>
+      <div class="info-status">
+        <span style="font-size:9px;padding:2px 8px;border-radius:2px;background:${statusColor[n.status]}22;color:${statusColor[n.status]};border:1px solid ${statusColor[n.status]}44">${n.status.replace('_',' ').toUpperCase()}</span>
+      </div>`;
+}
+
+function pickHoveredFromEvent(ev){
+  if(!liveMap)return;
+  const oe=ev.originalEvent||ev;
+  const cpt=liveMap.mouseEventToContainerPoint(oe);
+  let best=-1,bestD=22;
+  nodes.forEach((n,i)=>{
+    const p=nodeContainerPoint(liveMap,n);
+    if(!p)return;
+    const d=Math.hypot(cpt.x-p.x,cpt.y-p.y);
+    const thr=n.type==='contractor'?26:20;
+    if(d<thr&&d<bestD){bestD=d;best=i;}
+  });
+  hoveredNode=best>=0?best:null;
+  updatePinInfoCard();
+}
+
+function drawMapEffects(){
+  if(!effectsCtx||!liveMap){
+    requestAnimationFrame(drawMapEffects);
+    return;
+  }
+  effectsCtx.clearRect(0,0,Wm,Hm);
+
+  if(!reduceMotion){
+    beams.forEach(b=>{
+      b.progress+=b.speed;if(b.progress>1)b.progress=0;
+    });
+  }
+
+  beams.forEach(b=>{
+    const from=nodes[b.from],to=nodes[b.to];
+    const pf=nodeContainerPoint(liveMap,from),pt=nodeContainerPoint(liveMap,to);
+    if(!pf||!pt)return;
+    const fx=pf.x,fy=pf.y,tx2=pt.x,ty2=pt.y;
+    effectsCtx.setLineDash([4,8]);effectsCtx.strokeStyle=b.color+'30';effectsCtx.lineWidth=0.8;
+    effectsCtx.beginPath();effectsCtx.moveTo(fx,fy);effectsCtx.lineTo(tx2,ty2);effectsCtx.stroke();effectsCtx.setLineDash([]);
+    const pr=reduceMotion?0.35:b.progress;
+    const px=fx+(tx2-fx)*pr,py=fy+(ty2-fy)*pr;
+    effectsCtx.beginPath();effectsCtx.arc(px,py,3,0,Math.PI*2);effectsCtx.fillStyle=b.color;effectsCtx.fill();
+    effectsCtx.beginPath();effectsCtx.arc(px,py,6,0,Math.PI*2);effectsCtx.fillStyle=b.color+'40';effectsCtx.fill();
+  });
+
+  nodes.forEach((n,i)=>{
+    const p=nodeContainerPoint(liveMap,n);
+    if(!p)return;
+    const nx=p.x,ny=p.y;
+    const col=statusColor[n.status]||'#888';
+    const isHovered=hoveredNode===i;
+    const r=n.type==='contractor'?14:9;
+    const t=Date.now()/1000;
+
+    if(!reduceMotion){
+      const pulseR=r+(Math.sin(t*2+i)*4+6);
+      effectsCtx.beginPath();effectsCtx.arc(nx,ny,pulseR,0,Math.PI*2);
+      effectsCtx.strokeStyle=col+'40';effectsCtx.lineWidth=1;effectsCtx.stroke();
+    }
+
+    effectsCtx.beginPath();effectsCtx.arc(nx,ny,r+3,0,Math.PI*2);
+    effectsCtx.strokeStyle=col+(isHovered?'cc':'66');effectsCtx.lineWidth=1;effectsCtx.stroke();
+
+    effectsCtx.beginPath();effectsCtx.arc(nx,ny,r,0,Math.PI*2);
+    effectsCtx.fillStyle=isHovered?col:col+'aa';effectsCtx.fill();
+
+    effectsCtx.beginPath();effectsCtx.arc(nx,ny,3,0,Math.PI*2);
+    const lightHtml=document.documentElement.getAttribute('data-theme')==='light';
+    effectsCtx.fillStyle=n.type==='contractor'?(lightHtml?'#1A1612':'#0B0C0E'):(lightHtml?'#1A1612':'#F2EDE4');effectsCtx.fill();
+
+    if(isHovered||n.type==='contractor'){
+      effectsCtx.font="500 10px 'DM Mono',ui-monospace,monospace";
+      effectsCtx.fillStyle=lightHtml?'#1A1612':'#F2EDE4';effectsCtx.textAlign='center';
+      effectsCtx.fillText(n.name.split(' ').slice(0,2).join(' '),nx,ny+r+14);
+    }
+  });
+
+  if(!reduceMotion){
+    const t=Date.now()/1000;
+    const scanR=(t%4)/4*Math.max(Wm,Hm)*0.72;
+    const c=nodes[CONTRACTOR_IDX],cp=nodeContainerPoint(liveMap,c);
+    if(cp){
+      effectsCtx.beginPath();effectsCtx.arc(cp.x,cp.y,scanR,0,Math.PI*2);
+      effectsCtx.strokeStyle='rgba(212,168,67,'+(0.12-scanR/Math.max(Wm,Hm)*0.14)+')';
+      effectsCtx.lineWidth=1;effectsCtx.stroke();
+    }
+  }
+
+  requestAnimationFrame(drawMapEffects);
+}
+
+function syncLiveMapBasemap(){
+  if(!liveMap||!baseDarkLayer||!baseLightLayer)return;
+  const light=document.documentElement.getAttribute('data-theme')==='light';
+  if(light){
+    if(liveMap.hasLayer(baseDarkLayer))liveMap.removeLayer(baseDarkLayer);
+    if(!liveMap.hasLayer(baseLightLayer))baseLightLayer.addTo(liveMap);
+  }else{
+    if(liveMap.hasLayer(baseLightLayer))liveMap.removeLayer(baseLightLayer);
+    if(!liveMap.hasLayer(baseDarkLayer))baseDarkLayer.addTo(liveMap);
+  }
+}
+
+(function initLiveMap(){
+  const el=document.getElementById('map-leaflet');
+  if(!el||typeof L==='undefined'||!effectsCanvas||!effectsCtx||!mapSection)return;
+
+  resizeEffectsCanvas();
+  window.addEventListener('resize',resizeEffectsCanvas);
+  if(typeof ResizeObserver!=='undefined'){
+    new ResizeObserver(()=>resizeEffectsCanvas()).observe(mapSection);
+  }
+  requestAnimationFrame(resizeEffectsCanvas);
+  window.addEventListener('load',resizeEffectsCanvas);
+
+  baseDarkLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains:'abcd',
+    maxZoom:20
+  });
+  baseLightLayer=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains:'abcd',
+    maxZoom:20
+  });
+
+  liveMap=L.map(el,{
+    zoomControl:false,
+    scrollWheelZoom:true,
+    attributionControl:true,
+    preferCanvas:false
+  });
+  const b=L.latLngBounds(nodes.map(n=>[n.lat,n.lng]));
+  liveMap.fitBounds(b,{padding:[28,28],maxZoom:10});
+  syncLiveMapBasemap();
+
+  liveMap.on('mousemove',pickHoveredFromEvent);
+  liveMap.on('mouseout',()=>{hoveredNode=null;updatePinInfoCard();});
+  liveMap.on('move zoom moveend zoomend',()=>updatePinInfoCard());
+
+  document.getElementById('map-zoom-in')?.addEventListener('click',()=>liveMap.zoomIn());
+  document.getElementById('map-zoom-out')?.addEventListener('click',()=>liveMap.zoomOut());
+
+  drawMapEffects();
+})();
+
+// ===== FEED DATA =====
+const feedEvents=[
+  {type:'g',icon:'◈',agent:'SIGMA-7',text:'Requirement #REQ-2024-089 posted — initiating <span class="hl">AI procurement cycle</span>'},
+  {type:'blue',icon:'◎',agent:'ORACLE-1',text:'Fetching market price benchmarks — EMT conduit ¾" — RI region'},
+  {type:'blue',icon:'◎',agent:'ORACLE-1',text:'Market avg established: <span class="hl">$4.62/linear ft</span> · Source: 340 RI transactions Q1 2026'},
+  {type:'g',icon:'◈',agent:'SIGMA-7',text:'Google Maps API query: <span class="hl">"electrical supply distributors Rhode Island"</span> — 34 results'},
+  {type:'blue',icon:'◎',agent:'SIGMA-7',text:'Scraping contact data — East Bay Electrical Supply · found <span class="hl-blue">+1 (401) 555-0192</span>'},
+  {type:'blue',icon:'◎',agent:'SIGMA-7',text:'Email found: <span class="hl-blue">info@eastbay-elec.com</span> · verified deliverable · adding to outreach'},
+  {type:'amber',icon:'◈',agent:'AURORA-3',text:'Initiating auto-call to East Bay Electrical Supply — <span class="hl-amber">dialing now</span>'},
+  {type:'purple',icon:'✉',agent:'HERMES-1',text:'Composing personalized email to 14 verified suppliers — batch outreach'},
+  {type:'amber',icon:'◈',agent:'AURORA-3',text:'East Bay Electrical: <span class="hl-amber">call connected</span> · rep on line · quote negotiation in progress'},
+  {type:'g',icon:'◊',agent:'SIGMA-7',text:'Bid received: Cranston Building Supply · <span class="hl">$3.95/ft</span> · 14.5% below market'},
+  {type:'g',icon:'✉',agent:'HERMES-1',text:'Response received: Johnston Pipe & Supply · interested · forwarding to procurement cycle'},
+  {type:'g',icon:'◊',agent:'SIGMA-7',text:'Bid received: Johnston Pipe Supply · <span class="hl">$4.20/ft</span> · 9.1% below market'},
+  {type:'amber',icon:'◈',agent:'AURORA-3',text:'East Bay Electrical quote: <span class="hl-amber">$4.10/ft</span> · delivery April 3 confirmed · adding to comparison'},
+  {type:'blue',icon:'◎',agent:'SIGMA-7',text:'Fetching contact data: Woonsocket Hardware · <span class="hl-blue">phone lookup…</span>'},
+  {type:'g',icon:'⬡',agent:'SYSTEM',text:'4 bids collected · AI ranking by price × delivery × reliability · <span class="hl">results ready</span>'},
+];
+
+let feedIdx=0;
+const feed=document.getElementById('agent-feed');
+function addFeedEvent(){
+  if(feedIdx>=feedEvents.length)feedIdx=0;
+  const e=feedEvents[feedIdx++];
+  const div=document.createElement('div');
+  div.className=`feed-item ${e.type==='g'?'':e.type}`;
+  div.innerHTML=`<div class="feed-icon">${e.icon}</div><div class="feed-body"><div class="feed-agent">${e.agent}</div><div class="feed-text">${e.text}</div></div><div class="feed-time">${new Date().toLocaleTimeString('en-US',{hour12:false})}</div>`;
+  feed.insertBefore(div,feed.firstChild);
+  if(feed.children.length>20)feed.removeChild(feed.lastChild);
+}
+for(let i=0;i<8;i++)addFeedEvent();
+setInterval(addFeedEvent,2800);
+
+// ===== TERMINAL =====
+const termEvents=[
+  ()=>`<span class="t-green">SIGMA-7</span> [maps_api] query="electrical supply RI" returned=34`,
+  ()=>`<span class="t-blue">SIGMA-7</span> [scraper] target="eastbay-elec.com" phone=<span class="t-green">"(401) 555-0192"</span> email=<span class="t-green">"info@eastbay-elec.com"</span>`,
+  ()=>`<span class="t-amber">AURORA-3</span> [voip] initiating_call target="East Bay Electrical" number="+14015550192"`,
+  ()=>`<span class="t-amber">AURORA-3</span> [call] status=CONNECTED duration=0:12 waiting_for_rep=true`,
+  ()=>`<span class="t-amber">AURORA-3</span> [nlp] rep_responded=true extracting_quote=true`,
+  ()=>`<span class="t-green">SIGMA-7</span> [bid] received supplier="Cranston Building Supply" unit_price=$3.95 delivery_days=3`,
+  ()=>`<span class="t-green">SIGMA-7</span> [rank] sorting_bids criteria=[price,delivery,rating] top_pick="Cranston"`,
+  ()=>`<span class="t-blue">HERMES-1</span> [email] composed=true recipient="sarah.chen@RIConstructionGroup.com" status=SENDING`,
+  ()=>`<span class="t-green">ORACLE-1</span> [market] EMT_conduit_3_4in market_avg=$4.62 sample=340 region=RI`,
+  ()=>`<span class="t-amber">AURORA-3</span> [call] quote_extracted=$4.10 per_ft delivery_confirmed=true adding_to_comparison`,
+  ()=>`<span class="t-green">SIGMA-7</span> [result] 4_bids_ready sending_to_contractor notification=PUSH+EMAIL`,
+  ()=>`<span class="t-blue">SIGMA-7</span> [scraper] fetching contact: "Woonsocket Hardware" — GoogleMaps lookup in progress...`,
+];
+let termIdx=0;
+const termLog=document.getElementById('terminal-log');
+function addTermLine(){
+  const t=Date.now();
+  const line=document.createElement('div');line.className='t-line';
+  line.innerHTML=`<span class="t-gray">[${new Date().toLocaleTimeString('en-US',{hour12:false})}]</span> ${termEvents[termIdx%termEvents.length]()}`;
+  termLog.appendChild(line);termLog.scrollTop=termLog.scrollHeight;termIdx++;
+  if(termLog.children.length>30)termLog.removeChild(termLog.firstChild);
+}
+for(let i=0;i<5;i++)addTermLine();
+setInterval(addTermLine,3200);
+
+// ===== CALL WAVEFORM =====
+function buildWaveform(id,count=30,h=36){
+  const w=document.getElementById(id);if(!w)return;w.innerHTML='';
+  for(let i=0;i<count;i++){
+    const bar=document.createElement('div');bar.className='call-bar';
+    const maxH=h;const minH=4;
+    bar.style.height=(minH+Math.random()*(maxH-minH))+'px';
+    bar.style.animationDelay=(i*0.04)+'s';
+    bar.style.animationDuration=(0.5+Math.random()*0.6)+'s';
+    w.appendChild(bar);
+  }
+}
+buildWaveform('call-waveform',40,36);
+buildWaveform('mini-wave1',20,20);
+buildWaveform('mini-wave2',20,20);
+setInterval(()=>{buildWaveform('call-waveform',40,36)},4000);
+
+// Call duration counter
+let callSecs=167;
+setInterval(()=>{callSecs++;const m=Math.floor(callSecs/60),s=callSecs%60;const t=m+':'+(s<10?'0':'')+s;if(document.getElementById('call-duration'))document.getElementById('call-duration').textContent=t;if(document.getElementById('aurora-duration'))document.getElementById('aurora-duration').textContent=t;},1000);
+
+// ===== BID CARDS =====
+const bids=[
+  {name:'Cranston Building Supply',price:'$3.95',total:'$1,975',savings:'$335 saved vs market',delivery:'Apr 3 · Tomorrow',rating:'4.9',orders:'142 orders',dist:'8 mi',best:true},
+  {name:'East Bay Electrical',price:'$4.10',total:'$2,050',savings:'$260 saved',delivery:'Apr 4 · Fri',rating:'4.7',orders:'89 orders',dist:'14 mi',best:false},
+  {name:'Johnston Pipe & Supply',price:'$4.20',total:'$2,100',savings:'$210 saved',delivery:'Apr 5 · Sat',rating:'4.6',orders:'67 orders',dist:'11 mi',best:false},
+  {name:'Providence Hardware Co.',price:'$4.40',total:'$2,200',savings:'$110 saved',delivery:'Apr 6 · Sun',rating:'4.5',orders:'203 orders',dist:'3 mi',best:false},
+];
+const bidWrap=document.getElementById('bid-cards');
+bids.forEach((b,i)=>{
+  const div=document.createElement('div');
+  div.className='bid-card'+(b.best?' best':'');
+  div.style.animationDelay=(i*0.1)+'s';
+  div.innerHTML=`<div class="bid-supplier">${b.name}</div>
+    <div class="bid-row"><div class="bid-price">${b.price}<span style="font-size:11px;color:var(--text2)">/ft</span></div><div><div style="font-size:16px;font-family:var(--sans);color:var(--text)">${b.total}</div><div class="bid-savings">${b.savings}</div></div></div>
+    <div class="bid-meta"><div class="bid-tag">⏰ ${b.delivery}</div><div class="bid-tag">★ ${b.rating} · ${b.orders}</div><div class="bid-tag">📍 ${b.dist}</div></div>
+    <button class="bid-accept-btn" onclick="acceptBid('${b.name}','${b.savings}')">ACCEPT THIS BID — ${b.total} →</button>`;
+  bidWrap.appendChild(div);
+});
+
+// Bid expiry countdown
+let expirySecs=63862;
+setInterval(()=>{expirySecs--;if(expirySecs<0)expirySecs=86400;const h=Math.floor(expirySecs/3600),m=Math.floor((expirySecs%3600)/60),s=expirySecs%60;const el=document.getElementById('bid-expiry');if(el)el.textContent=h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s},1000);
+
+// ===== EMAIL PIPELINE =====
+const emailPipeline=[
+  {to:'East Bay Electrical',subj:'Bid request: EMT Conduit 500ft',status:'opened',time:'09:14'},
+  {to:'Cranston Building Supply',subj:'Competitive bid opportunity',status:'replied',time:'09:22'},
+  {to:'RI Construction Group',subj:'EMT conduit — April 4 delivery',status:'sending',time:'09:31'},
+  {to:'Newport Supply Group',subj:'500ft EMT conduit bid request',status:'delivered',time:'09:31'},
+  {to:'Woonsocket Hardware',subj:'Procurement opportunity: conduit',status:'queued',time:'pending'},
+];
+const pipeline=document.getElementById('email-pipeline');
+emailPipeline.forEach(e=>{
+  const statusColor2={'opened':'var(--g)','replied':'var(--g)','sending':'var(--amber)','delivered':'var(--blue)','queued':'var(--text3)'};
+  const div=document.createElement('div');
+  div.style.cssText='display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;font-size:10px';
+  div.innerHTML=`<span style="color:${statusColor2[e.status]};font-size:9px;min-width:60px">${e.status.toUpperCase()}</span><span style="flex:1;color:var(--text)">${e.to}</span><span style="color:var(--text2);font-size:9px">${e.time}</span>`;
+  pipeline.appendChild(div);
+});
+
+// ===== PROCUREMENT CYCLES =====
+const procCycles=[
+  {req:'REQ-2024-089',mat:'500ft ¾" EMT Conduit',progress:78,step:'4 bids received · ranking',color:'var(--g)'},
+  {req:'REQ-2024-088',mat:'200ft ½" Copper Pipe',progress:45,step:'12 suppliers contacted · awaiting',color:'var(--amber)'},
+  {req:'REQ-2024-087',mat:'300 sheets 4×8 Drywall',progress:91,step:'Bid accepted · confirming delivery',color:'var(--g)'},
+  {req:'REQ-2024-086',mat:'100ft PVC Conduit 1"',progress:22,step:'Searching suppliers · 8 found',color:'var(--blue)'},
+];
+const procDiv=document.getElementById('procurement-cycles');
+procCycles.forEach(c=>{
+  const div=document.createElement('div');
+  div.style.cssText='background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px';
+  div.innerHTML=`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-family:var(--sans);font-size:13px;font-weight:700;color:var(--white)">${c.mat}</span><span style="font-family:var(--label);font-size:9px;letter-spacing:0.08em;color:var(--text2)">${c.req}</span></div>
+    <div style="font-size:10px;color:var(--text2);margin-bottom:10px">${c.step}</div>
+    <div style="background:var(--border);height:4px;border-radius:2px;overflow:hidden"><div style="height:100%;background:${c.color};width:${c.progress}%;border-radius:2px;transition:width 2s"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:9px;color:var(--text3)">PROGRESS</span><span style="font-size:9px;color:${c.color}">${c.progress}%</span></div>`;
+  procDiv.appendChild(div);
+});
+
+// ===== CALLS COMPLETED =====
+const callsDone=[
+  {supplier:'Woonsocket Hardware',result:'Quote: $4.80/ft — rejected (above market)',outcome:'pass',dur:'1:23'},
+  {supplier:'Narragansett Supply',result:'Voicemail — follow-up email sent',outcome:'pending',dur:'0:45'},
+  {supplier:'Warwick Materials',result:'No stock — requirement noted for future',outcome:'pass',dur:'2:11'},
+];
+const callsDoneDiv=document.getElementById('calls-completed');
+callsDone.forEach(c=>{
+  const col={'pass':'var(--red)','pending':'var(--amber)','won':'var(--g)'}[c.outcome];
+  const div=document.createElement('div');
+  div.style.cssText='display:flex;gap:10px;padding:8px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;font-size:10px;align-items:flex-start';
+  div.innerHTML=`<span style="color:${col};font-size:9px;min-width:50px;margin-top:1px">${c.outcome.toUpperCase()}</span><div style="flex:1"><div style="color:var(--text);font-weight:500;margin-bottom:2px">${c.supplier}</div><div style="color:var(--text2)">${c.result}</div></div><span style="color:var(--text3);font-size:9px">${c.dur}</span>`;
+  callsDoneDiv.appendChild(div);
+});
+
+// ===== ACCEPT BID =====
+function acceptBid(name,savings){
+  fireParticles();
+  setTimeout(()=>showToast('💰','BID ACCEPTED','Order placed with '+name+' · '+savings,'var(--g)'),300);
+  animateCounter('savings-num',1240,2100,1200,'$');
+  document.querySelectorAll('.bid-card').forEach(c=>{c.style.opacity='0.3'});
+  showToast('📦','DELIVERY CONFIRMED','Materials arriving April 3 · East Providence','var(--blue)');
+}
+
+// ===== PARTICLES =====
+function fireParticles(){
+  const sv=document.querySelector('.savings-reveal');
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');p.className='particle';
+    const angle=Math.random()*Math.PI*2,dist=60+Math.random()*80;
+    p.style.cssText=`left:50%;top:50%;background:var(--g);--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;animation-delay:${Math.random()*0.3}s;position:absolute;width:4px;height:4px;border-radius:50%`;
+    sv.appendChild(p);setTimeout(()=>p.remove(),1200);
+  }
+}
+
+// ===== COUNTER ANIM =====
+function animateCounter(id,from,to,dur,prefix=''){
+  const el=document.getElementById(id);if(!el)return;
+  const start=Date.now();
+  const tick=()=>{const p=Math.min((Date.now()-start)/dur,1);const v=Math.floor(from+(to-from)*p);el.textContent=prefix+v.toLocaleString();if(p<1)requestAnimationFrame(tick)};
+  tick();
+}
+
+// ===== TOAST =====
+function showToast(icon,title,text,col='var(--g)'){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');t.className='toast';
+  t.style.borderLeftColor=col;t.style.borderLeftWidth='3px';
+  t.innerHTML=`<div class="toast-icon">${icon}</div><div class="toast-body"><div class="toast-title">${title}</div><div class="toast-text">${text}</div></div>`;
+  c.appendChild(t);
+  setTimeout(()=>{t.classList.add('removing');setTimeout(()=>t.remove(),300)},4000);
+}
+
+// ===== NAV / TABS =====
+const TAB_ORDER=['tab-ops','tab-sales','tab-marketing','tab-procurement','tab-bids'];
+function activateTabById(tabId){
+  const tabs=document.querySelectorAll('.tab-bar .tab');
+  const contents=document.querySelectorAll('.center-col .tab-content');
+  tabs.forEach(t=>t.classList.remove('active'));
+  contents.forEach(c=>c.classList.remove('active'));
+  const idx=TAB_ORDER.indexOf(tabId);
+  if(idx>=0&&tabs[idx])tabs[idx].classList.add('active');
+  const pane=document.getElementById(tabId);
+  if(pane)pane.classList.add('active');
+}
+function switchPanel(el,panel){
+  document.querySelectorAll('.nav-rail .nav-item').forEach(n=>n.classList.remove('active'));
+  if(el&&el.classList)el.classList.add('active');
+  const tabMap={ops:'tab-ops',bids:'tab-bids',sales:'tab-sales',marketing:'tab-marketing',procurement:'tab-procurement'};
+  if(tabMap[panel])activateTabById(tabMap[panel]);
+  const scrollId={map:'map-section',reqs:'req-form',terminal:'terminal-log'}[panel];
+  if(scrollId){
+    const target=document.getElementById(scrollId);
+    if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  if(panel==='savings'){
+    document.querySelector('.savings-reveal')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+function switchTab(el,id){
+  document.querySelectorAll('.tab-bar .tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.center-col .tab-content').forEach(c=>c.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const pane=document.getElementById(id);
+  if(pane)pane.classList.add('active');
+}
+
+// ===== EMAIL SIMULATE SEND =====
+function simulateSend(){
+  const status=document.getElementById('email-status');
+  status.textContent='SENDING…';status.style.color='var(--amber)';status.style.background='var(--amber2)';
+  setTimeout(()=>{status.textContent='SENT ✓';status.className='email-status-badge sent';showToast('✉','EMAIL SENT','Outreach delivered to sarah.chen@RIConstructionGroup.com','var(--blue)')},1200);
+}
+
+// ===== QUICK POST =====
+function triggerQuickPost(){
+  window.location.href='post-requirement.html#req-hero';
+}
+function advanceReqStep(){
+  document.getElementById('rstep2').classList.remove('active');document.getElementById('rstep2').classList.add('done');
+  document.getElementById('rstep3').classList.add('active');
+  document.getElementById('req-date-field').classList.remove('focused');
+  document.getElementById('req-date-field').classList.add('filled');
+}
+function postRequirement(){
+  showToast('◈','AI INITIATED','Procurement cycle started · AI contacting 14 suppliers','var(--g)');
+  setTimeout(()=>showToast('◎','SUPPLIERS FOUND','12 verified suppliers in Providence area matched','var(--blue)'),1500);
+  setTimeout(()=>showToast('◈','CALLING NOW','AURORA-3 dialing East Bay Electrical Supply…','var(--amber)'),3000);
+  animateCounter('kpi-active',7,8,600);
+  const btn=document.getElementById('req-post-btn');
+  btn.textContent='AI WORKING… ◈';btn.style.background='var(--g)';btn.style.color='#000';btn.style.borderColor='var(--g)';
+}
+
+// ===== LIVE KPI UPDATES =====
+setInterval(()=>{
+  const el=document.getElementById('kpi-saved');
+  if(el){const cur=parseInt(el.textContent.replace(/[$,]/g,''))||1240;el.textContent='$'+(cur+Math.floor(Math.random()*30)).toLocaleString()}
+},8000);
+setInterval(()=>{
+  const suppliers=['East Bay Electrical contacting suppliers in Cranston area','Oracle-1 updated lumber price benchmarks — avg $0.87/board ft','New supplier registered: Bristol Hardware & Supply','Marketing Agent: 2 new responses from email campaign'],msg=suppliers[Math.floor(Math.random()*suppliers.length)];
+  showToast('⬡','LIVE UPDATE',msg,'var(--g)');
+},18000);
+
+// ===== HEADER COUNTERS LIVE =====
+setInterval(()=>{
+  const el=document.getElementById('h-savings');
+  if(el){const v=parseInt(el.textContent.replace(/[$,]/g,''))||14220;el.textContent='$'+(v+Math.floor(Math.random()*50)).toLocaleString()}
+},5000);
+
+// Auto-show first toast after 2s
+setTimeout(()=>showToast('◎','MAP LIVE','AI scanning Rhode Island for verified suppliers…','var(--blue)'),2000);
+setTimeout(()=>showToast('◈','AURORA-3 ACTIVE','Live call in progress — East Bay Electrical','var(--amber)'),4000);
+setTimeout(()=>showToast('◊','BID RECEIVED','Cranston Building Supply: $3.95/ft · 14.5% below market','var(--g)'),7000);
+</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — Order tracking (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="css/maps.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 12 · Order tracking</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+          <header class="app-header">
+            <a class="app-header__back" href="home.html">←</a>
+            <div class="app-header__mid">
+              <p class="app-header__title">Order Tracking</p>
+            </div>
+            <a href="notifications.html" class="flow-topbar__btn" style="font-size:10px">Help</a>
+          </header>
+
+          <div class="screen__scroll">
+            <div class="app-card">
+              <div class="app-card__top">
+                <div>
+                  <h3 class="app-card__title">¾″ EMT Conduit</h3>
+                  <p class="app-card__meta">Cranston Building Supply</p>
+                </div>
+                <span class="app-row__price">$2,050</span>
+              </div>
+              <p class="field__hint">Order #SRC-8821 · tap to copy</p>
+            </div>
+
+            <div class="mock-map-wrap">
+              <p class="mock-map__caption">Job site · supplier (approx.)</p>
+              <div
+                class="mock-map"
+                role="img"
+                aria-label="Delivery site and supplier location on map"
+                data-lat="41.802"
+                data-lng="-71.42"
+                data-zoom="12"
+                data-markers='[{"lat":41.8235,"lng":-71.4267,"label":"142 Atwells Ave"},{"lat":41.7798,"lng":-71.4374,"label":"Cranston Bldg Supply"}]'
+              ></div>
+            </div>
+
+            <p class="app-h2" style="text-align:center;font-size:20px;margin:20px 0 4px">IN TRANSIT</p>
+            <p class="app-p" style="text-align:center;margin-bottom:20px">Arriving Tuesday, April 3 · By 11:00 AM</p>
+
+            <div class="flow-timeline">
+              <div class="tl-item">
+                <div class="tl-dot tl-dot--done">✓</div>
+                <div>
+                  <p style="margin:0;font-weight:600;color:var(--heading)">Order confirmed</p>
+                  <p class="field__hint">Apr 1 · 9:47 AM · Supplier confirmed</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot tl-dot--done">✓</div>
+                <div>
+                  <p style="margin:0;font-weight:600;color:var(--heading)">Preparing</p>
+                  <p class="field__hint">Materials being packaged</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot tl-dot--active">🚚</div>
+                <div>
+                  <p style="margin:0;font-weight:600;color:var(--heading)">Out for delivery</p>
+                  <p class="field__hint">Driver en route · ETA 11:00 AM</p>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;margin-top:8px;overflow:hidden">
+                    <div style="width:70%;height:100%;background:var(--ux-green)"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot">○</div>
+                <div>
+                  <p style="margin:0;color:var(--mist)">Delivered</p>
+                  <p class="field__hint">Confirm receipt when dropped</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-card" style="margin-top:16px">
+              <p class="app-card__meta">Supplier contact</p>
+              <p style="margin:8px 0 0;font-weight:600;color:var(--heading)">Cranston Building Supply</p>
+              <p class="app-p" style="font-size:14px"><a href="tel:" style="color:var(--ux-green)">(401) 555-0142</a></p>
+              <p class="app-p" style="font-size:14px"><a href="mailto:" style="color:var(--ux-green)">orders@cranston.example</a></p>
+              <a href="outreach.html" class="btn btn--ghost" style="margin-top:8px">Message supplier</a>
+            </div>
+
+            <p class="app-eyebrow">Something wrong?</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="btn btn--ghost" style="flex:1;margin:0">Report an issue</span>
+              <span class="btn btn--ghost" style="flex:1;margin:0">Request change</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="home.html">← Home</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Tracking</span>12</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="success.html">Confirm →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="js/mockup-maps.js"></script>
+</body>
+</html>

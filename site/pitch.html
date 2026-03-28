@@ -53,6 +53,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    img, video { max-width: 100%; height: auto; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -69,7 +70,10 @@
 
     #doc-progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:999;width:0%;transition:width .1s;}
     #btt{
-      position:fixed;bottom:28px;right:28px;z-index:100;
+      position:fixed;
+      bottom:max(16px,env(safe-area-inset-bottom,16px));
+      right:max(16px,env(safe-area-inset-right,16px));
+      z-index:100;
       width:40px;height:40px;border-radius:8px;
       background:var(--surface);border:1px solid var(--border2);
       color:var(--mist);font-size:16px;
@@ -153,9 +157,12 @@
       background:rgba(11,12,14,.96);
       backdrop-filter:blur(20px);
       border-bottom:1px solid var(--border2);
-      padding:0 clamp(24px,6vw,80px);
+      padding:0 clamp(16px,4vw,80px);
+      padding-top:env(safe-area-inset-top,0);
       display:flex;align-items:center;gap:4px;
-      overflow-x:auto;scrollbar-width:none;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
     }
     html[data-theme="light"] #nav{background:rgba(246,241,233,.92);}
     #nav::-webkit-scrollbar{display:none;}
@@ -185,6 +192,7 @@
       display:flex;
       align-items:center;
       gap:6px;
+      flex-wrap:wrap;
       padding:6px;
       border-radius:999px;
       background:rgba(255,255,255,.03);
@@ -216,6 +224,76 @@
       cursor:pointer;transition:all .2s;white-space:nowrap;
     }
     .theme-toggle:hover{background:var(--surface2);color:var(--white);}
+    .site-nav .nav-menu-btn{
+      display:none;align-items:center;justify-content:center;gap:10px;
+      min-height:44px;padding:0 14px;margin-right:4px;border-radius:10px;
+      border:1px solid var(--border2);background:var(--surface);color:var(--mist2);
+      font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+      cursor:pointer;flex-shrink:0;
+    }
+    .site-nav .nav-menu-btn .nav-menu-icon{width:18px;height:14px;position:relative;display:block;flex-shrink:0;}
+    .site-nav .nav-menu-btn .nav-menu-icon::before,
+    .site-nav .nav-menu-btn .nav-menu-icon::after,
+    .site-nav .nav-menu-btn .nav-menu-icon span{
+      position:absolute;left:0;right:0;height:2px;background:currentColor;border-radius:1px;
+      transition:transform .2s,opacity .2s;
+    }
+    .site-nav .nav-menu-btn .nav-menu-icon::before{content:'';top:0;}
+    .site-nav .nav-menu-btn .nav-menu-icon span{top:6px;display:block;}
+    .site-nav .nav-menu-btn .nav-menu-icon::after{content:'';bottom:0;}
+    body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::before{transform:translateY(6px) rotate(45deg);}
+    body.nav-open .site-nav .nav-menu-btn .nav-menu-icon span{opacity:0;}
+    body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::after{transform:translateY(-6px) rotate(-45deg);}
+    .site-nav .nav-backdrop{
+      display:none;position:fixed;left:0;right:0;bottom:0;
+      top:calc(48px + env(safe-area-inset-top,0px));z-index:198;
+      background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s ease;pointer-events:none;
+    }
+    body.nav-open .site-nav .nav-backdrop{opacity:1;pointer-events:auto;}
+    .site-nav .nav-primary{display:contents;}
+    .mobile-nav-label{
+      display:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+      color:var(--mist);padding:10px 18px 6px;margin:0;
+    }
+    .mobile-nav-label.nav-doc-label{padding-top:20px;}
+    @media(max-width:768px){
+      body.nav-open{overflow:hidden;}
+      .site-nav .nav-menu-btn{display:inline-flex;}
+      .site-nav .nav-backdrop{display:block;}
+      nav.site-nav{
+        flex-wrap:nowrap;overflow:visible;padding:8px clamp(12px,4vw,24px);
+        min-height:48px;align-items:center;gap:8px;
+      }
+      nav.site-nav .nav-spacer{display:none;}
+      nav.site-nav .nav-primary{
+        display:flex;flex-direction:column;align-items:stretch;position:fixed;
+        left:0;right:auto;width:min(100%,360px);bottom:0;top:0;
+        padding-top:calc(52px + env(safe-area-inset-top,0px));
+        background:var(--surface);border-right:1px solid var(--border2);z-index:199;
+        overflow-y:auto;-webkit-overflow-scrolling:touch;
+        transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+        box-shadow:12px 0 40px rgba(0,0,0,.4);
+      }
+      body.nav-open nav.site-nav .nav-primary{transform:translateX(0);}
+      .mobile-nav-label{display:block;}
+      nav.site-nav .nav-item{
+        padding:16px 18px;font-size:12px;letter-spacing:.06em;white-space:normal;line-height:1.35;
+        border-bottom:1px solid var(--border);border-left:3px solid transparent;
+      }
+      nav.site-nav .nav-item.active{border-left-color:var(--gold);background:var(--gold-dim);}
+      nav.site-nav .doc-switch{
+        flex-direction:column;align-items:stretch;margin:0 12px 20px;padding:8px;
+        border-radius:12px;gap:4px;flex-wrap:nowrap;
+      }
+      nav.site-nav .doc-link{
+        text-align:left;padding:14px 16px;border-radius:10px;font-size:11px;white-space:normal;line-height:1.35;
+      }
+      nav.site-nav .theme-toggle{margin-left:auto;flex-shrink:0;}
+    }
+    @media(max-width:768px) and (prefers-reduced-motion:reduce){
+      nav.site-nav .nav-primary{transition:none;}
+      .site-nav .nav-backdrop{transition:none;}
+    }
 
     .section{
       padding:clamp(64px,8vw,112px) clamp(24px,6vw,80px);
@@ -249,7 +327,7 @@
       background:var(--surface);
       border:1px solid var(--border);
       border-radius:var(--r2);
-      padding:34px;
+      padding:clamp(20px,5vw,34px);
       margin-bottom:14px;
       position:relative;
       overflow:hidden;
@@ -293,10 +371,13 @@
       font-size:10px;letter-spacing:.16em;text-transform:uppercase;
       color:var(--mist);margin-bottom:10px;
     }
-    .kpi{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+    .kpi{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;}
     .kpi:last-child{border-bottom:none;}
-    .kpi .l{font-size:13.5px;color:var(--mist2);line-height:1.5;}
-    .kpi .v{font-family:'DM Mono',monospace;font-size:13px;color:var(--white);white-space:nowrap;}
+    .kpi .l{font-size:13.5px;color:var(--mist2);line-height:1.5;flex:1;min-width:0;}
+    .kpi .v{font-family:'DM Mono',monospace;font-size:13px;color:var(--white);white-space:nowrap;text-align:right;}
+    @media(max-width:480px){
+      .kpi .v{white-space:normal;text-align:left;width:100%;}
+    }
 
     /* AI engine section (adapted from sourced_ai_section.html) */
     .ai-engine-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -401,6 +482,10 @@
     @media (prefers-reduced-motion: reduce){
       *{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
     }
+    @media(max-width:560px){
+      .nav-item{padding:12px 10px;font-size:10px;}
+      .doc-link{padding:8px 10px;font-size:9px;}
+    }
   </style>
 </head>
 <body>
@@ -419,18 +504,29 @@
     </div>
   </div>
 
-  <nav id="nav">
-    <a class="nav-item active" href="#situation">01 · Situation</a>
-    <a class="nav-item" href="#complication">02 · Complication</a>
-    <a class="nav-item" href="#resolution">03 · Resolution</a>
-    <a class="nav-item" href="#numbers">04 · Numbers</a>
-    <a class="nav-item" href="#ask">05 · Ask</a>
-    <span class="nav-spacer"></span>
-    <div class="doc-switch" aria-label="Docs navigation">
-      <a class="doc-link" href="index.html">Overview</a>
-      <a class="doc-link active" href="pitch.html">Pitch</a>
-      <a class="doc-link" href="demand.html">Validation</a>
-      <a class="doc-link" href="plansheet.html">Spec</a>
+  <nav id="nav" class="site-nav">
+    <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="navPrimary" aria-label="Open menu">
+      <span class="nav-menu-icon" aria-hidden="true"><span></span></span>
+      Menu
+    </button>
+    <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+    <div class="nav-primary" id="navPrimary">
+      <p class="mobile-nav-label">On this page</p>
+      <a class="nav-item active" href="#situation">01 · Situation</a>
+      <a class="nav-item" href="#complication">02 · Complication</a>
+      <a class="nav-item" href="#resolution">03 · Resolution</a>
+      <a class="nav-item" href="#numbers">04 · Numbers</a>
+      <a class="nav-item" href="#ask">05 · Ask</a>
+      <span class="nav-spacer"></span>
+      <p class="mobile-nav-label nav-doc-label">Documents</p>
+      <div class="doc-switch" aria-label="Docs navigation">
+        <a class="doc-link" href="../index.html">Overview</a>
+        <a class="doc-link active" href="pitch.html">Pitch</a>
+        <a class="doc-link" href="demand.html">Validation</a>
+        <a class="doc-link" href="plansheet.html">Spec</a>
+        <a class="doc-link" href="../mockup/index.html">Mockups</a>
+        <a class="doc-link" href="../reference/index.html">Reference</a>
+      </div>
     </div>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">Theme</button>
   </nav>
@@ -469,7 +565,7 @@
         <div class="pitch-slide-title">Customer proof exists — keep it in the library.</div>
         <div class="pitch-slide-body">For investor discussions, we reference proof without duplicating it here. The full “voice of customer” receipts (Reddit + reviews) live in the Validation Library.</div>
         <div class="pitch-bullets">
-          <div class="pb">Open the evidence library: <strong style="color:var(--white);font-weight:700;">demand.html</strong></div>
+          <div class="pb">Open the evidence library: <strong style="color:var(--white);font-weight:700;">site/demand.html</strong></div>
           <div class="pb">Use this pitch for the narrative + numbers; use validation for depth.</div>
         </div>
       </div>
@@ -725,7 +821,7 @@
       <h2 class="cta-title">The market is real.<br>The window is <em>open.</em></h2>
       <p class="cta-sub">Every day we wait, a contractor overpays for materials they should have sourced better.</p>
       <div class="cta-actions">
-        <a class="btn primary" href="index.html">Back to Overview →</a>
+        <a class="btn primary" href="../index.html">Back to Overview →</a>
         <a class="btn ghost" href="plansheet.html">Open Master Spec</a>
         <a class="btn ghost" href="demand.html">Open Validation Report</a>
       </div>
@@ -753,6 +849,22 @@
         localStorage.setItem('dibbs_theme',next);
         sync();
       });
+    })();
+
+    (function(){
+      const btn=document.getElementById('navMenuBtn');
+      const bd=document.getElementById('navBackdrop');
+      const primary=document.getElementById('navPrimary');
+      if(!btn||!primary)return;
+      function setOpen(o){
+        document.body.classList.toggle('nav-open',o);
+        btn.setAttribute('aria-expanded',o);
+        btn.setAttribute('aria-label',o?'Close menu':'Open menu');
+      }
+      btn.addEventListener('click',()=>setOpen(!document.body.classList.contains('nav-open')));
+      if(bd)bd.addEventListener('click',()=>setOpen(false));
+      primary.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+      document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false);});
     })();
 
     window.addEventListener('scroll',()=>{

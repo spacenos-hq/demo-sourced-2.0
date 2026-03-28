@@ -161,7 +161,7 @@ Light mode should keep the **same hierarchy**, not invent new colors:
 
 ## File/page conventions (this project)
 
-- Pages: `index.html` (overview), `pitch.html`, `demand.html` (validation), `plansheet.html` (spec)
+- Pages: `index.html` (overview); sales docs in `site/` — `site/pitch.html`, `site/demand.html` (validation), `site/plansheet.html` (spec); mocks in `mockup/`; prototypes in `reference/`
 - Always include:
   - Sticky nav (or top strip) with links between all pages
   - Theme toggle using `localStorage` key: `dibbs_theme`

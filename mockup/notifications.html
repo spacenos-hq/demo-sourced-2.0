@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — Notifications (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 14 · Notifications</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+          <header class="app-header">
+            <a class="app-header__back" href="home.html">←</a>
+            <div class="app-header__mid">
+              <p class="app-header__title">Notifications</p>
+            </div>
+            <button type="button" class="flow-topbar__btn mock-topbar-btn" style="font-size:9px" data-mock-mark-read>Mark all read</button>
+          </header>
+
+          <div class="chip-scroller" style="padding:8px 16px;border-bottom:1px solid var(--border)">
+            <button type="button" class="mat-chip is-active">All</button>
+            <button type="button" class="mat-chip">Bids</button>
+            <button type="button" class="mat-chip">Orders</button>
+            <button type="button" class="mat-chip">AI</button>
+            <button type="button" class="mat-chip">System</button>
+          </div>
+
+          <div class="screen__scroll" style="padding:0">
+            <p class="notif-group-h">Today</p>
+            <a href="compare.html" class="notif-row unread">
+              <span class="notif-ic notif-ic--green">💰</span>
+              <div style="flex:1;min-width:0">
+                <p class="notif-title" style="margin:0;font-size:14px">4 bids ready</p>
+                <p class="field__hint" style="margin:4px 0 0">Conduit job · Accept by 6pm tonight</p>
+              </div>
+              <span class="field__hint" style="flex-shrink:0">2m</span>
+            </a>
+            <a href="order-tracking.html" class="notif-row">
+              <span class="notif-ic notif-ic--green">🚚</span>
+              <div style="flex:1">
+                <p style="margin:0;font-size:14px;color:var(--heading)">Out for delivery</p>
+                <p class="field__hint" style="margin:4px 0 0">EMT conduit · ETA 11:00 AM</p>
+              </div>
+              <span class="field__hint">1h</span>
+            </a>
+
+            <p class="notif-group-h">Yesterday</p>
+            <a href="tracker.html" class="notif-row">
+              <span class="notif-ic notif-ic--amber">🤖</span>
+              <div style="flex:1">
+                <p style="margin:0;font-size:14px;color:var(--heading)">AI expanded search</p>
+                <p class="field__hint" style="margin:4px 0 0">8 more suppliers contacted · drywall</p>
+              </div>
+              <span class="field__hint">Wed</span>
+            </a>
+
+            <p style="padding:20px 16px;text-align:center">
+              <a href="settings-account.html" class="flow-link-muted">Manage notification preferences →</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="home.html">← Home</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Alerts</span>14</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="settings-account.html">Settings →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+</body>
+</html>

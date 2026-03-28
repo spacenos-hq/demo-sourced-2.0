@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<meta name="robots" content="noindex,nofollow">
+<title>Sourced — UX Design Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Dark = pitch index.html default; light = html[data-theme="light"] (same as index.html) */
+:root {
+  --black: #0B0C0E;
+  --surface: #111316;
+  --surface2: #181B1F;
+  --surface3: #1E2228;
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.12);
+  --gold: #D4A843;
+  --gold2: #F0C96A;
+  --gold-dim: rgba(212, 168, 67, 0.15);
+  --gold-border: rgba(212, 168, 67, 0.25);
+  --white: #F2EDE4;
+  --mist: #7A8091;
+  --mist2: #9BA3B2;
+  --teal: #3ECFB2;
+  --teal-dim: rgba(62, 207, 178, 0.12);
+  --green: #52C97B;
+  --green-dim: rgba(82, 201, 123, 0.12);
+  --amber: #F0A84E;
+  --amber-dim: rgba(240, 168, 78, 0.12);
+  --red: #E85D5D;
+  --red-dim: rgba(232, 93, 93, 0.12);
+  --blue: #5B9CF6;
+  --blue-dim: rgba(91, 156, 246, 0.12);
+  --purple: #A87FE8;
+  --purple-dim: rgba(168, 127, 232, 0.12);
+  --mono: "DM Mono", ui-monospace, monospace;
+  --display: Syne, system-ui, sans-serif;
+  --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --bg: var(--black);
+  --text: var(--white);
+  --text2: var(--mist2);
+  --text3: var(--mist);
+  --heading: var(--white);
+  --serif: var(--display);
+}
+
+html[data-theme="light"] {
+  --black: #F6F1E9;
+  --surface: #FFFFFF;
+  --surface2: #FBF7F0;
+  --surface3: #F2EBDD;
+  --border: rgba(26, 22, 18, 0.10);
+  --border2: rgba(26, 22, 18, 0.16);
+  --white: #1A1612;
+  --mist: #6B6258;
+  --mist2: #8A8076;
+  --gold-dim: rgba(212, 168, 67, 0.14);
+  --gold-border: rgba(212, 168, 67, 0.30);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+img, video { max-width: 100%; height: auto; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; color-scheme: dark; }
+html[data-theme="light"] { color-scheme: light; }
+body {
+  background: var(--black);
+  color: var(--mist2);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--gold-dim); color: var(--gold2); }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(11, 12, 14, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border2);
+  padding: 10px clamp(16px, 4vw, 32px);
+  padding-top: max(10px, env(safe-area-inset-top, 0));
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 4px;
+  min-height: 56px;
+}
+html[data-theme="light"] nav {
+  background: rgba(246, 241, 233, 0.92);
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: clamp(15px, 3.5vw, 18px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gold2);
+  white-space: nowrap;
+  order: 1;
+}
+.nav-logo span {
+  color: var(--mist);
+  font-weight: 500;
+  font-size: 9px;
+  font-family: var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  order: 2;
+  flex-shrink: 0;
+  margin-left: auto;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  color: var(--mist2);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.theme-toggle:hover {
+  background: var(--surface2);
+  color: var(--white);
+  border-color: var(--border2);
+}
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 0;
+  width: 100%;
+  flex-basis: 100%;
+  order: 3;
+  justify-content: flex-start;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+nav .nav-links a {
+  font-size: 10px;
+  font-family: var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mist);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s;
+}
+nav .nav-links a:hover {
+  color: var(--gold2);
+  background: var(--gold-dim);
+}
+@media (min-width: 900px) {
+  nav { flex-wrap: nowrap; gap: 0; padding: 0 clamp(16px, 4vw, 32px); height: 56px; }
+  .nav-logo { margin-right: 1.5rem; order: 1; margin-left: 0; }
+  .theme-toggle { order: 3; margin-left: 8px; }
+  .nav-links {
+    order: 2;
+    flex: 1;
+    flex-basis: auto;
+    width: auto;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+    gap: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  nav .nav-links a { padding: 0 0.65rem; }
+}
+@media (max-width: 899px) {
+  .theme-toggle { margin-left: auto; }
+}
+.container { max-width: 800px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px); }
+.page-header {
+  padding: clamp(100px, 18vw, 120px) 0 48px;
+  border-bottom: 1px solid var(--border2);
+}
+.page-header h1 {
+  font-family: var(--display);
+  font-size: clamp(1.75rem, 5vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  line-height: 1.12;
+  max-width: 22ch;
+}
+.page-header .tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold2);
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+.page-header p {
+  color: var(--mist2);
+  max-width: 58ch;
+  margin-top: 14px;
+  font-size: 15px;
+}
+.page-header p strong { color: var(--gold2); font-weight: 600; }
+section { padding: clamp(48px, 8vw, 72px) 0; border-bottom: 1px solid var(--border2); }
+section:last-child { border-bottom: none; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 10px;
+}
+.section-num { font-family: var(--mono); font-size: 10px; color: var(--gold2); margin-right: 8px; font-weight: 500; }
+h2 {
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 24px;
+  line-height: 1.15;
+}
+h3 { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 12px; }
+h4 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold2);
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+p { color: var(--mist2); margin-bottom: 16px; }
+p:last-child { margin-bottom: 0; }
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+@media (min-width: 640px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
+.cfux-continuity-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  .cfux-continuity-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: clamp(18px, 4vw, 24px);
+  margin-bottom: 16px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+html[data-theme="light"] .card {
+  box-shadow: 0 1px 0 rgba(26, 22, 18, 0.04);
+}
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; margin-bottom: 24px; }
+.card.green-accent { border-color: rgba(82, 201, 123, 0.4); }
+.card.amber-accent { border-color: rgba(240, 168, 78, 0.4); }
+.card.red-accent { border-color: rgba(232, 93, 93, 0.4); }
+.card.blue-accent { border-color: rgba(91, 156, 246, 0.4); }
+.card.purple-accent { border-color: rgba(168, 127, 232, 0.4); }
+.persona { display: flex; gap: 16px; flex-wrap: wrap; }
+.persona-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.persona-avatar.blue { background: var(--blue-dim); border: 1px solid rgba(91, 156, 246, 0.4); }
+.persona-avatar.green { background: var(--green-dim); border: 1px solid rgba(82, 201, 123, 0.4); }
+.persona-avatar.amber { background: var(--amber-dim); border: 1px solid rgba(240, 168, 78, 0.4); }
+.persona-body { flex: 1; min-width: min(100%, 200px); }
+.persona-name { font-weight: 600; color: var(--white); font-size: 15px; }
+.persona-role { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--mist); margin-bottom: 10px; text-transform: uppercase; }
+.chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  margin: 3px 6px 3px 0;
+}
+.chip.green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(82, 201, 123, 0.3); }
+.chip.red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(232, 93, 93, 0.3); }
+.chip.amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(240, 168, 78, 0.3); }
+.chip.blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(91, 156, 246, 0.3); }
+.chip.purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(168, 127, 232, 0.3); }
+.journey-stage { display: flex; gap: 16px; margin-bottom: 28px; position: relative; }
+.journey-stage::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 48px;
+  bottom: -28px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--border2), transparent);
+}
+.journey-stage:last-child::before { display: none; }
+.stage-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gold2);
+  background: var(--surface);
+}
+.stage-body { flex: 1; padding-top: 6px; min-width: 0; }
+.stage-name { font-weight: 600; color: var(--white); margin-bottom: 4px; }
+.stage-emotion { font-family: var(--mono); font-size: 10px; color: var(--amber); margin-bottom: 10px; }
+.stage-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+@media (min-width: 700px) {
+  .stage-row { grid-template-columns: repeat(3, 1fr); }
+}
+.stage-cell { background: var(--surface2); border-radius: 10px; padding: 12px; border: 1px solid var(--border); }
+.stage-cell-label { font-family: var(--mono); font-size: 9px; color: var(--mist); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.stage-cell p { font-size: 13px; color: var(--mist2); }
+.flow-group { margin-bottom: 36px; }
+.flow-group-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border2);
+}
+.screen-list { display: grid; gap: 8px; }
+.screen-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.screen-item:hover { border-color: var(--gold-border); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25); }
+html[data-theme="light"] .screen-item:hover { box-shadow: 0 4px 20px rgba(26, 22, 18, 0.06); }
+.screen-num { font-family: var(--mono); font-size: 10px; color: var(--gold2); min-width: 28px; padding-top: 2px; font-weight: 500; }
+.screen-name { font-family: var(--display); font-weight: 700; font-size: 14px; color: var(--white); }
+.screen-desc { font-size: 13px; color: var(--mist2); margin-top: 2px; }
+.screen-arrow { font-family: var(--mono); font-size: 10px; color: var(--mist); margin-top: 6px; line-height: 1.4; }
+.cfux {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+html[data-theme="light"] .cfux {
+  box-shadow: 0 1px 0 rgba(26, 22, 18, 0.04);
+}
+.cfux-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  background: var(--surface2);
+}
+.cfux-screen-num { font-family: var(--mono); font-size: 10px; color: var(--mist); letter-spacing: 0.08em; }
+.cfux-screen-name { font-family: var(--display); font-size: clamp(18px, 4vw, 22px); font-weight: 800; letter-spacing: -0.02em; color: var(--white); }
+.cfux-layers { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 768px) {
+  .cfux-layers { grid-template-columns: 1fr 1fr; }
+}
+.cfux-layer { padding: 18px 20px; border-bottom: 1px solid var(--border2); }
+@media (min-width: 768px) {
+  .cfux-layer { border-right: 1px solid var(--border2); }
+  .cfux-layer:nth-child(even) { border-right: none; }
+  .cfux-layer:nth-last-child(-n+2) { border-bottom: none; }
+}
+.cfux-layer-label { font-family: var(--mono); font-size: 9px; color: var(--mist); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+.cfux-row { margin-bottom: 10px; }
+.cfux-key { font-size: 12px; font-weight: 500; color: var(--mist2); margin-bottom: 3px; }
+.cfux-val { font-size: 13px; color: var(--white); }
+.cfux-val.green { color: var(--green); }
+.cfux-val.amber { color: var(--amber); }
+.copy-block {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: clamp(16px, 4vw, 20px);
+  margin-bottom: 14px;
+}
+.copy-screen { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--gold2); margin-bottom: 14px; text-transform: uppercase; }
+.copy-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+.copy-label { font-family: var(--mono); font-size: 10px; color: var(--mist); min-width: 88px; padding-top: 3px; flex-shrink: 0; }
+.copy-text { font-size: 14px; color: var(--white); flex: 1; min-width: 0; }
+.copy-text.headline { font-family: var(--display); font-size: clamp(17px, 3.5vw, 20px); font-weight: 800; letter-spacing: -0.02em; color: var(--white); }
+.copy-text.btn {
+  display: inline-block;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-border);
+  color: var(--gold2);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.law-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+.law-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 18px; }
+.law-name { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--gold2); margin-bottom: 8px; }
+.law-def { font-size: 13px; color: var(--mist2); margin-bottom: 12px; border-bottom: 1px solid var(--border2); padding-bottom: 12px; }
+.law-application { font-size: 13px; color: var(--mist2); }
+.law-application strong { color: var(--white); }
+.user-type-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.tab-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--mist2);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.tab-btn.active {
+  background: var(--gold-dim);
+  border-color: var(--gold-border);
+  color: var(--gold2);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.script-block {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--gold);
+  padding: 18px 20px;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 14px;
+}
+.script-time { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--gold2); margin-bottom: 8px; text-transform: uppercase; }
+.script-action { font-size: 13px; color: var(--mist); font-style: italic; margin-top: 8px; }
+.risk-row { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border2); align-items: flex-start; }
+.risk-row:last-child { border-bottom: none; }
+.risk-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.risk-icon.red { background: var(--red-dim); }
+.risk-icon.amber { background: var(--amber-dim); }
+.risk-body { flex: 1; min-width: 0; }
+.risk-title { font-weight: 600; color: var(--white); font-size: 14px; margin-bottom: 4px; }
+.risk-desc { font-size: 13px; color: var(--mist2); margin-bottom: 6px; }
+.risk-fix { font-size: 13px; color: var(--teal); }
+.interaction-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px; }
+.interaction-table th {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border2);
+  background: var(--surface2);
+}
+.interaction-table td { padding: 12px; border-bottom: 1px solid var(--border2); color: var(--mist2); vertical-align: top; }
+.interaction-table td:first-child { color: var(--white); font-weight: 500; }
+.interaction-table tr:last-child td { border-bottom: none; }
+.component-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border2);
+}
+.component-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.component-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mist); min-width: 100px; flex-shrink: 0; }
+.ds-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: transform 0.15s;
+}
+.ds-btn:hover { transform: translateY(-1px); }
+.ds-btn.primary { background: var(--gold-dim); border: 1px solid var(--gold-border); color: var(--gold2); }
+.ds-btn.secondary { background: var(--surface2); border: 1px solid var(--border2); color: var(--white); }
+.ds-btn.ghost { background: transparent; border: none; color: var(--gold2); text-decoration: underline; text-underline-offset: 3px; }
+.ds-input {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 14px;
+  width: min(100%, 280px);
+}
+.ds-badge { display: inline-block; font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 20px; }
+.ds-badge.success { background: var(--green-dim); color: var(--green); border: 1px solid rgba(82, 201, 123, 0.35); }
+.ds-badge.warning { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(240, 168, 78, 0.35); }
+.ds-badge.error { background: var(--red-dim); color: var(--red); border: 1px solid rgba(232, 93, 93, 0.35); }
+.ds-progress { background: var(--surface2); height: 6px; border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+.ds-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2)); border-radius: 2px; }
+.ds-card-mini { background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 14px; min-width: 0; flex: 1 1 140px; }
+.ds-stat { font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); }
+.ds-stat-label { font-size: 11px; color: var(--mist); }
+.edge-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.edge-node {
+  padding: 8px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--white);
+}
+.edge-node.error { border-color: rgba(232, 93, 93, 0.4); background: var(--red-dim); color: var(--red); }
+.edge-node.recovery { border-color: rgba(240, 168, 78, 0.4); background: var(--amber-dim); color: var(--amber); }
+.edge-node.success { border-color: rgba(82, 201, 123, 0.4); background: var(--green-dim); color: var(--green); }
+.edge-arrow { color: var(--mist); font-size: 14px; }
+ul.styled { list-style: none; padding: 0; }
+ul.styled li {
+  padding: 8px 0 8px 22px;
+  position: relative;
+  font-size: 14px;
+  color: var(--mist2);
+  border-bottom: 1px solid var(--border2);
+}
+ul.styled li:last-child { border-bottom: none; }
+ul.styled li::before { content: '→'; position: absolute; left: 0; color: var(--gold2); font-weight: 600; }
+.divider { border: none; border-top: 1px solid var(--border2); margin: 28px 0; }
+@media (max-width: 640px) {
+  .interaction-table thead { display: none; }
+  .interaction-table tr { display: block; border-bottom: 1px solid var(--border2); padding: 12px 0; margin-bottom: 4px; }
+  .interaction-table td { display: block; border: none; padding: 6px 0; width: 100% !important; }
+  .interaction-table td:first-child {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold2);
+    margin-bottom: 4px;
+  }
+  .copy-row { flex-direction: column; gap: 4px; }
+  .copy-label { min-width: auto; }
+  .journey-stage { flex-direction: column; }
+  .journey-stage::before { display: none; }
+  .persona { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 768px) {
+  .cfux-layers { grid-template-columns: 1fr; }
+  .cfux-layer { border-right: none !important; }
+  .cfux-layer:nth-last-child(-n+2) { border-bottom: 1px solid var(--border2); }
+  .cfux-layer:last-child { border-bottom: none; }
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SOURCED <span>UX FRAMEWORK v1.0</span></div>
+  <div class="nav-links">
+  <a href="#psychology">01 Psychology</a>
+  <a href="#journey">02 Journey</a>
+  <a href="#screens">03 Screens</a>
+  <a href="#cfux">04 CFUX-∞</a>
+  <a href="#microcopy">05 Copy</a>
+  <a href="#interaction">06 Interaction</a>
+  <a href="#design">07 Design System</a>
+  <a href="#edge">08 Edge Cases</a>
+  <a href="#psych-map">09 Psych Map</a>
+  <a href="#adaptive">10 Adaptive</a>
+  <a href="#demo">11 Demo Script</a>
+  <a href="#redteam">12 Red Team</a>
+  </div>
+  <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">Night</button>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <div class="tag">CFUX-∞ DESIGN FRAMEWORK · SOURCED PROCUREMENT PLATFORM</div>
+    <h1>Zero-Friction Procurement for Construction</h1>
+    <p>A complete, production-ready UX framework. Every screen engineered to eliminate cognitive load. First-time users navigate without tutorials. Every friction point pre-solved.</p>
+  </div>
+
+  <!-- SECTION 1: PSYCHOLOGY -->
+  <section id="psychology">
+    <div class="section-label"><span class="section-num">01</span>User Psychology Foundation</div>
+    <h2>Who Are We Designing For?</h2>
+
+    <div class="card-grid">
+      <div class="card blue-accent">
+        <div class="persona">
+          <div class="persona-avatar blue">🏗</div>
+          <div class="persona-body">
+            <div class="persona-name">Marcus, GC Project Manager</div>
+            <div class="persona-role">GENERAL CONTRACTOR · 12 YEARS EXP</div>
+            <p style="font-size:13px;">Manages 3–6 concurrent jobs. Spends 40% of time on the phone chasing material quotes. Trusts gut-feel pricing. Hates software that "doesn't get construction."</p>
+            <div style="margin-top:10px;">
+              <div class="chip red">Entry Emotion: Skeptical</div>
+              <div class="chip amber">Fear: Wasting time on another tool</div>
+              <div class="chip green">Trigger: "How much cheaper can I get this?"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card green-accent">
+        <div class="persona">
+          <div class="persona-avatar green">📦</div>
+          <div class="persona-body">
+            <div class="persona-name">Lisa, Supply Rep</div>
+            <div class="persona-role">REGIONAL SUPPLIER · ELECTRICAL MATERIALS</div>
+            <p style="font-size:13px;">Manages B2B accounts. Relies on cold calls and trade shows. Sees unpredictable revenue. Knows she's missing sales she doesn't even know exist.</p>
+            <div style="margin-top:10px;">
+              <div class="chip amber">Entry Emotion: Curious but cautious</div>
+              <div class="chip red">Fear: Low-quality leads, race to bottom pricing</div>
+              <div class="chip green">Trigger: "Steady, qualified demand"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card amber-accent">
+        <div class="persona">
+          <div class="persona-avatar amber">🔧</div>
+          <div class="persona-body">
+            <div class="persona-name">Danny, Small Sub</div>
+            <div class="persona-role">SUBCONTRACTOR · PLUMBING · 3-PERSON CREW</div>
+            <p style="font-size:13px;">Buys 1–2x/month. Overpays without knowing it. Hates "enterprise" software. Needs something he can use between jobs on his phone.</p>
+            <div style="margin-top:10px;">
+              <div class="chip red">Entry Emotion: Overwhelmed</div>
+              <div class="chip amber">Fear: Complexity, contracts, being locked in</div>
+              <div class="chip green">Trigger: "I saved $400 on this one order"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <h3>Top 3 User Intents (What They WANT)</h3>
+    <div class="card-grid" style="margin-top:16px;">
+      <div class="card">
+        <h4>01 · CERTAINTY</h4>
+        <p style="font-size:13px;">Not features — certainty that they'll pay a fair price and get the materials on time. Remove the anxiety of "am I getting ripped off?"</p>
+      </div>
+      <div class="card">
+        <h4>02 · TIME BACK</h4>
+        <p style="font-size:13px;">They don't want procurement software. They want the 4 hours per week they spend chasing quotes back. That's what the platform sells.</p>
+      </div>
+      <div class="card">
+        <h4>03 · ZERO SURPRISES</h4>
+        <p style="font-size:13px;">Price surprises tank jobs. They want confirmed pricing before they commit, with delivery windows they can plan around. No "we'll confirm later."</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <h3>Biggest Fears & Motivation Triggers</h3>
+    <div class="grid-2">
+      <div class="card red-accent">
+        <h4>FEARS</h4>
+        <ul class="styled">
+          <li>Posting a requirement and getting zero responses</li>
+          <li>A supplier seeing their pricing data (competitors)</li>
+          <li>Committing to a platform that adds work, not removes it</li>
+          <li>Losing control of vendor relationships they built over years</li>
+          <li>Getting locked into a subscription that doesn't deliver</li>
+        </ul>
+      </div>
+      <div class="card green-accent">
+        <h4>MOTIVATION TRIGGERS</h4>
+        <ul class="styled">
+          <li>Seeing a real dollar amount saved on first order</li>
+          <li>Getting a competitive bid within hours, not days</li>
+          <li>AI doing the work they hate (follow-ups, comparisons)</li>
+          <li>Peers using it ("my buddy's crew uses Sourced")</li>
+          <li>Specific proof: "avg 14% below market pricing"</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: JOURNEY -->
+  <section id="journey">
+    <div class="section-label"><span class="section-num">02</span>Full User Journey — End to End</div>
+    <h2>Entry to Retention Loop</h2>
+
+    <div class="journey-stage">
+      <div class="stage-dot">E</div>
+      <div class="stage-body">
+        <div class="stage-name">Entry — Discovery & Landing</div>
+        <div class="stage-emotion">🔴 Skeptical · Distracted · Time-starved</div>
+        <p style="font-size:13px;">User arrives via word-of-mouth, Google, or LinkedIn. They have 90 seconds of patience. The landing page must answer: "What is this, who is it for, can I trust it?"</p>
+        <div class="stage-row">
+          <div class="stage-cell"><div class="stage-cell-label">Intent</div><p>Evaluate in 60s if this is worth their time</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Emotional State</div><p>Skeptical. They've seen "AI for construction" before.</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Must Happen</div><p>Instant role recognition + a concrete, credible value claim</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage">
+      <div class="stage-dot">F</div>
+      <div class="stage-body">
+        <div class="stage-name">First Impression — Sign Up Flow</div>
+        <div class="stage-emotion">🟡 Curious · Cautiously Optimistic</div>
+        <p style="font-size:13px;">If they clicked "Get Started," they're interested. This stage must not lose them. 3-field max signup. No credit card. Role selection routes the experience.</p>
+        <div class="stage-row">
+          <div class="stage-cell"><div class="stage-cell-label">Intent</div><p>Get inside without friction or commitment anxiety</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Emotional State</div><p>Optimistic but watching for red flags (too many fields, credit card)</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Must Happen</div><p>Sub-60s signup. Immediate role-specific dashboard, not a generic home</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage">
+      <div class="stage-dot">A</div>
+      <div class="stage-body">
+        <div class="stage-name">Activation — First Value Action</div>
+        <div class="stage-emotion">🟡 Eager · Slightly Nervous</div>
+        <p style="font-size:13px;">For contractors: post their first requirement in under 2 minutes. For suppliers: confirm their product catalog in under 5 minutes. Activation = first action that creates value, not just account setup.</p>
+        <div class="stage-row">
+          <div class="stage-cell"><div class="stage-cell-label">Intent</div><p>See the platform actually work, not a demo</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Emotional State</div><p>Eager to be impressed, ready to bounce if it's confusing</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Must Happen</div><p>A requirement posted OR a bid received within the session. Zeigarnik loop opened.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage">
+      <div class="stage-dot">C</div>
+      <div class="stage-body">
+        <div class="stage-name">Core Use — AI Procurement Cycle</div>
+        <div class="stage-emotion">🟢 Trusting · Waiting · Evaluating</div>
+        <p style="font-size:13px;">AI agents collect bids, compare suppliers, surface ranked options. The user's job becomes review-and-decide, not gather-and-compare. This must feel magic: they posted a requirement and got 4 ranked bids without lifting a finger.</p>
+        <div class="stage-row">
+          <div class="stage-cell"><div class="stage-cell-label">Intent</div><p>Make a confident procurement decision, fast</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Emotional State</div><p>Impressed if it works. Anxious if it's slow or opaque.</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Must Happen</div><p>Bid comparison view must be scannable in 30 seconds. One clear "Best Value" recommendation.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage">
+      <div class="stage-dot">V</div>
+      <div class="stage-body">
+        <div class="stage-name">Value Realization — First Accepted Bid</div>
+        <div class="stage-emotion">🟢 Satisfied · Converted</div>
+        <p style="font-size:13px;">The moment a bid is accepted and confirmation lands. This is the emotional peak of the journey. The platform must celebrate it: show how much they saved vs. market rate, send a confirmation, open the path to the next requirement.</p>
+        <div class="stage-row">
+          <div class="stage-cell"><div class="stage-cell-label">Intent</div><p>Confirm the deal is real and reliable</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Emotional State</div><p>Relieved. Impressed. Likely to tell a colleague.</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Must Happen</div><p>Savings summary shown. Referral prompt appears. Next requirement CTA visible.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage" style="margin-bottom:0;">
+      <div class="stage-dot">R</div>
+      <div class="stage-body">
+        <div class="stage-name">Retention Loop — Habitual Use</div>
+        <div class="stage-emotion">🟢 Habitual · Dependent</div>
+        <p style="font-size:13px;">Sourced becomes the default behavior before any significant material purchase. The retention loop: new project → open Sourced → post requirement → receive bids → accept → track delivery. Monthly savings reports reinforce the habit.</p>
+        <div class="stage-row">
+          <div class="stage-cell"><div class="stage-cell-label">Intent</div><p>Sourced is now the first step, not an afterthought</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Emotional State</div><p>Reliant. Would feel the loss if the platform disappeared.</p></div>
+          <div class="stage-cell"><div class="stage-cell-label">Must Happen</div><p>Push notifications for bid updates. Monthly savings report. Streak or usage momentum.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: SCREEN FLOW -->
+  <section id="screens">
+    <div class="section-label"><span class="section-num">03</span>Screen Flow Architecture</div>
+    <h2>Every Screen, Every Path</h2>
+    <p>Complete screen inventory. Zero dead ends. Every screen has at least one forward path.</p>
+
+    <div class="flow-group">
+      <div class="flow-group-label">ONBOARDING FLOW</div>
+      <div class="screen-list">
+        <div class="screen-item">
+          <div class="screen-num">01</div>
+          <div>
+            <div class="screen-name">Landing / Marketing Page</div>
+            <div class="screen-desc">Hero with role selector. Social proof. "Get Started" CTA. No login wall.</div>
+            <div class="screen-arrow">→ 02 Sign Up · → 01b Scroll to Features</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">02</div>
+          <div>
+            <div class="screen-name">Role Selection Gate</div>
+            <div class="screen-desc">Two cards: "I'm a Contractor" / "I'm a Supplier." Single click, no sub-roles yet.</div>
+            <div class="screen-arrow">→ 03a (Contractor) · → 03b (Supplier)</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">03a</div>
+          <div>
+            <div class="screen-name">Contractor Sign Up</div>
+            <div class="screen-desc">Name, email, company name, phone. 4 fields max. Google OAuth option. No credit card.</div>
+            <div class="screen-arrow">→ 04a Contractor Onboarding</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">03b</div>
+          <div>
+            <div class="screen-name">Supplier Sign Up</div>
+            <div class="screen-desc">Company name, email, category (dropdown), coverage area. Google OAuth option.</div>
+            <div class="screen-arrow">→ 04b Supplier Onboarding</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">04a</div>
+          <div>
+            <div class="screen-name">Contractor Onboarding — Post First Requirement (guided)</div>
+            <div class="screen-desc">3-step wizard: What you need → When you need it → Where to deliver. Pre-filled with smart defaults. Progress bar visible.</div>
+            <div class="screen-arrow">→ 05 Contractor Dashboard (requirement posted state)</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">04b</div>
+          <div>
+            <div class="screen-name">Supplier Onboarding — Catalog Quick Setup</div>
+            <div class="screen-desc">Category selection grid → upload price list OR enter 3 top products manually → coverage area map. 5 min setup.</div>
+            <div class="screen-arrow">→ 06 Supplier Dashboard (awaiting bids state)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-group-label">CONTRACTOR CORE FLOW</div>
+      <div class="screen-list">
+        <div class="screen-item">
+          <div class="screen-num">05</div>
+          <div>
+            <div class="screen-name">Contractor Dashboard</div>
+            <div class="screen-desc">Active requirements, bid activity feed, quick "New Requirement" button, savings tracker, recent orders.</div>
+            <div class="screen-arrow">→ 07 New Requirement · → 09 Bid Review · → 11 Order Tracking · → 13 Savings Report</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">07</div>
+          <div>
+            <div class="screen-name">New Requirement Form</div>
+            <div class="screen-desc">Material type (autocomplete), quantity + unit, delivery date, delivery address, notes. Smart fill from past orders. "Post & Let AI Work" CTA.</div>
+            <div class="screen-arrow">→ 08 Requirement Live Status</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">08</div>
+          <div>
+            <div class="screen-name">Requirement Live Status</div>
+            <div class="screen-desc">Real-time status: "AI contacting 12 suppliers…" Estimated bid arrival time. Can edit or cancel before bids arrive.</div>
+            <div class="screen-arrow">→ 09 Bid Review (when bids arrive) · → 05 Dashboard</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">09</div>
+          <div>
+            <div class="screen-name">Bid Comparison View</div>
+            <div class="screen-desc">Ranked bid cards. AI "Best Value" badge. Price, delivery time, supplier rating, distance. One-tap accept. Can message supplier inline.</div>
+            <div class="screen-arrow">→ 10 Order Confirmation · → 09b Supplier Profile</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">10</div>
+          <div>
+            <div class="screen-name">Order Confirmation + Savings Reveal</div>
+            <div class="screen-desc">Celebration screen. Shows: Order confirmed, $XXX saved vs. market rate, delivery ETA, tracking link. Referral nudge.</div>
+            <div class="screen-arrow">→ 11 Order Tracking · → 07 New Requirement · → 05 Dashboard</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">11</div>
+          <div>
+            <div class="screen-name">Order Tracking</div>
+            <div class="screen-desc">Timeline view: Confirmed → Preparing → In Transit → Delivered. Supplier contact card. Issue reporting button.</div>
+            <div class="screen-arrow">→ 12 Issue Report · → 05 Dashboard</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">13</div>
+          <div>
+            <div class="screen-name">Savings Report (Monthly)</div>
+            <div class="screen-desc">Total saved, breakdown by material category, most-used suppliers, historical trend chart. Shareable PDF.</div>
+            <div class="screen-arrow">→ 05 Dashboard · → 14 Referral Program</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-group-label">SUPPLIER CORE FLOW</div>
+      <div class="screen-list">
+        <div class="screen-item">
+          <div class="screen-num">06</div>
+          <div>
+            <div class="screen-name">Supplier Dashboard</div>
+            <div class="screen-desc">Open bid requests feed, active bids I've submitted, won orders, monthly revenue tracker, catalog health score.</div>
+            <div class="screen-arrow">→ 15 Bid Request Detail · → 16 Submit Bid · → 17 Won Orders · → 18 Catalog Manager</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">15</div>
+          <div>
+            <div class="screen-name">Bid Request Detail</div>
+            <div class="screen-desc">Contractor requirement details (anonymized). Material spec, quantity, delivery location map, deadline. "Submit Bid" or "Pass" actions.</div>
+            <div class="screen-arrow">→ 16 Submit Bid · → 06 Dashboard</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">16</div>
+          <div>
+            <div class="screen-name">Bid Submission Form</div>
+            <div class="screen-desc">Price per unit (auto-calculates total), delivery date, notes, validity period. Price benchmark shown: "Market avg: $X.XX/unit."</div>
+            <div class="screen-arrow">→ 06 Dashboard (bid submitted state)</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">17</div>
+          <div>
+            <div class="screen-name">Won Orders & Fulfillment</div>
+            <div class="screen-desc">Won order details, contractor contact, delivery address, status updates, document upload (delivery receipt).</div>
+            <div class="screen-arrow">→ 06 Dashboard</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-group">
+      <div class="flow-group-label">EMPTY STATES · ERRORS · SETTINGS</div>
+      <div class="screen-list">
+        <div class="screen-item">
+          <div class="screen-num">E1</div>
+          <div>
+            <div class="screen-name">Empty Dashboard — No Requirements Posted</div>
+            <div class="screen-desc">"Post your first requirement — takes 2 minutes." Animated illustration. Direct CTA. Not a blank page.</div>
+            <div class="screen-arrow">→ 07 New Requirement</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">E2</div>
+          <div>
+            <div class="screen-name">Zero Bids Received State</div>
+            <div class="screen-desc">"AI is still working — we'll notify you the moment bids arrive." ETA shown. Edit requirement option. No panic, managed expectation.</div>
+            <div class="screen-arrow">→ 07 Edit Requirement · → 05 Dashboard</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">E3</div>
+          <div>
+            <div class="screen-name">Network / API Error State</div>
+            <div class="screen-desc">"Something went wrong — your data is saved. Tap to retry." Clear error message. Auto-retry in background. No data loss.</div>
+            <div class="screen-arrow">→ Retry → Previous screen</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">S1</div>
+          <div>
+            <div class="screen-name">Account Settings</div>
+            <div class="screen-desc">Profile, notification preferences, payment method, subscription plan, linked bank/card for fee auto-deduction.</div>
+            <div class="screen-arrow">→ Previous screen</div>
+          </div>
+        </div>
+        <div class="screen-item">
+          <div class="screen-num">S2</div>
+          <div>
+            <div class="screen-name">Subscription & Billing</div>
+            <div class="screen-desc">Current plan, next billing date, payment history, upgrade/downgrade options. No hidden fees.</div>
+            <div class="screen-arrow">→ S1 Settings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CFUX -->
+  <section id="cfux">
+    <div class="section-label"><span class="section-num">04</span>CFUX-∞ Breakdown</div>
+    <h2>Every Screen, Layer by Layer</h2>
+    <p>The 5-layer CFUX framework applied to every critical screen. Perception → Cognition → Action → Emotion → Continuity.</p>
+
+    <!-- SCREEN: LANDING -->
+    <div class="cfux">
+      <div class="cfux-header">
+        <span class="cfux-screen-num">Screen 01</span>
+        <span class="cfux-screen-name">Landing Page / Marketing</span>
+      </div>
+      <div class="cfux-layers">
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">A · Perception (0–2 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Cognitive Hook</div><div class="cfux-val green">"Stop chasing quotes. AI gets you 4 competitive bids in 24 hours."</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Orientation</div><div class="cfux-val">Hero: construction backdrop, two-sided UI preview, role selector immediately visible</div></div>
+          <div class="cfux-row"><div class="cfux-key">Familiarity Mapping</div><div class="cfux-val">Marketplace pattern (Thumbtack, TaskRabbit) — familiar "post a job, get quotes" mental model</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">B · Cognition (2–10 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Intent Confirmation</div><div class="cfux-val">Role selector above the fold: "I'm a Contractor" / "I'm a Supplier." They see themselves immediately.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Friction Killers</div><div class="cfux-val">No pricing visible on landing. No signup wall. Social proof: "47 RI contractors trust Sourced"</div></div>
+          <div class="cfux-row"><div class="cfux-key">Trust Signals</div><div class="cfux-val">Specific savings: "Avg 14% below market." Named companies (anonymized). No stock photos.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">C · Action</div>
+          <div class="cfux-row"><div class="cfux-key">Primary Action</div><div class="cfux-val">Click role card → Enter signup flow</div></div>
+          <div class="cfux-row"><div class="cfux-key">Action Gravity</div><div class="cfux-val amber">Two large cards, centered, no competing CTAs. The only clickable elements above the fold.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Effort Minimization</div><div class="cfux-val">Single click on role card bypasses generic signup — goes directly to role-specific next step</div></div>
+          <div class="cfux-row"><div class="cfux-key">Micro-commitment</div><div class="cfux-val">Role selection = micro-commitment. Creates identity alignment before form.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">D · Emotion + Momentum</div>
+          <div class="cfux-row"><div class="cfux-key">Emotional Trigger</div><div class="cfux-val">Pain recognition: "Stop chasing quotes" directly addresses Marcus's daily frustration</div></div>
+          <div class="cfux-row"><div class="cfux-key">Momentum Mechanic</div><div class="cfux-val">Role card hover shows "→ Get started in 60 seconds" — sets expectation of speed</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Reward</div><div class="cfux-val">Role card selection animates into a confirmed state before transitioning. Progress feeling.</div></div>
+        </div>
+        <div class="cfux-layer" style="grid-column: 1/-1;">
+          <div class="cfux-layer-label">E · Continuity</div>
+          <div class="cfux-continuity-grid">
+            <div><div class="cfux-key">Result Preview</div><div class="cfux-val">Below fold: animated GIF/video of bid comparison screen. They see what they're signing up for.</div></div>
+            <div><div class="cfux-key">Next Step</div><div class="cfux-val">After role selection: personalized signup form (not a generic form)</div></div>
+            <div><div class="cfux-key">No Dead End</div><div class="cfux-val">Scroll reveals features. "Already have an account? Log in" in nav. Never stranded.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN: REQUIREMENT FORM -->
+    <div class="cfux">
+      <div class="cfux-header">
+        <span class="cfux-screen-num">Screen 07</span>
+        <span class="cfux-screen-name">New Requirement Form</span>
+      </div>
+      <div class="cfux-layers">
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">A · Perception (0–2 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Cognitive Hook</div><div class="cfux-val green">"Tell us what you need. We'll find the best price."</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Orientation</div><div class="cfux-val">Clean form. Progress bar "Step 1 of 3." No sidebar, no distractions. Single column.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Familiarity Mapping</div><div class="cfux-val">Amazon/Instacart product search pattern. They know how to describe what they want.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">B · Cognition (2–10 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Intent Confirmation</div><div class="cfux-val">Form fields match exactly how contractors think: "What material?" not "SKU or category?"</div></div>
+          <div class="cfux-row"><div class="cfux-key">Friction Killers</div><div class="cfux-val">Smart autocomplete for materials. Quantity defaults to last order. Address pre-filled from profile.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Trust Signals</div><div class="cfux-val">"Your requirement is sent to verified suppliers only." Padlock icon. No public posting.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Choice Architecture</div><div class="cfux-val">Only 4 required fields. Optional fields collapsed under "Add more details." Reduced overwhelm.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">C · Action</div>
+          <div class="cfux-row"><div class="cfux-key">Primary Action</div><div class="cfux-val">"Post Requirement" — large, green, full-width button at bottom</div></div>
+          <div class="cfux-row"><div class="cfux-key">Action Gravity</div><div class="cfux-val amber">Button is the only interactive element not inside a form field. Eye lands on it naturally.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Effort Minimization</div><div class="cfux-val">Material name autocomplete pulls from industry-standard catalog. No free-text guessing.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Micro-commitment</div><div class="cfux-val">Step 1 completion (material + quantity) unlocks Step 2 with a green checkmark. Progress investment.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">D · Emotion + Momentum</div>
+          <div class="cfux-row"><div class="cfux-key">Emotional Trigger</div><div class="cfux-val">Below the button: "AI starts working immediately — you'll have bids by [tomorrow 2pm]." Relief from uncertainty.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Momentum Mechanic</div><div class="cfux-val">Step indicator fills green as each step completes. Zeigarnik: they want to finish the incomplete bar.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Reward</div><div class="cfux-val">Form auto-saves. "Your progress is saved" toast on any navigation away.</div></div>
+        </div>
+        <div class="cfux-layer" style="grid-column: 1/-1;">
+          <div class="cfux-layer-label">E · Continuity</div>
+          <div class="cfux-continuity-grid">
+            <div><div class="cfux-key">Result Preview</div><div class="cfux-val">Step 3 preview: "Review & Post" shows a summary card of their requirement before submission</div></div>
+            <div><div class="cfux-key">Next Step</div><div class="cfux-val">Post → Requirement Live Status screen with real-time supplier outreach progress</div></div>
+            <div><div class="cfux-key">No Dead End</div><div class="cfux-val">"Back" goes to previous step, not dashboard. Saved draft in dashboard even if abandoned.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN: BID COMPARISON -->
+    <div class="cfux">
+      <div class="cfux-header">
+        <span class="cfux-screen-num">Screen 09</span>
+        <span class="cfux-screen-name">Bid Comparison View</span>
+      </div>
+      <div class="cfux-layers">
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">A · Perception (0–2 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Cognitive Hook</div><div class="cfux-val green">"4 bids received. AI recommends Supplier B — 12% below market."</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Orientation</div><div class="cfux-val">Ranked list. First card (AI pick) has a green "Best Value" badge and is slightly elevated. Immediate.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Familiarity Mapping</div><div class="cfux-val">Amazon search results. Flight comparison sites. Hotel booking. Ranked cards pattern is universal.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">B · Cognition (2–10 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Intent Confirmation</div><div class="cfux-val">Each card shows: Price (large), Delivery Date, Supplier Rating, Distance. Exactly what a contractor weighs.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Friction Killers</div><div class="cfux-val">No need to calculate. "You save $XXX vs. market average" pre-computed and shown. Eliminates mental math.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Trust Signals</div><div class="cfux-val">Supplier rating (star + review count), verified badge, last 3 order delivery times. Not just a number.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Choice Architecture</div><div class="cfux-val">4 bids max shown. More exist but ranked below fold. Reduces choice paralysis (Hick's Law applied).</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">C · Action</div>
+          <div class="cfux-row"><div class="cfux-key">Primary Action</div><div class="cfux-val">"Accept This Bid" — green, on the top (AI-recommended) card. Other cards have a ghost "Accept" button.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Action Gravity</div><div class="cfux-val amber">Green button on green-bordered card. Everything points to this. The eye has no choice but to land here.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Effort Minimization</div><div class="cfux-val">One-tap accept. Confirmation modal shows delivery terms — single "Confirm Order" tap to close.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Micro-commitment</div><div class="cfux-val">Tapping "Accept" shows a 3-second confirmation modal before final commit. Reduces regret, maintains momentum.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">D · Emotion + Momentum</div>
+          <div class="cfux-row"><div class="cfux-key">Emotional Trigger</div><div class="cfux-val">Loss aversion: "This bid expires in 18h 44m." Countdown visible. Creates urgency without panic.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Momentum Mechanic</div><div class="cfux-val">The requirement they spent 2 min posting has returned 4 bids. Effort-to-reward ratio is overwhelmingly positive. They feel smart.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Reward</div><div class="cfux-val">Accepting a bid shows an instant green success animation before transitioning to confirmation screen.</div></div>
+        </div>
+        <div class="cfux-layer" style="grid-column: 1/-1;">
+          <div class="cfux-layer-label">E · Continuity</div>
+          <div class="cfux-continuity-grid">
+            <div><div class="cfux-key">Result Preview</div><div class="cfux-val">Tapping supplier card shows inline profile expand — no page navigation needed</div></div>
+            <div><div class="cfux-key">Next Step</div><div class="cfux-val">Accept → Screen 10 (Order Confirmation + Savings Reveal)</div></div>
+            <div><div class="cfux-key">No Dead End</div><div class="cfux-val">"Not ready yet? Bids saved for 24h" — can exit and return. Never lost.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN: SUPPLIER BID SUBMISSION -->
+    <div class="cfux">
+      <div class="cfux-header">
+        <span class="cfux-screen-num">Screen 16</span>
+        <span class="cfux-screen-name">Supplier Bid Submission</span>
+      </div>
+      <div class="cfux-layers">
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">A · Perception (0–2 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Cognitive Hook</div><div class="cfux-val green">"A contractor needs 200 units of [Material] by [Date]. Submit your best price."</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Orientation</div><div class="cfux-val">Requirement summary card at top (read-only). Bid form below. Clear separation between "what they want" and "your offer."</div></div>
+          <div class="cfux-row"><div class="cfux-key">Familiarity Mapping</div><div class="cfux-val">RFQ response form. eBay seller listing. Familiar "quote + submit" pattern.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">B · Cognition (2–10 sec)</div>
+          <div class="cfux-row"><div class="cfux-key">Intent Confirmation</div><div class="cfux-val">Market benchmark shown: "Market avg: $4.20/unit." Helps supplier price competitively without racing to zero.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Friction Killers</div><div class="cfux-val">Price per unit auto-calculates order total. Delivery date defaults to earliest available from their calendar.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Trust Signals</div><div class="cfux-val">Contractor is anonymized until bid is accepted. Reduces fear of competitor visibility.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Choice Architecture</div><div class="cfux-val">3 fields only (price, date, notes). "Add more detail" expands optionally. Speed is the default.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">C · Action</div>
+          <div class="cfux-row"><div class="cfux-key">Primary Action</div><div class="cfux-val">"Submit Bid" — full-width green button. "Pass on this one" as a small ghost link below.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Action Gravity</div><div class="cfux-val amber">Primary: submit. Secondary: pass. The hierarchy is unmistakable. No equal-weight options.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Effort Minimization</div><div class="cfux-val">Price field pre-populated from their catalog pricing for the same SKU if available.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Micro-commitment</div><div class="cfux-val">Entering a price triggers a live preview: "At $4.10/unit, you're 2.4% below market average." Confidence builder.</div></div>
+        </div>
+        <div class="cfux-layer">
+          <div class="cfux-layer-label">D · Emotion + Momentum</div>
+          <div class="cfux-row"><div class="cfux-key">Emotional Trigger</div><div class="cfux-val">Loss aversion: "Bid window closes in 4h 12m." Deadline creates action without being manipulative — it's real.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Momentum Mechanic</div><div class="cfux-val">"You've won 3 of your last 5 bids this week." Streak data shown on dashboard to maintain submission habit.</div></div>
+          <div class="cfux-row"><div class="cfux-key">Instant Reward</div><div class="cfux-val">Bid submitted → "Bid submitted. We'll notify you instantly if accepted." Green tick. Instant peace of mind.</div></div>
+        </div>
+        <div class="cfux-layer" style="grid-column: 1/-1;">
+          <div class="cfux-layer-label">E · Continuity</div>
+          <div class="cfux-continuity-grid">
+            <div><div class="cfux-key">Result Preview</div><div class="cfux-val">After submit, feed shows next open bid request immediately. No return to empty state.</div></div>
+            <div><div class="cfux-key">Next Step</div><div class="cfux-val">Dashboard shows "Bid submitted: awaiting response" with live status indicator</div></div>
+            <div><div class="cfux-key">No Dead End</div><div class="cfux-val">Pass goes back to bid request feed. No dead ends. Always a next opportunity visible.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SECTION 5: MICROCOPY -->
+  <section id="microcopy">
+    <div class="section-label"><span class="section-num">05</span>Microcopy System</div>
+    <h2>Words That Do Work</h2>
+    <p>No generic copy. Every word reduces friction or increases action confidence.</p>
+
+    <div class="copy-block">
+      <div class="copy-screen">Screen 01 · Landing Page</div>
+      <div class="copy-row"><div class="copy-label">Headline</div><div class="copy-text headline">Stop chasing quotes. Get 4 competitive bids in 24 hours.</div></div>
+      <div class="copy-row"><div class="copy-label">Subtext</div><div class="copy-text" style="color:var(--text2);">Sourced AI contacts verified suppliers, collects bids, and ranks them by value — while you're on site.</div></div>
+      <div class="copy-row"><div class="copy-label">CTA · Contractor</div><div class="copy-text btn">I'm a Contractor →</div></div>
+      <div class="copy-row"><div class="copy-label">CTA · Supplier</div><div class="copy-text btn">I'm a Supplier →</div></div>
+      <div class="copy-row"><div class="copy-label">Social Proof</div><div class="copy-text" style="color:var(--text2);">"I saved $1,400 on my last concrete order. Posted at 8am, had 3 bids by noon." — Marcus T., Providence GC</div></div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-screen">Screen 07 · New Requirement Form</div>
+      <div class="copy-row"><div class="copy-label">Headline</div><div class="copy-text headline">What do you need?</div></div>
+      <div class="copy-row"><div class="copy-label">Field Label 1</div><div class="copy-text" style="color:var(--text2);">Material (e.g. "2x4 lumber, 16ft" or "½" copper pipe")</div></div>
+      <div class="copy-row"><div class="copy-label">Placeholder</div><div class="copy-text" style="color:var(--text3);">Start typing — we'll find the right match</div></div>
+      <div class="copy-row"><div class="copy-label">Primary CTA</div><div class="copy-text btn">Post & Let AI Handle It →</div></div>
+      <div class="copy-row"><div class="copy-label">Below CTA</div><div class="copy-text" style="color:var(--text3);font-size:12px;">AI starts contacting suppliers immediately. You'll have bids by tomorrow at 2pm.</div></div>
+      <div class="copy-row"><div class="copy-label">Empty State</div><div class="copy-text" style="color:var(--text2);">You haven't posted any requirements yet. It takes 2 minutes — let's start with your next project.</div></div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-screen">Screen 08 · Requirement Live Status</div>
+      <div class="copy-row"><div class="copy-label">Headline</div><div class="copy-text headline">AI is working on your behalf</div></div>
+      <div class="copy-row"><div class="copy-label">Status Line</div><div class="copy-text" style="color:var(--green);">Contacting 14 verified suppliers in your area…</div></div>
+      <div class="copy-row"><div class="copy-label">ETA</div><div class="copy-text" style="color:var(--text2);">First bids typically arrive within 2–4 hours. We'll notify you the moment they do.</div></div>
+      <div class="copy-row"><div class="copy-label">Zero Bids State</div><div class="copy-text" style="color:var(--amber);">No bids yet — our AI is expanding the supplier search. You'll hear from us by [time].</div></div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-screen">Screen 09 · Bid Comparison</div>
+      <div class="copy-row"><div class="copy-label">Headline</div><div class="copy-text headline">4 bids in — here's your best options</div></div>
+      <div class="copy-row"><div class="copy-label">AI Badge</div><div class="copy-text btn">✓ AI Recommended · 12% below market</div></div>
+      <div class="copy-row"><div class="copy-label">Expiry</div><div class="copy-text" style="color:var(--amber);">This bid expires in 18h 44m</div></div>
+      <div class="copy-row"><div class="copy-label">Primary CTA</div><div class="copy-text btn">Accept This Bid</div></div>
+      <div class="copy-row"><div class="copy-label">Not Ready</div><div class="copy-text" style="color:var(--text3);font-size:12px;">Not ready? Bids are saved for 24 hours.</div></div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-screen">Screen 10 · Order Confirmation + Savings</div>
+      <div class="copy-row"><div class="copy-label">Headline</div><div class="copy-text headline">Order confirmed. You saved $347.</div></div>
+      <div class="copy-row"><div class="copy-label">Subtext</div><div class="copy-text" style="color:var(--text2);">That's 14% below the market average for this material in your area.</div></div>
+      <div class="copy-row"><div class="copy-label">Delivery ETA</div><div class="copy-text" style="color:var(--green);">Delivery confirmed: Tuesday, April 1 by 11am</div></div>
+      <div class="copy-row"><div class="copy-label">Referral Nudge</div><div class="copy-text" style="color:var(--text2);">Know a GC who wastes time on quotes? Send them Sourced — you both get $50 off next month.</div></div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-screen">Error & Edge States</div>
+      <div class="copy-row"><div class="copy-label">Network Error</div><div class="copy-text" style="color:var(--red);">Connection lost — your data is saved. Tap to try again.</div></div>
+      <div class="copy-row"><div class="copy-label">Bid Expired</div><div class="copy-text" style="color:var(--amber);">This bid expired. Don't worry — we're collecting fresh bids from more suppliers now.</div></div>
+      <div class="copy-row"><div class="copy-label">No Suppliers</div><div class="copy-text" style="color:var(--text2);">We're still building our supplier network for this material in your area. Your requirement is saved and we'll notify you when we can fulfill it.</div></div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: INTERACTION -->
+  <section id="interaction">
+    <div class="section-label"><span class="section-num">06</span>Interaction & Behavior Design</div>
+    <h2>Movement, Feedback, and Response</h2>
+
+    <h3 style="margin-bottom:16px;">Transitions & Animations</h3>
+    <table class="interaction-table">
+      <thead><tr><th>Interaction</th><th>Animation</th><th>Why It Exists</th></tr></thead>
+      <tbody>
+        <tr><td>Role card select → Sign Up</td><td>Card scales to fill screen (300ms ease-out)</td><td>Signals progression, not replacement. Establishes spatial metaphor: "entering" the platform.</td></tr>
+        <tr><td>Form step advance</td><td>Next step slides in from right (200ms)</td><td>Reinforces left-to-right progress model. Spatial orientation reduces confusion.</td></tr>
+        <tr><td>Requirement posted</td><td>Green pulse emanates from post button. Card drops into dashboard list.</td><td>Confirms action was received. Creates physical metaphor: the requirement is now "out there."</td></tr>
+        <tr><td>Bid cards appear</td><td>Cards cascade in from top (50ms stagger)</td><td>Prevents "all at once" overwhelm. Each card has a beat to register before the next appears.</td></tr>
+        <tr><td>Accept bid tap</td><td>Button fills green → expands → transitions to confirmation (400ms)</td><td>Provides clear tactile feedback. Slows the action just enough to feel deliberate, not accidental.</td></tr>
+        <tr><td>Savings reveal</td><td>Number counts up to final value (600ms)</td><td>The counting animation draws attention and creates anticipation. The final number lands with weight.</td></tr>
+        <tr><td>AI status pulse</td><td>Subtle breathing animation on status indicator</td><td>Communicates "the system is working" without a spinning loader. Reduces perceived wait anxiety.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-bottom:16px;">Feedback Systems</h3>
+    <table class="interaction-table">
+      <thead><tr><th>Event</th><th>Feedback</th></tr></thead>
+      <tbody>
+        <tr><td>Form field filled correctly</td><td>Subtle green tick appears right-aligned in field. No toast — inline is faster to process.</td></tr>
+        <tr><td>Required field left empty on submit</td><td>Field border turns red + label text turns red + scrolls to field. No generic alert dialog.</td></tr>
+        <tr><td>Requirement successfully posted</td><td>Full-screen green flash (200ms) + "Requirement posted" toast. Both channels (visual + toast) confirm.</td></tr>
+        <tr><td>Bid accepted</td><td>Haptic feedback (mobile) + success screen. Cannot accidentally accept — confirmation modal intervenes.</td></tr>
+        <tr><td>Network failure</td><td>Persistent banner (not toast — must be dismissed). Shows retry button inline. Data auto-saved.</td></tr>
+        <tr><td>Slow API (&gt;3s)</td><td>Skeleton loaders replace content. Not a spinner — skeletons maintain layout so UI doesn't collapse.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-bottom:16px;">Gesture Behavior (Mobile)</h3>
+    <table class="interaction-table">
+      <thead><tr><th>Gesture</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Swipe left on bid card</td><td>Reveal "Pass" action. Swipe right reveals "Accept" (green). Matches iOS message pattern.</td></tr>
+        <tr><td>Pull to refresh on dashboard</td><td>Refreshes bid activity feed. Shows "Checking for new bids…" during refresh.</td></tr>
+        <tr><td>Long press on requirement</td><td>Quick actions: Edit, Duplicate, Cancel. Bottom sheet appears. No navigate-edit-back loop.</td></tr>
+        <tr><td>Pinch on delivery map</td><td>Standard map zoom. Supplier locations visible as pins when zoomed in.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-bottom:16px;">Offline / Slow Network</h3>
+    <div class="card-grid">
+      <div class="card red-accent">
+        <h4>OFFLINE MODE</h4>
+        <p style="font-size:13px;">Banner: "You're offline — showing saved data." Dashboard loads from local cache. New requirements are queued and posted when connection returns. Form data never lost.</p>
+      </div>
+      <div class="card amber-accent">
+        <h4>SLOW NETWORK (&gt;5s)</h4>
+        <p style="font-size:13px;">Progressive skeleton loading. Text content loads before images. Critical data (prices, dates) prioritized. A degraded experience is better than a broken one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: DESIGN SYSTEM -->
+  <section id="design">
+    <div class="section-label"><span class="section-num">07</span>Design System</div>
+    <h2>Components, Hierarchy & Consistency</h2>
+
+    <h3 style="margin-bottom:16px;">Reusable Components</h3>
+    <div class="card" style="margin-bottom:24px;">
+      <div class="component-row">
+        <div class="component-label">Primary CTA</div>
+        <button class="ds-btn primary">Post Requirement</button>
+        <p style="font-size:12px;color:var(--text3);margin:0;">Used for irreversible or primary conversion actions. One per screen.</p>
+      </div>
+      <div class="component-row">
+        <div class="component-label">Secondary Action</div>
+        <button class="ds-btn secondary">View All Bids</button>
+        <p style="font-size:12px;color:var(--text3);margin:0;">Supporting actions. Multiple allowed per screen.</p>
+      </div>
+      <div class="component-row">
+        <div class="component-label">Ghost / Escape</div>
+        <button class="ds-btn ghost">Pass on this bid</button>
+        <p style="font-size:12px;color:var(--text3);margin:0;">Lowest visual weight. Never competes with primary. Used for decline/skip actions.</p>
+      </div>
+      <div class="component-row">
+        <div class="component-label">Text Input</div>
+        <input class="ds-input" placeholder="2x4 lumber, 16ft…" type="text">
+      </div>
+      <div class="component-row">
+        <div class="component-label">Status Badges</div>
+        <span class="ds-badge success">Bid Accepted</span>
+        <span class="ds-badge warning">Expiring Soon</span>
+        <span class="ds-badge error">Bid Expired</span>
+      </div>
+      <div class="component-row">
+        <div class="component-label">Progress Bar</div>
+        <div style="flex:1;max-width:300px;">
+          <div class="ds-progress"><div class="ds-progress-fill" style="width:66%"></div></div>
+          <p style="font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono);">Step 2 of 3 — Delivery details</p>
+        </div>
+      </div>
+      <div class="component-row">
+        <div class="component-label">Stat Cards</div>
+        <div class="ds-card-mini">
+          <div class="ds-stat-label">Saved This Month</div>
+          <div class="ds-stat" style="color:var(--green);">$1,240</div>
+        </div>
+        <div class="ds-card-mini">
+          <div class="ds-stat-label">Bids Received</div>
+          <div class="ds-stat">14</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:16px;">Visual Hierarchy Rules</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>TYPOGRAPHY SCALE</h4>
+        <p style="font-size:20px; font-family:var(--display); font-weight:800; letter-spacing:-0.02em; color:var(--heading); margin-bottom:8px;">Syne — Headlines</p>
+        <p style="font-size:14px; font-weight:500; color:var(--text); margin-bottom:6px;">Inter 500 — UI labels</p>
+        <p style="font-size:13px; color:var(--text2); margin-bottom:6px;">Inter 400 — Body text</p>
+        <p style="font-size:11px; font-family:var(--mono); color:var(--text3);">DM Mono — Meta, tags, steps</p>
+      </div>
+      <div class="card">
+        <h4>COLOR SEMANTICS</h4>
+        <p style="font-size:13px; color:var(--gold2); margin-bottom:4px;">Gold — Brand accent, primary CTAs, nav</p>
+        <p style="font-size:13px; color:var(--green); margin-bottom:4px;">Green — Success, savings, positive states</p>
+        <p style="font-size:13px; color:var(--amber); margin-bottom:4px;">Amber — Warning, expiry, attention</p>
+        <p style="font-size:13px; color:var(--red); margin-bottom:4px;">Red — Error, danger, cancel</p>
+        <p style="font-size:13px; color:var(--blue); margin-bottom:4px;">Blue — Info, secondary emphasis</p>
+        <p style="font-size:13px; color:var(--purple); margin-bottom:4px;">Purple — Premium / power features</p>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:16px; margin-top:24px;">How UI Reduces Cognitive Load</h3>
+    <ul class="styled" style="margin-top:0;">
+      <li>One primary action per screen. Secondary actions have lower visual weight. Ghost links for destructive/exit actions.</li>
+      <li>Smart defaults everywhere. Delivery address pre-filled. Quantity defaults to previous order. Date defaults to "7 days from today."</li>
+      <li>Inline validation — never delay error feedback to form submit.</li>
+      <li>Collapsible optional fields. Core task completion requires the fewest fields possible.</li>
+      <li>Color used semantically, not decoratively. A red badge always means "action needed." Green always means "good."</li>
+      <li>Maximum 2 typefaces. Maximum 3 type sizes per screen. Hierarchy through weight and color, not proliferation.</li>
+      <li>All currency and percentage calculations done by the system. Users compare, not calculate.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 8: EDGE CASES -->
+  <section id="edge">
+    <div class="section-label"><span class="section-num">08</span>Edge Cases & Failure Flows</div>
+    <h2>Where Users Break — and How We Catch Them</h2>
+
+    <h3 style="margin-bottom:20px;">High-Risk Drop Points</h3>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h4>Drop Point 01 — Sign Up Form Abandonment</h4>
+      <div class="edge-flow">
+        <div class="edge-node">User starts signup</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node error">Hits friction (too many fields)</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">Email capture triggers: "Save your progress — continue later"</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node success">Re-engagement email with "Continue where you left off" deep link</div>
+      </div>
+      <p style="font-size:13px;">Recovery UI: Progress auto-saved after first field. Abandonment triggers single email 4h later. Deep link returns them to exact form position.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h4>Drop Point 02 — Requirement Posted, Zero Bids Arrive</h4>
+      <div class="edge-flow">
+        <div class="edge-node">Requirement posted</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node error">0 bids after 6h</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">Push notification + email: "AI expanding search. We've contacted 8 more suppliers."</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">If 12h pass: Sourced team proactive outreach offer</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node success">Managed expectation. Trust maintained.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h4>Drop Point 03 — Bid Accepted but Supplier Cancels</h4>
+      <div class="edge-flow">
+        <div class="edge-node">Bid accepted</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node error">Supplier cancels order</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">Immediate push: "Supplier unavailable — your bids are still valid. Accept another?"</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">Returns to bid list. Next-best bid pre-highlighted.</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node success">New bid accepted within minutes. No re-posting required.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h4>Drop Point 04 — Supplier Bid Submission Error</h4>
+      <div class="edge-flow">
+        <div class="edge-node">Supplier fills bid form</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node error">Submit fails (network)</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">Local save triggered instantly. "Connection issue — your bid is saved."</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">Auto-retry every 30s in background</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node success">Bid submitted when connection restored. User notified.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Drop Point 05 — Hesitation on Bid Accept</h4>
+      <div class="edge-flow">
+        <div class="edge-node">User views bid comparison</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node error">Hesitates — leaves screen</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">Notification: "Your bids are expiring in 2 hours. Accept from your dashboard."</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node recovery">If all bids expire: "Bids expired — tap to re-open requirement for new bids" (one tap)</div>
+        <div class="edge-arrow">→</div>
+        <div class="edge-node success">Never a dead end. Always a path forward.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 9: PSYCHOLOGY MAP -->
+  <section id="psych-map">
+    <div class="section-label"><span class="section-num">09</span>Psychology Mapping</div>
+    <h2>Every Principle, Specifically Applied</h2>
+
+    <div class="law-grid">
+      <div class="law-card">
+        <div class="law-name">HICK'S LAW</div>
+        <div class="law-def">More choices = longer decision time. Reduce options to reduce paralysis.</div>
+        <div class="law-application"><strong style="color:var(--text);">Applied:</strong> Bid comparison shows max 4 bids above the fold. Role selection is binary (Contractor / Supplier). The requirement form has 4 required fields, not 12. Every screen has ONE primary action.</div>
+      </div>
+      <div class="law-card">
+        <div class="law-name">FOGG BEHAVIOR MODEL</div>
+        <div class="law-def">Behavior = Motivation × Ability × Prompt. All three must align.</div>
+        <div class="law-application"><strong style="color:var(--text);">Applied:</strong> Motivation: "$347 saved" on confirmation screen. Ability: Smart defaults, autocomplete, 4-field forms. Prompt: Push notification "Your bids are ready" fires at the exact moment of maximum relevance.</div>
+      </div>
+      <div class="law-card">
+        <div class="law-name">LOSS AVERSION</div>
+        <div class="law-def">Losing $10 feels worse than gaining $10. Frame as avoiding loss.</div>
+        <div class="law-application"><strong style="color:var(--text);">Applied:</strong> "This bid expires in 18h." "You're currently paying 14% above market." Monthly savings report shows "You saved $1,240 — here's what you would have paid without Sourced." Churn prevention: "Cancel and lose your bid history and $X in pending savings."</div>
+      </div>
+      <div class="law-card">
+        <div class="law-name">ZEIGARNIK EFFECT</div>
+        <div class="law-def">Incomplete tasks occupy more mental bandwidth than completed ones.</div>
+        <div class="law-application"><strong style="color:var(--text);">Applied:</strong> Progress bar on requirement form is never at 0% — starts at 30% (role selection already "done"). Dashboard shows requirements "In Progress" at the top. Incomplete onboarding shows a persistent "Finish setup to unlock bidding" prompt.</div>
+      </div>
+      <div class="law-card">
+        <div class="law-name">DEFAULT BIAS</div>
+        <div class="law-def">People tend to accept pre-selected options without changing them.</div>
+        <div class="law-application"><strong style="color:var(--text);">Applied:</strong> AI-recommended bid is pre-selected (green border, "Best Value" badge). Delivery address defaults to project site. Quantity defaults to previous order amount. Notification preferences default to ON. The defaults are designed to drive the best outcome, not random.</div>
+      </div>
+      <div class="law-card">
+        <div class="law-name">SOCIAL PROOF</div>
+        <div class="law-def">People follow the actions of others, especially peers.</div>
+        <div class="law-application"><strong style="color:var(--text);">Applied:</strong> Landing page: real contractor quotes with company names (with permission). Bid comparison: "47 contractors in RI have ordered from this supplier." Order confirmation referral prompt: "Share Sourced with a GC you trust." Supplier bid screen: win rate displayed ("You've won 4 of your last 6 bids").</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 10: ADAPTIVE UX -->
+  <section id="adaptive">
+    <div class="section-label"><span class="section-num">10</span>Adaptive UX Layer</div>
+    <h2>The UI That Learns</h2>
+
+    <div class="user-type-tabs">
+      <button class="tab-btn active" onclick="showTab('first', this)">First-Time User</button>
+      <button class="tab-btn" onclick="showTab('returning', this)">Returning User</button>
+      <button class="tab-btn" onclick="showTab('power', this)">Power User</button>
+    </div>
+
+    <div class="tab-content active" id="tab-first">
+      <div class="card-grid">
+        <div class="card green-accent">
+          <h4>ONBOARDING OVERLAY</h4>
+          <p style="font-size:13px;">Contextual tooltips on first-session dashboard. Not a tour — just single-step hints that appear when the user's cursor/focus approaches a key element for the first time. Dismissed on interaction, never on timer.</p>
+        </div>
+        <div class="card green-accent">
+          <h4>GUIDED FIRST REQUIREMENT</h4>
+          <p style="font-size:13px;">The requirement form on first use has an extra "Why we ask this" inline explanation next to each field. After first requirement is posted, these explanations disappear forever. Never condescending on repeat use.</p>
+        </div>
+        <div class="card green-accent">
+          <h4>SIMPLIFIED BID VIEW</h4>
+          <p style="font-size:13px;">First bid comparison screen hides advanced filters. Shows only: Price, Delivery Date, Rating. Advanced filtering appears from Session 3 onward as a secondary option — not removed, just de-emphasized.</p>
+        </div>
+        <div class="card green-accent">
+          <h4>EMPTY STATE COACHING</h4>
+          <p style="font-size:13px;">Every empty state on first use has a direct action prompt and a "Here's what this looks like with data" preview illustration. Never just a blank page with a message.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-returning">
+      <div class="card-grid">
+        <div class="card blue-accent">
+          <h4>SMART DASHBOARD</h4>
+          <p style="font-size:13px;">Dashboard prioritizes what needs action: bids awaiting acceptance at top, followed by in-progress requirements, then completed orders. Returning users see action-oriented layout, not onboarding prompts.</p>
+        </div>
+        <div class="card blue-accent">
+          <h4>QUICK REORDER</h4>
+          <p style="font-size:13px;">"Reorder this" appears on all past orders after Session 2. One-tap pre-fills the requirement form with last order's details. Returning users hate repeating themselves — this eliminates it.</p>
+        </div>
+        <div class="card blue-accent">
+          <h4>REMEMBERED PREFERENCES</h4>
+          <p style="font-size:13px;">Preferred suppliers bookmarked after 2+ orders with the same supplier. "You've ordered from East Bay Supply 3 times — add to preferred suppliers?" Smart prompt, not automatic enrollment.</p>
+        </div>
+        <div class="card blue-accent">
+          <h4>NOTIFICATION TUNING</h4>
+          <p style="font-size:13px;">After Month 1, a notification preferences screen is surfaced: "You're getting X notifications/week — customize what matters most." Reduces churn from notification fatigue.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-power">
+      <div class="card-grid">
+        <div class="card purple-accent">
+          <h4>BULK REQUIREMENTS</h4>
+          <p style="font-size:13px;">Power users unlock CSV upload for multi-line requirements. "Post 12 requirements at once" — shown only after 5+ individual requirements have been posted. Revealed through progressive disclosure, not upfront complexity.</p>
+        </div>
+        <div class="card purple-accent">
+          <h4>ADVANCED FILTERS</h4>
+          <p style="font-size:13px;">Bid comparison unlocks full filtering after 10+ bid comparisons: filter by certified minority supplier, ISO rating, specific delivery time windows, payment terms. Appears as a "Filters" button that was previously hidden.</p>
+        </div>
+        <div class="card purple-accent">
+          <h4>API ACCESS</h4>
+          <p style="font-size:13px;">After $5K+ in procurement volume, a "Connect your ERP" CTA appears. Surfaced as a logical next step for high-volume users — not as an upsell on a pricing page. Contextual, not commercial.</p>
+        </div>
+        <div class="card purple-accent">
+          <h4>SAVINGS ANALYTICS</h4>
+          <p style="font-size:13px;">Full analytics dashboard with YTD savings, by-category breakdown, most-used suppliers, market benchmark comparison chart. Available from Month 3. Power users get the data they need to justify Sourced to their CFO.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 11: DEMO SCRIPT -->
+  <section id="demo">
+    <div class="section-label"><span class="section-num">11</span>Client Demo Script</div>
+    <h2>The 90-Second Walk-Through</h2>
+    <p>Deliver this as a narrated screen walkthrough. Each block = one screen transition.</p>
+
+    <div class="script-block">
+      <div class="script-time">0:00–0:12 · Landing Page</div>
+      <p style="font-size:14px;">"The first thing a contractor or supplier sees is this: a clear promise and a single decision — who are you? We designed this page so that within 10 seconds, anyone in construction knows exactly what Sourced does and whether it's for them. No jargon. No feature list. Just the outcome."</p>
+      <div class="script-action">→ Click "I'm a Contractor"</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-time">0:12–0:22 · Sign Up → Dashboard</div>
+      <p style="font-size:14px;">"Sign up is 4 fields. No credit card. 60 seconds. And instead of landing on a blank dashboard, they're immediately guided to post their first requirement — the one action that creates value. We skip the empty state entirely."</p>
+      <div class="script-action">→ Complete form. Land on requirement form (guided).</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-time">0:22–0:40 · Posting a Requirement</div>
+      <p style="font-size:14px;">"This is the core action. They tell us what they need — just like texting a supplier. Smart autocomplete means no catalog navigation. The address is pre-filled. Quantity defaults from their last order. Watch what happens when they hit Post…"</p>
+      <div class="script-action">→ Tap "Post & Let AI Handle It." Watch the pulse animation. Transition to Live Status.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-time">0:40–0:58 · Bid Comparison — The Wow Moment</div>
+      <p style="font-size:14px;">"This is the moment clients lean forward. They posted a requirement. The AI contacted 14 suppliers. Now they have 4 ranked bids — and the system has already calculated which one is 12% below market. One tap to accept. No phone calls. No spreadsheets. This is what 24 hours of AI procurement looks like."</p>
+      <div class="script-action">→ Tap "Accept This Bid." Watch the confirmation animation.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-time">0:58–1:10 · Order Confirmed + Savings</div>
+      <p style="font-size:14px;">"And this is what drives retention. Not just 'order confirmed' — but 'you saved $347 on this order.' The number counts up. They see the value. This is the moment they send the app to their project manager."</p>
+      <div class="script-action">→ Pause on savings screen. Let the number land.</div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-time">1:10–1:22 · Close</div>
+      <p style="font-size:14px;">"The entire experience — from 'I need material' to 'order confirmed, money saved' — is under 2 minutes of the contractor's time. The other 22 hours? That's Sourced working in the background. That's the platform."</p>
+    </div>
+  </section>
+
+  <!-- SECTION 12: RED TEAM -->
+  <section id="redteam">
+    <div class="section-label"><span class="section-num">12</span>Red Team Analysis</div>
+    <h2>Where This UX Might Fail</h2>
+
+    <div class="card">
+      <div class="risk-row">
+        <div class="risk-icon red">⚠</div>
+        <div class="risk-body">
+          <div class="risk-title">Risk 01 — "AI Recommended" Badge Feels Manipulative</div>
+          <div class="risk-desc">If users don't understand how the AI ranks bids, they may distrust the recommendation or feel herded. Especially cautious contractors who've been burned by "best deal" promises before.</div>
+          <div class="risk-fix">Fix: Add a tiny "Why this recommendation?" link that expands: "Ranked by price, delivery time, and supplier reliability score." Transparency converts skeptics faster than hiding the logic.</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-icon red">⚠</div>
+        <div class="risk-body">
+          <div class="risk-title">Risk 02 — Countdown Timers Feel Pressuring</div>
+          <div class="risk-desc">"This bid expires in 18h" can trigger reactive rather than considered decisions. Users who feel pressured may abandon instead of accept, or accept and regret.</div>
+          <div class="risk-fix">Fix: Ensure timers are always honest (never shortened). Add: "Not ready? Bids can be refreshed in one tap if they expire." Removes the fear of permanent loss — actually increases acceptance rate by reducing anxiety.</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-icon red">⚠</div>
+        <div class="risk-body">
+          <div class="risk-title">Risk 03 — Savings Claim Feels Inflated</div>
+          <div class="risk-desc">"14% below market" only works if the market baseline is credible. If users can't verify it, it becomes marketing noise that erodes trust after first use.</div>
+          <div class="risk-fix">Fix: Link "market average" to a methodology page. Show the sample (e.g., "Based on 340 quotes in Rhode Island, Jan–Mar 2026"). Specific beats aspirational. One click to proof.</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-icon amber">△</div>
+        <div class="risk-body">
+          <div class="risk-title">Risk 04 — Onboarding Completion vs. Activation Gap</div>
+          <div class="risk-desc">A user can complete sign-up without ever posting a requirement. The gap between "signed up" and "first value" is the most dangerous drop point and most platforms underinvest here.</div>
+          <div class="risk-fix">Fix: Make posting a requirement part of onboarding itself (Step 4a in this design). Remove the optional path. First-session success means at least one requirement is in the system before they close the app.</div>
+        </div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-icon amber">△</div>
+        <div class="risk-body">
+          <div class="risk-title">Risk 05 — Mobile Form Completion Rate</div>
+          <div class="risk-desc">Contractors are on job sites. Typing on mobile while managing a crew is hard. A 4-field form still feels like work if the keyboard behavior is poor.</div>
+          <div class="risk-fix">Fix: Numeric keyboard auto-triggers for quantity fields. Delivery date uses a native date picker, not a typed field. Material autocomplete shows maximum 5 results — never a scroll. Voice input button on material name field.</div>
+        </div>
+      </div>
+      <div class="risk-row" style="border-bottom:none;">
+        <div class="risk-icon amber">△</div>
+        <div class="risk-body">
+          <div class="risk-title">Risk 06 — Complexity Hidden Too Deep (Power Users)</div>
+          <div class="risk-desc">Progressive disclosure risks hiding features that power users would have paid for, making the product feel shallow to the users who can champion it internally.</div>
+          <div class="risk-fix">Fix: Power features unlocked through usage, not time. After 5th requirement: bulk upload appears. After 3rd supplier: preferred list appears. Tie feature reveal to action milestones, not calendar days. Users feel they earned the power, not that it was withheld.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="card green-accent">
+      <h3 style="margin-bottom:12px;">The Core Simplification Principle</h3>
+      <p style="font-size:14px;">Every screen in this framework was designed by asking: <strong style="color:var(--heading)">"What is the one thing a user needs to do here, and what is everything else?"</strong> Everything else either gets removed, collapsed, or deferred. The complexity of construction procurement is real — but it should be invisible to the user. That's the job of the AI agents. The UI's job is to make humans feel capable, not overwhelmed.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function showTab(type, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + type).classList.add('active');
+  btn.classList.add('active');
+}
+
+(function initTheme() {
+  var stored = localStorage.getItem('dibbs_theme');
+  var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  var theme = stored || (prefersLight ? 'light' : 'dark');
+  document.documentElement.dataset.theme = theme;
+
+  var btn = document.getElementById('themeToggle');
+  function syncLabel() {
+    if (!btn) return;
+    btn.textContent = document.documentElement.dataset.theme === 'light' ? 'Light' : 'Night';
+  }
+  syncLabel();
+
+  if (btn) {
+    btn.addEventListener('click', function () {
+      var next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('dibbs_theme', next);
+      syncLabel();
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

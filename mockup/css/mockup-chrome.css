@@ -1,0 +1,56 @@
+/* Shared “outside the phone” chrome — aligns with index.html guide tokens */
+.mockup-page:not(.mockup-page--catalog) {
+  align-items: center;
+}
+
+/* Label + device + nav share one column width (matches device max width) */
+.mockup-page:not(.mockup-page--catalog) > .mockup-label {
+  width: min(100%, 380px);
+  max-width: 380px;
+  margin: 0 auto;
+  text-align: left;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.mockup-page:not(.mockup-page--catalog) > .catalog-link {
+  width: min(100%, 380px);
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Reusable tag chip (same visual language as .guide .tag) */
+.tag-inline {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ux-green);
+  background: var(--ux-green-dim);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.mock-meta-row {
+  width: min(100%, 380px);
+  max-width: 380px;
+  margin: 0 auto 4px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-meta-row .mockup-label {
+  margin: 0;
+  flex: 1;
+  min-width: 200px;
+  text-align: left;
+}

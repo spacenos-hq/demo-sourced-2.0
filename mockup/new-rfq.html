@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — New RFQ (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+  <style>
+    .mic-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0 8px;
+    }
+    .mic-zone.mock-voice-live .mic-ring {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 2px solid var(--gold-border);
+      background: var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .mic-zone.mock-voice-live .mic-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--gold2), var(--gold));
+    }
+    .parsed-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .parsed-row:last-child { border-bottom: none; }
+    .parsed-k {
+      font-family: "DM Mono", monospace;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mist);
+    }
+    .parsed-v { color: var(--ux-green); font-weight: 600; text-align: right; max-width: 58%; }
+  </style>
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 6 · New requirement (+ voice step from demo flow)</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+          <div class="flow-topbar" style="border-bottom:1px solid var(--border);padding-left:16px;padding-right:16px">
+            <a href="home.html" class="flow-topbar__btn flow-topbar__btn--muted" style="padding:0">Cancel</a>
+            <span style="font-family:var(--font-serif);font-weight:700;color:var(--heading)">New Requirement</span>
+            <a href="home.html" class="flow-topbar__btn" style="padding:0">Save Draft</a>
+          </div>
+          <p class="wizard-steps" style="border:none;padding-top:4px"><span class="is-active">Material</span> · Delivery · Review</p>
+          <header class="app-header" style="border:none;padding-top:4px">
+            <a class="app-header__back" href="home.html" aria-label="Back to home">←</a>
+            <div class="app-header__mid">
+              <p class="app-header__title" style="font-size:19px">What do you need?</p>
+              <p class="app-header__sub">Voice + parsed fields · demo loop</p>
+            </div>
+            <div class="app-header__step">Flow<br /><span style="color:var(--mist2)">3 / 8</span></div>
+          </header>
+
+          <div class="screen__scroll screen__scroll--tight">
+            <div class="mic-zone mock-voice-live mock-voice-live--listening">
+              <div class="mic-ring mock-mic-ring--pulse"><div class="mic-dot" aria-hidden="true"></div></div>
+              <div class="mock-call-waveform" aria-hidden="true">
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+                <span class="mock-call-wave__bar"></span>
+              </div>
+              <p class="mock-listen-status"><span class="mock-live-dot" aria-hidden="true"></span> Listening · AI structuring</p>
+            </div>
+
+            <p class="app-eyebrow">Parsed RFQ</p>
+            <div class="app-card mock-parsed-live">
+              <div class="parsed-row"><span class="parsed-k">Material</span><span class="parsed-v">3/4″ Plywood CDX</span></div>
+              <div class="parsed-row"><span class="parsed-k">Quantity</span><span class="parsed-v">200 sheets</span></div>
+              <div class="parsed-row"><span class="parsed-k">Location</span><span class="parsed-v">Providence, RI</span></div>
+              <div class="parsed-row"><span class="parsed-k">Deliver by</span><span class="parsed-v">Fri Apr 4</span></div>
+            </div>
+            <p class="app-p" style="font-size:12px;margin-top:12px">Your requirement is sent to verified suppliers only — no public posting.</p>
+            <p class="app-p" style="font-size:11px;margin-top:0;color:var(--mist)">AI starts contacting suppliers immediately. First bids typically in 2–4 hours.</p>
+          </div>
+
+          <div class="app-actions">
+            <a href="outreach.html" class="btn btn--primary">Post &amp; Let AI Handle It →</a>
+            <a href="home.html" class="btn btn--ghost">Save draft</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="home.html">← Prev</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">03 · New requirement</span>CFUX screen 07</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="outreach.html">Next →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — AI Working (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="css/maps.css" />
+  <style>
+    .hero-ai {
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      background: radial-gradient(ellipse at 30% 0%, var(--ux-green-dim), var(--surface));
+      border: 1px solid var(--border2);
+      text-align: center;
+    }
+    .countdown {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--ux-green);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 7 · Live requirement status + supplier feed</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+          <header class="app-header">
+            <a class="app-header__back" href="home.html" aria-label="Dashboard">←</a>
+            <div class="app-header__mid">
+              <p class="app-header__title">AI Working</p>
+              <p class="app-header__sub">500ft ¾″ EMT · Apr 4</p>
+            </div>
+            <a href="new-rfq.html" class="flow-topbar__btn" style="font-size:10px;align-self:center">Edit req.</a>
+          </header>
+
+          <div class="screen__scroll">
+            <div class="hero-ai">
+              <p class="app-p" style="margin:0;font-size:13px;color:var(--heading)"><strong>500ft ¾″ EMT Conduit</strong> · Apr 4 · Providence</p>
+              <p class="field__hint" style="margin-top:8px">🕐 Estimated bids: Tomorrow by 2:00 PM</p>
+              <p class="countdown" aria-hidden="true">18:24:09</p>
+            </div>
+
+            <div class="mock-map-wrap">
+              <p class="mock-map__caption">Suppliers in range · real map</p>
+              <div
+                class="mock-map mock-map--tall"
+                role="img"
+                aria-label="Map with supplier locations"
+                data-lat="41.82"
+                data-lng="-71.41"
+                data-zoom="11"
+                data-markers='[{"lat":41.826,"lng":-71.403,"label":"Atlas"},{"lat":41.818,"lng":-71.428,"label":"NE Bldg"},{"lat":41.808,"lng":-71.352,"label":"Metro"},{"lat":41.815,"lng":-71.37,"label":"In call"}]'
+              ></div>
+            </div>
+
+            <p class="app-eyebrow">Live progress</p>
+            <div class="flow-timeline">
+              <div class="tl-item">
+                <div class="tl-dot tl-dot--done">✓</div>
+                <div>
+                  <p style="margin:0;font-weight:600;color:var(--heading)">Requirement received</p>
+                  <p class="field__hint">Posted at 9:31 AM</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot tl-dot--done">✓</div>
+                <div>
+                  <p style="margin:0;font-weight:600;color:var(--heading)">Market price established</p>
+                  <p class="field__hint">EMT ¾″ avg $4.62/ft · RI <a href="savings-report.html" style="color:var(--ux-green)">methodology</a></p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot tl-dot--done">✓</div>
+                <div>
+                  <p style="margin:0;font-weight:600;color:var(--heading)">Suppliers found</p>
+                  <p class="field__hint">34 verified in your area</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot tl-dot--done">✓</div>
+                <div>
+                  <p style="margin:0;font-weight:600;color:var(--heading)">Contact details verified</p>
+                  <p class="field__hint">Fetching contact for 13 more…</p>
+                </div>
+              </div>
+              <div class="tl-item tl-item--ai-reaching">
+                <div class="tl-dot tl-dot--active tl-dot--pulse">⟳</div>
+                <div>
+                  <p class="mock-ai-reaching-headline" style="margin:0;font-weight:600;color:var(--heading)">AI reaching out now</p>
+                  <p class="field__hint">4 calls · 14 emails · 8 responses · <a href="compare.html" style="color:var(--ux-green)">activity log</a></p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot">○</div>
+                <div>
+                  <p style="margin:0;color:var(--mist)">Collecting bids</p>
+                  <p class="field__hint">Waiting for supplier responses</p>
+                </div>
+              </div>
+            </div>
+
+            <p class="app-eyebrow">Agents on this job</p>
+            <div class="agent-pill-scroll">
+              <div class="agent-pill"><strong>SIGMA-7</strong>Procurement<br />Contacting 8 more</div>
+              <div class="agent-pill"><strong>AURORA-3</strong>Sales<br />Live call in progress</div>
+              <div class="agent-pill"><strong>HERMES-1</strong>Marketing<br />14 emails sent</div>
+            </div>
+
+            <p class="app-eyebrow">Supplier pipeline</p>
+            <div class="app-card" style="padding:0 16px">
+              <div class="app-row">
+                <div class="app-row__main">
+                  <p class="app-row__name">Atlas Lumber RI</p>
+                  <p class="app-row__sub">lumber · Providence</p>
+                </div>
+                <div class="app-row__right">
+                  <span class="badge badge--live">Bid in</span>
+                  <p class="app-row__price" style="margin-top:4px">$3,060</p>
+                </div>
+              </div>
+              <div class="app-row">
+                <div class="app-row__main">
+                  <p class="app-row__name">Metro Supply</p>
+                  <p class="app-row__sub">wholesale</p>
+                </div>
+                <div class="app-row__right">
+                  <span class="badge badge--call">AI calling</span>
+                  <p class="app-row__price" style="margin-top:4px;color:var(--mist)">—</p>
+                </div>
+              </div>
+            </div>
+
+            <p class="app-eyebrow">Need to change something?</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;padding-bottom:12px">
+              <a href="new-rfq.html" class="btn btn--ghost" style="flex:1;margin:0;min-width:120px">Edit requirement</a>
+              <span class="btn btn--ghost" style="flex:1;margin:0;min-width:120px;cursor:default">Cancel requirement</span>
+            </div>
+          </div>
+
+          <div class="app-actions">
+            <a href="compare.html" class="btn btn--primary">View 4 bids →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="outreach.html">← Outreach</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Live status</span>Prompt 7</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="compare.html">Compare →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="js/mockup-maps.js"></script>
+</body>
+</html>

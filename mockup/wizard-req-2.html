@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — First requirement · Delivery (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="css/maps.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 4 · Wizard 2/3 · When &amp; where</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="flow-screen">
+          <div class="screen__status" style="display:flex;justify-content:space-between;padding:10px 20px 0;padding-top:max(10px,env(safe-area-inset-top));font-family:var(--font-mono);font-size:11px;color:var(--heading)">
+            <span>9:41</span><span>●●●</span>
+          </div>
+          <p class="wizard-steps">What · <span class="is-active">When · Where</span></p>
+          <header class="app-header" style="border:none">
+            <div class="app-header__mid" style="padding-left:0">
+              <p class="app-header__title">When and where?</p>
+            </div>
+          </header>
+
+          <div class="flow-screen__scroll">
+            <div class="field">
+              <label class="field__label">Delivery date</label>
+              <p class="field__hint" style="margin-bottom:8px">Recommended: within 7 days · Bottom sheet calendar on tap (mock)</p>
+              <div class="field__input" style="cursor:default">Fri, April 4, 2026</div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="addr">Delivery address</label>
+              <div class="field__input-wrap">
+                <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.6" aria-hidden="true">📍</span>
+                <input class="field__input" id="addr" type="text" style="padding-left:36px" value="142 Atwells Ave, Providence, RI" />
+              </div>
+              <p class="field__hint">Suggestion card: “Use my saved address…” · “Use current location →”</p>
+            </div>
+
+            <div class="mock-map-wrap">
+              <p class="mock-map__caption">Delivery site · 142 Atwells Ave</p>
+              <div
+                class="mock-map"
+                role="img"
+                aria-label="Map centered on delivery address in Providence"
+                data-lat="41.8235"
+                data-lng="-71.4267"
+                data-zoom="15"
+                data-markers='[{"lat":41.8235,"lng":-71.4267,"label":"142 Atwells Ave","r":8}]'
+              ></div>
+            </div>
+
+            <p class="field__hint"><a href="wizard-req-1.html" style="color:var(--ux-green)">Special requirements (optional) +</a></p>
+          </div>
+
+          <div class="app-actions">
+            <a href="wizard-ai-handoff.html" class="btn btn--primary">Post Requirement</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="wizard-req-1.html">← What</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Wizard</span>AI handoff</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="wizard-ai-handoff.html">Celebrate →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="js/mockup-maps.js"></script>
+</body>
+</html>

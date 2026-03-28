@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — Supplier home (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 10 · Supplier dashboard</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen" style="padding-bottom:0">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+          <div class="dash-top">
+            <a href="settings-account.html" class="dash-avatar">EB</a>
+            <div class="dash-greet">
+              <strong>East Bay Electrical</strong>
+              <small>Supplier</small>
+            </div>
+            <a href="notifications.html" class="dash-bell">🔔</a>
+          </div>
+
+          <div class="screen__scroll" style="padding:0">
+            <div class="dash-banner dash-banner--amber" style="margin-top:0">
+              <p><strong>7 new requests</strong> match your catalog</p>
+              <a href="#open">View →</a>
+            </div>
+
+            <div class="dash-stats">
+              <a href="#open" class="dash-stat-chip dash-stat-chip--hot"><span class="n">7</span><span class="l">Open reqs</span></a>
+              <a href="savings-report.html" class="dash-stat-chip"><span class="n">67%</span><span class="l">Win rate</span></a>
+              <a href="savings-report.html" class="dash-stat-chip"><span class="n">$8.4K</span><span class="l">This month</span></a>
+            </div>
+
+            <div class="dash-section-h" id="open">
+              <h3>Open Requests <span class="badge badge--call">7</span></h3>
+              <a href="#open">See all →</a>
+            </div>
+
+            <div class="sup-req-card">
+              <span class="badge" style="margin-bottom:8px">NEW</span>
+              <h4 class="app-card__title">500ft ¾″ EMT Conduit</h4>
+              <p class="app-p" style="font-size:12px;margin:0">Deliver Apr 4 · Providence, RI · 8 mi</p>
+              <span class="badge badge--call" style="margin-top:8px">ELECTRICAL</span>
+              <p class="field__hint" style="margin-top:8px;color:var(--ux-amber)">Closes in 4h 22m</p>
+              <a href="supplier-bid-submit.html" class="btn btn--primary" style="margin-top:12px">Submit Bid</a>
+              <button type="button" class="flow-link-muted mock-text-btn" style="margin-top:8px;background:none;border:none;cursor:pointer;padding:0;font:inherit;color:inherit;width:100%;text-align:center">Pass</button>
+            </div>
+
+            <div class="sup-req-card sup-req-card--urgent">
+              <h4 class="app-card__title">Copper pipe run · Job 882</h4>
+              <p class="app-p" style="font-size:12px;margin:0">Deliver Apr 2 · Johnston · 12 mi</p>
+              <p class="field__hint" style="margin-top:8px;color:var(--ux-red)">Closes in 1h 08m</p>
+              <a href="supplier-bid-submit.html" class="btn btn--primary" style="margin-top:12px">Submit Bid</a>
+            </div>
+
+            <div class="dash-section-h">
+              <h3>My Bids</h3>
+              <a href="supplier-bid-submit.html">See all →</a>
+            </div>
+            <div class="app-card" style="margin:0 16px;padding:0;overflow:hidden">
+              <a href="order-tracking.html" class="bid-wait-row">
+                <div>
+                  <p style="margin:0;font-weight:500">Drywall bundle</p>
+                  <span class="badge" style="margin-top:4px">UNDER REVIEW</span>
+                </div>
+                <span class="price">$890</span>
+              </a>
+              <a href="compare.html" class="bid-wait-row">
+                <div>
+                  <p style="margin:0;font-weight:500">PVC schedule 40</p>
+                  <span class="badge badge--live" style="margin-top:4px">WINNING</span>
+                </div>
+                <span class="price">$412</span>
+              </a>
+            </div>
+
+            <div class="dash-section-h">
+              <h3>Recent Wins</h3>
+            </div>
+            <p class="app-p" style="padding:0 16px;font-size:12px">Conduit job — $2,100 · confirmed · Apr 1</p>
+            <p class="field__hint" style="padding:0 16px 16px">Revenue this week: <strong style="color:var(--ux-green)">$4,200</strong></p>
+          </div>
+
+          <nav class="tabbar5" aria-label="Supplier tabs">
+            <a href="supplier-dashboard.html" class="is-active"><span class="ti">⌂</span>Home</a>
+            <a href="supplier-dashboard.html#open"><span class="ti">📥</span>Requests</a>
+            <a href="supplier-bid-submit.html"><span class="ti">◈</span>Bids</a>
+            <a href="order-tracking.html"><span class="ti">📦</span>Orders</a>
+            <a href="settings-account.html"><span class="ti">👤</span>Profile</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="signup-supplier.html">← Stub</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Supplier</span>Home</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="supplier-bid-submit.html">Bid form →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+</body>
+</html>

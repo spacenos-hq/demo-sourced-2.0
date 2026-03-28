@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — Home dashboard (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="css/maps.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 5 · Contractor home dashboard</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen screen--home" style="padding-bottom:0">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+
+          <div class="dash-top">
+            <a href="settings-account.html" class="dash-avatar" aria-label="Profile">M</a>
+            <div class="dash-greet">
+              <strong>Good morning, Marcus</strong>
+              <small>Providence, RI</small>
+            </div>
+            <a href="notifications.html" class="dash-bell" aria-label="Notifications">
+              🔔
+              <span class="dash-bell__badge">3</span>
+            </a>
+          </div>
+
+          <div class="screen__scroll" style="padding:0 0 8px">
+            <div class="dash-banner">
+              <p><strong>4 bids ready</strong> — conduit job · Accept by 6pm</p>
+              <a href="compare.html">View →</a>
+            </div>
+
+            <div class="dash-stats">
+              <a href="tracker.html" class="dash-stat-chip"><span class="n">2</span><span class="l">Active reqs</span></a>
+              <a href="compare.html" class="dash-stat-chip dash-stat-chip--hot"><span class="n">4</span><span class="l">Bids waiting</span></a>
+              <a href="order-tracking.html" class="dash-stat-chip"><span class="n">1</span><span class="l">In transit</span></a>
+            </div>
+
+            <div style="padding:0 16px 14px">
+              <p class="mock-map__caption">Active procurement · Providence metro</p>
+              <div
+                class="mock-map mock-map--compact"
+                role="img"
+                aria-label="Map of procurement activity"
+                data-lat="41.822"
+                data-lng="-71.405"
+                data-zoom="10"
+                data-markers='[{"lat":41.826,"lng":-71.403,"label":"Search A"},{"lat":41.818,"lng":-71.428,"label":"Search B"}]'
+              ></div>
+            </div>
+
+            <div class="dash-section-h">
+              <h3>Active Requirements</h3>
+              <a href="new-rfq.html">New +</a>
+            </div>
+            <div class="req-cards-scroll">
+              <a href="tracker.html" class="req-card-mini">
+                <span class="badge badge--call" style="margin-bottom:8px">AI SEARCHING</span>
+                <h4>¾″ EMT Conduit</h4>
+                <p class="app-p" style="font-size:12px;margin:0">500 ft · Deliver Apr 4</p>
+                <div class="ds-progress" style="margin-top:10px;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden">
+                  <div class="req-progress-fill req-progress-fill--amber" style="width:45%;height:100%"></div>
+                </div>
+              </a>
+              <a href="compare.html" class="req-card-mini req-card-mini--highlight">
+                <span class="badge badge--live" style="margin-bottom:8px">4 BIDS READY</span>
+                <h4>3/4″ Plywood CDX</h4>
+                <p class="app-p" style="font-size:12px;margin:0">200 sheets · Apr 4</p>
+                <div class="ds-progress" style="margin-top:10px;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden">
+                  <div class="req-progress-fill req-progress-fill--gold" style="width:75%;height:100%"></div>
+                </div>
+              </a>
+            </div>
+
+            <div class="dash-section-h">
+              <h3>Bids Waiting for You <span class="badge badge--live" style="margin-left:6px">4</span></h3>
+              <a href="compare.html">See all →</a>
+            </div>
+            <div class="app-card" style="margin:0 16px;padding:0;overflow:hidden">
+              <a href="compare.html" class="bid-wait-row">
+                <div style="min-width:0;flex:1">
+                  <p style="margin:0;font-weight:600;color:var(--heading)">EMT Conduit</p>
+                  <p class="field__hint" style="margin:4px 0 0">4 bids · Best: $4.10/ft · Expires in 6h</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+                  <span class="price">$2,050</span>
+                  <span style="color:var(--mist);font-size:18px;line-height:1">›</span>
+                </div>
+              </a>
+            </div>
+
+            <div class="dash-section-h">
+              <h3>Recent Activity</h3>
+            </div>
+            <div class="app-card" style="margin:0 16px;padding:0;overflow:hidden">
+              <div class="activity-row"><span class="ic">📋</span><div><strong style="color:var(--heading)">Requirement posted</strong><br /><span class="field__hint">2 min ago</span></div></div>
+              <div class="activity-row"><span class="ic">💰</span><div><strong style="color:var(--heading)">Bid received</strong><br /><span class="field__hint">3 hours ago</span></div></div>
+              <div class="activity-row"><span class="ic">✓</span><div><strong style="color:var(--heading)">Order confirmed</strong><br /><span class="field__hint">Yesterday</span></div></div>
+            </div>
+
+            <a href="savings-report.html" class="savings-wide" style="display:block;text-decoration:none;color:inherit">
+              <p class="app-card__meta" style="margin-bottom:4px">This month’s savings</p>
+              <p class="big">$1,240</p>
+              <p class="field__hint" style="margin-top:8px">▁▃▅▇▆▄▂ daily · <span class="savings-wide__cta">See full report →</span></p>
+            </a>
+
+            <p class="app-p" style="padding:0 16px 8px;font-size:11px">
+              <a href="index.html" style="color:var(--mist)">Exit to mockup guide</a>
+            </p>
+          </div>
+
+          <nav class="tabbar5" aria-label="Main tabs">
+            <a href="home.html" class="is-active"><span class="ti">⌂</span>Home</a>
+            <a href="new-rfq.html"><span class="ti">＋</span>Reqs</a>
+            <a href="compare.html"><span class="ti">◈</span>Bids (4)</a>
+            <a href="order-tracking.html"><span class="ti">📦</span>Orders</a>
+            <a href="settings-account.html"><span class="ti">⋯</span>More</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="wizard-ai-handoff.html">← Wizard</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">Home</span>Prompt 5</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="new-rfq.html">New RFQ →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="js/mockup-maps.js"></script>
+</body>
+</html>

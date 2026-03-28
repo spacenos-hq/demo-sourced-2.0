@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — Deal placed (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+  <style>
+    .success-hero {
+      text-align: center;
+      padding: 28px 12px 8px;
+    }
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: var(--ux-green-dim);
+      border: 1px solid var(--ux-green-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--ux-green);
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--mist2);
+      line-height: 1.45;
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-item::before {
+      content: "✓";
+      color: var(--ux-green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 9 · Order confirmation + savings (celebration)</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+          <header class="app-header">
+            <div class="app-header__mid" style="padding-left:4px">
+              <p class="app-header__title">Sourced</p>
+              <p class="app-header__sub">Order confirmed</p>
+            </div>
+            <div class="app-header__step">Flow<br /><span style="color:var(--mist2)">8 / 8</span></div>
+          </header>
+
+          <div class="screen__scroll">
+            <div class="success-hero">
+              <div class="success-icon" aria-hidden="true">✓</div>
+              <h2 class="app-h2" style="font-size:24px;margin-bottom:6px">Order confirmed. You saved $275.</h2>
+              <p class="app-p" style="margin-bottom:0;font-size:13px">That’s 14% below the market average for this material in your area. Suppliers were notified — delivery updates land here.</p>
+            </div>
+
+            <p class="app-eyebrow">What happens next</p>
+            <div class="app-card">
+              <div class="check-item">RFQ #4821 locked — pricing snapshot saved for your records.</div>
+              <div class="check-item">Three POs sent · delivery window Fri Apr 4.</div>
+              <div class="check-item">Savings logged to your profile ($275) for future benchmarks.</div>
+              <div class="check-item">Rate suppliers after delivery to improve the network.</div>
+            </div>
+
+            <p class="app-p" style="font-size:12px;text-align:center;margin-top:16px;color:var(--mist2);line-height:1.5">Know a GC who wastes time on quotes? Send them Sourced — you both get $50 off next month.</p>
+            <p class="app-p" style="font-size:11px;text-align:center;margin-top:8px;color:var(--mist)">4 bids · &lt;24h · zero contractor calls. This run hit all three.</p>
+          </div>
+
+          <div class="app-actions">
+            <a href="home.html" class="btn btn--primary">Back to home</a>
+            <a href="index.html" class="btn btn--ghost">Mockup guide</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="confirm.html">← Prev</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">08 · Done</span>Loop to home</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="home.html">Home →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+</body>
+</html>

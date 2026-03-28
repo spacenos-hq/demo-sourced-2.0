@@ -55,6 +55,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    img, video { max-width: 100%; height: auto; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -72,7 +73,10 @@
     /* Progress + Back to top */
     #doc-progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--gold); z-index: 999; width: 0%; transition: width .1s; }
     #btt {
-      position: fixed; bottom: 28px; right: 28px; z-index: 100;
+      position: fixed;
+      bottom: max(16px, env(safe-area-inset-bottom, 16px));
+      right: max(16px, env(safe-area-inset-right, 16px));
+      z-index: 100;
       width: 40px; height: 40px; border-radius: 8px;
       background: var(--surface); border: 1px solid var(--border2);
       color: var(--mist); font-size: 16px;
@@ -201,6 +205,9 @@
       .cover-meta-strip { grid-template-columns: 1fr 1fr; gap: 20px; }
       .cover-meta-item { border-right: none; padding-right: 0; }
     }
+    @media (max-width: 400px) {
+      .cover-meta-strip { grid-template-columns: 1fr; }
+    }
 
     /* Sticky nav */
     #nav {
@@ -208,9 +215,11 @@
       background: rgba(11,12,14,.96);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border2);
-      padding: 0 clamp(24px, 6vw, 80px);
+      padding: 0 clamp(16px, 4vw, 80px);
+      padding-top: env(safe-area-inset-top, 0);
       display: flex; align-items: center; gap: 4px;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
     html[data-theme="light"] #nav {
@@ -247,6 +256,7 @@
       display:flex;
       align-items:center;
       gap:6px;
+      flex-wrap:wrap;
       padding:6px;
       border-radius:999px;
       background:rgba(255,255,255,.03);
@@ -291,6 +301,156 @@
       white-space: nowrap;
     }
     .theme-toggle:hover { background: var(--surface2); color: var(--white); border-color: var(--border2); }
+
+    /* Mobile: hamburger + slide-in panel (replaces cramped wrap / hidden horizontal scroll) */
+    .site-nav .nav-menu-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 14px;
+      margin-right: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border2);
+      background: var(--surface);
+      color: var(--mist2);
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .site-nav .nav-menu-btn .nav-menu-icon {
+      width: 18px;
+      height: 14px;
+      position: relative;
+      display: block;
+      flex-shrink: 0;
+    }
+    .site-nav .nav-menu-btn .nav-menu-icon::before,
+    .site-nav .nav-menu-btn .nav-menu-icon::after,
+    .site-nav .nav-menu-btn .nav-menu-icon span {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      transition: transform .2s, opacity .2s;
+    }
+    .site-nav .nav-menu-btn .nav-menu-icon::before { content: ''; top: 0; }
+    .site-nav .nav-menu-btn .nav-menu-icon span { top: 6px; display: block; }
+    .site-nav .nav-menu-btn .nav-menu-icon::after { content: ''; bottom: 0; }
+    body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::before {
+      transform: translateY(6px) rotate(45deg);
+    }
+    body.nav-open .site-nav .nav-menu-btn .nav-menu-icon span { opacity: 0; }
+    body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::after {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    .site-nav .nav-backdrop {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: calc(48px + env(safe-area-inset-top, 0px));
+      z-index: 198;
+      background: rgba(0, 0, 0, .5);
+      opacity: 0;
+      transition: opacity .25s ease;
+      pointer-events: none;
+    }
+    body.nav-open .site-nav .nav-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .site-nav .nav-primary { display: contents; }
+    .mobile-nav-label {
+      display: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--mist);
+      padding: 10px 18px 6px;
+      margin: 0;
+    }
+    .mobile-nav-label.nav-doc-label { padding-top: 20px; }
+
+    @media (max-width: 768px) {
+      body.nav-open { overflow: hidden; }
+      .site-nav .nav-menu-btn { display: inline-flex; }
+      .site-nav .nav-backdrop { display: block; }
+      nav.site-nav {
+        flex-wrap: nowrap;
+        overflow: visible;
+        padding: 8px clamp(12px, 4vw, 24px);
+        min-height: 48px;
+        align-items: center;
+        gap: 8px;
+      }
+      nav.site-nav .nav-spacer { display: none; }
+      nav.site-nav .nav-primary {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        position: fixed;
+        left: 0;
+        right: auto;
+        width: min(100%, 360px);
+        bottom: 0;
+        top: 0;
+        padding-top: calc(52px + env(safe-area-inset-top, 0px));
+        background: var(--surface);
+        border-right: 1px solid var(--border2);
+        z-index: 199;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        transform: translateX(-100%);
+        transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+        box-shadow: 12px 0 40px rgba(0, 0, 0, .4);
+      }
+      body.nav-open nav.site-nav .nav-primary { transform: translateX(0); }
+      .mobile-nav-label { display: block; }
+      nav.site-nav .nav-item {
+        padding: 16px 18px;
+        font-size: 12px;
+        letter-spacing: .06em;
+        white-space: normal;
+        line-height: 1.35;
+        border-bottom: 1px solid var(--border);
+        border-left: 3px solid transparent;
+      }
+      nav.site-nav .nav-item.active {
+        border-left-color: var(--gold);
+        background: var(--gold-dim);
+      }
+      nav.site-nav .doc-switch {
+        flex-direction: column;
+        align-items: stretch;
+        margin: 0 12px 20px;
+        padding: 8px;
+        border-radius: 12px;
+        gap: 4px;
+        flex-wrap: nowrap;
+      }
+      nav.site-nav .doc-link {
+        text-align: left;
+        padding: 14px 16px;
+        border-radius: 10px;
+        font-size: 11px;
+        white-space: normal;
+        line-height: 1.35;
+      }
+      nav.site-nav .theme-toggle { margin-left: auto; flex-shrink: 0; }
+    }
+    @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+      nav.site-nav .nav-primary { transition: none; }
+      .site-nav .nav-backdrop { transition: none; }
+    }
 
     /* Sections */
     .section {
@@ -348,7 +508,11 @@
 
     /* Stats grid */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-bottom: 44px; }
+    .stats-grid.stats-cols-3 { grid-template-columns: repeat(3, 1fr); }
     @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) {
+      .stats-grid.stats-cols-3 { grid-template-columns: 1fr; }
+    }
     .stat-card { background: var(--surface); padding: 28px 24px; position: relative; overflow: hidden; }
     .stat-card{transition:transform .22s ease,background .22s ease;}
     .stat-card:hover{transform:translateY(-3px);background:var(--surface2);}
@@ -542,6 +706,11 @@
       display: grid;
       grid-template-columns: 88px 1fr;
       border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 480px) {
+      .tl-row { grid-template-columns: 72px 1fr; }
+      .tl-time { padding: 12px 8px; font-size: 10px; }
+      .tl-content { padding: 12px 12px; }
     }
     .tl-row:last-child { border-bottom: none; }
     .tl-time {
@@ -748,7 +917,10 @@
 
     /* Small tweaks */
     @media (max-width: 560px) {
-      h1.cover-title { font-size: 48px; }
+      h1.cover-title { font-size: clamp(36px, 11vw, 48px); }
+      .callout { flex-direction: column; padding: 20px 18px; }
+      .nav-item { padding: 12px 10px; font-size: 10px; }
+      .doc-link { padding: 8px 10px; font-size: 9px; }
     }
   </style>
 </head>
@@ -769,6 +941,7 @@
         <a class="btn primary" href="#problem">Start with the Problem →</a>
         <a class="btn ghost" href="#proof">See the Proof</a>
         <a class="btn ghost" href="#roadmap">View the Roadmap</a>
+        <a class="btn ghost" href="mockup/index.html" title="Interactive HTML mocks aligned with docs/DESIGN_RULES.md">Mobile mockups</a>
       </div>
     </div>
     <div class="cover-meta-strip">
@@ -781,20 +954,31 @@
   </div>
 
   <!-- STICKY NAV -->
-  <nav id="nav">
-    <a class="nav-item active" href="#problem">01 · Problem</a>
-    <a class="nav-item" href="#proof">02 · Proof</a>
-    <a class="nav-item" href="#day">03 · Before/After</a>
-    <a class="nav-item" href="#roadmap">04 · Roadmap</a>
-    <a class="nav-item" href="#model">05 · Model</a>
-    <a class="nav-item" href="#competition">06 · Competition</a>
-    <a class="nav-item" href="#cta">07 · Next</a>
-    <span class="nav-spacer"></span>
-    <div class="doc-switch" aria-label="Docs navigation">
-      <a class="doc-link active" href="index.html">Overview</a>
-      <a class="doc-link" href="pitch.html">Pitch</a>
-      <a class="doc-link" href="demand.html">Validation</a>
-      <a class="doc-link" href="plansheet.html">Spec</a>
+  <nav id="nav" class="site-nav">
+    <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="navPrimary" aria-label="Open menu">
+      <span class="nav-menu-icon" aria-hidden="true"><span></span></span>
+      Menu
+    </button>
+    <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+    <div class="nav-primary" id="navPrimary">
+      <p class="mobile-nav-label">On this page</p>
+      <a class="nav-item active" href="#problem">01 · Problem</a>
+      <a class="nav-item" href="#proof">02 · Proof</a>
+      <a class="nav-item" href="#day">03 · Before/After</a>
+      <a class="nav-item" href="#roadmap">04 · Roadmap</a>
+      <a class="nav-item" href="#model">05 · Model</a>
+      <a class="nav-item" href="#competition">06 · Competition</a>
+      <a class="nav-item" href="#cta">07 · Next</a>
+      <span class="nav-spacer"></span>
+      <p class="mobile-nav-label nav-doc-label">Documents</p>
+      <div class="doc-switch" aria-label="Docs navigation">
+        <a class="doc-link active" href="index.html">Overview</a>
+        <a class="doc-link" href="site/pitch.html">Pitch</a>
+        <a class="doc-link" href="site/demand.html">Validation</a>
+        <a class="doc-link" href="site/plansheet.html">Spec</a>
+        <a class="doc-link" href="mockup/index.html">Mockups</a>
+        <a class="doc-link" href="reference/index.html">Reference</a>
+      </div>
     </div>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">Theme</button>
   </nav>
@@ -850,7 +1034,7 @@
         <div>
           <div class="section-label">02 · Proof</div>
           <h2 class="section-title">Proof exists already —<br>we’re packaging it into a system.</h2>
-          <p class="section-desc">This page stays high-signal. The full evidence library lives in `demand.html`, and the full investor narrative lives in `pitch.html`.</p>
+          <p class="section-desc">This page stays high-signal. The full evidence library lives in <code>site/demand.html</code>, and the full investor narrative lives in <code>site/pitch.html</code>.</p>
         </div>
       </div>
 
@@ -862,7 +1046,7 @@
         </div>
       </div>
 
-      <div class="stats-grid fi" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px;">
+      <div class="stats-grid stats-cols-3 fi" style="margin-bottom:20px;">
         <div class="stat-card">
           <div class="stat-n">92%</div>
           <div class="stat-l">Pain is universal</div>
@@ -886,9 +1070,9 @@
           <div class="callout-title">Where to go next</div>
           <div class="callout-body">
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-              <a class="btn primary" href="demand.html">Open Validation Library →</a>
-              <a class="btn ghost" href="pitch.html">Open Investor Pitch</a>
-              <a class="btn ghost" href="plansheet.html">Open Master Spec</a>
+              <a class="btn primary" href="site/demand.html">Open Validation Library →</a>
+              <a class="btn ghost" href="site/pitch.html">Open Investor Pitch</a>
+              <a class="btn ghost" href="site/plansheet.html">Open Master Spec</a>
             </div>
           </div>
         </div>
@@ -1133,7 +1317,7 @@
         </div>
       </div>
 
-      <div class="stats-grid fi" style="grid-template-columns:repeat(3,1fr);">
+      <div class="stats-grid stats-cols-3 fi">
         <div class="stat-card">
           <div class="stat-n">$99</div>
           <div class="stat-l">Contractor Pro</div>
@@ -1253,10 +1437,10 @@
     <div class="cta-inner fi">
       <div class="section-label" style="justify-content:center;">07 · Next Step</div>
       <h2 class="cta-title">The market is screaming.<br>The playbook is <em>proven.</em></h2>
-      <p class="cta-sub">If you want the full build spec, jump to `plansheet.html`. If you want the full market validation report, jump to `demand.html`. This `index.html` is the combined, best-of-both narrative.</p>
+      <p class="cta-sub">If you want the full build spec, jump to <code>site/plansheet.html</code>. If you want the full market validation report, jump to <code>site/demand.html</code>. This overview is the combined, best-of-both narrative.</p>
       <div class="cover-actions" style="justify-content:center;margin:26px 0 0;">
-        <a class="btn primary" href="plansheet.html">Open Master Spec →</a>
-        <a class="btn ghost" href="demand.html">Open Validation Report</a>
+        <a class="btn primary" href="site/plansheet.html">Open Master Spec →</a>
+        <a class="btn ghost" href="site/demand.html">Open Validation Report</a>
         <a class="btn ghost" href="#top">Back to Top</a>
       </div>
       <div class="cta-note">Prepared for internal review · March 2026</div>
@@ -1291,6 +1475,30 @@
           syncLabel();
         });
       }
+    })();
+
+    (function () {
+      const nav = document.querySelector('.site-nav');
+      if (!nav) return;
+      const btn = document.getElementById('navMenuBtn');
+      const bd = document.getElementById('navBackdrop');
+      const primary = document.getElementById('navPrimary');
+      if (!btn || !primary) return;
+      function setOpen(open) {
+        document.body.classList.toggle('nav-open', open);
+        btn.setAttribute('aria-expanded', open);
+        btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+      btn.addEventListener('click', function () {
+        setOpen(!document.body.classList.contains('nav-open'));
+      });
+      if (bd) bd.addEventListener('click', function () { setOpen(false); });
+      primary.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { setOpen(false); });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setOpen(false);
+      });
     })();
 
     // Progress + back to top

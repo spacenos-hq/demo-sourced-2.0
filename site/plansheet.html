@@ -54,6 +54,7 @@ html[data-theme="light"] {
   --gold-border: rgba(212,168,67,.30);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
+img, video { max-width:100%; height:auto; }
 html { scroll-behavior: smooth; }
 body { font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--black); color:var(--white); overflow-x:hidden; line-height:1.6; }
 ::selection { background:var(--gold-dim); color:var(--gold2); }
@@ -164,9 +165,11 @@ h1.cover-title em { font-style:normal;color:var(--gold); font-weight:700; }
   background:rgba(11,12,14,.96);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border2);
-  padding:0 clamp(24px,6vw,80px);
+  padding:0 clamp(16px,4vw,80px);
+  padding-top:env(safe-area-inset-top,0);
   display:flex;align-items:center;gap:4px;
   overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
   scrollbar-width:none;
 }
 #nav .nav-spacer{flex:1;}
@@ -207,7 +210,7 @@ html[data-theme="light"] #nav{background:rgba(246,241,233,.92);}
 }
 .nav-item:hover::after{opacity:.6;transform:none;}
 #nav .doc-switch{
-  display:flex;align-items:center;gap:6px;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
   padding:6px;border-radius:999px;
   background:rgba(255,255,255,.03);
   border:1px solid var(--border2);
@@ -225,6 +228,76 @@ html[data-theme="light"] #nav .doc-switch{background:rgba(26,22,18,.03);}
 }
 #nav .doc-link:hover{background:var(--surface2);color:var(--white);border-color:var(--border2);}
 #nav .doc-link.active{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold2);}
+.site-nav .nav-menu-btn{
+  display:none;align-items:center;justify-content:center;gap:10px;
+  min-height:44px;padding:0 14px;margin-right:4px;border-radius:10px;
+  border:1px solid var(--border2);background:var(--surface);color:var(--mist2);
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;flex-shrink:0;
+}
+.site-nav .nav-menu-btn .nav-menu-icon{width:18px;height:14px;position:relative;display:block;flex-shrink:0;}
+.site-nav .nav-menu-btn .nav-menu-icon::before,
+.site-nav .nav-menu-btn .nav-menu-icon::after,
+.site-nav .nav-menu-btn .nav-menu-icon span{
+  position:absolute;left:0;right:0;height:2px;background:currentColor;border-radius:1px;
+  transition:transform .2s,opacity .2s;
+}
+.site-nav .nav-menu-btn .nav-menu-icon::before{content:'';top:0;}
+.site-nav .nav-menu-btn .nav-menu-icon span{top:6px;display:block;}
+.site-nav .nav-menu-btn .nav-menu-icon::after{content:'';bottom:0;}
+body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::before{transform:translateY(6px) rotate(45deg);}
+body.nav-open .site-nav .nav-menu-btn .nav-menu-icon span{opacity:0;}
+body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::after{transform:translateY(-6px) rotate(-45deg);}
+.site-nav .nav-backdrop{
+  display:none;position:fixed;left:0;right:0;bottom:0;
+  top:calc(48px + env(safe-area-inset-top,0px));z-index:198;
+  background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s ease;pointer-events:none;
+}
+body.nav-open .site-nav .nav-backdrop{opacity:1;pointer-events:auto;}
+.site-nav .nav-primary{display:contents;}
+.mobile-nav-label{
+  display:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--mist);padding:10px 18px 6px;margin:0;
+}
+.mobile-nav-label.nav-doc-label{padding-top:20px;}
+@media(max-width:768px){
+  body.nav-open{overflow:hidden;}
+  .site-nav .nav-menu-btn{display:inline-flex;}
+  .site-nav .nav-backdrop{display:block;}
+  nav.site-nav{
+    flex-wrap:nowrap;overflow:visible;padding:8px clamp(12px,4vw,24px);
+    min-height:48px;align-items:center;gap:8px;
+  }
+  nav.site-nav .nav-spacer{display:none;}
+  nav.site-nav .nav-primary{
+    display:flex;flex-direction:column;align-items:stretch;position:fixed;
+    left:0;right:auto;width:min(100%,360px);bottom:0;top:0;
+    padding-top:calc(52px + env(safe-area-inset-top,0px));
+    background:var(--surface);border-right:1px solid var(--border2);z-index:199;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:12px 0 40px rgba(0,0,0,.4);
+  }
+  body.nav-open nav.site-nav .nav-primary{transform:translateX(0);}
+  .mobile-nav-label{display:block;}
+  nav.site-nav .nav-item{
+    padding:16px 18px;font-size:12px;letter-spacing:.06em;white-space:normal;line-height:1.35;
+    border-bottom:1px solid var(--border);border-left:3px solid transparent;
+  }
+  nav.site-nav .nav-item.active{border-left-color:var(--gold);background:var(--gold-dim);}
+  nav.site-nav .doc-switch{
+    flex-direction:column;align-items:stretch;margin:0 12px 20px;padding:8px;
+    border-radius:12px;gap:4px;flex-wrap:nowrap;
+  }
+  nav.site-nav .doc-link{
+    text-align:left;padding:14px 16px;border-radius:10px;font-size:11px;white-space:normal;line-height:1.35;
+  }
+  nav.site-nav .theme-toggle{margin-left:auto;flex-shrink:0;}
+}
+@media(max-width:768px) and (prefers-reduced-motion:reduce){
+  nav.site-nav .nav-primary{transition:none;}
+  .site-nav .nav-backdrop{transition:none;}
+}
 
 /* ── SECTIONS ── */
 .section {
@@ -456,7 +529,8 @@ h2.section-title {
 @media(max-width:700px){.data-row{grid-template-columns:1fr;gap:4px;}.data-type{display:inline;}}
 
 /* ── PHASING TABLE ── */
-.phase-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.phase-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r2);}
+.phase-table{min-width:720px;width:100%;border-collapse:collapse;margin-top:8px;}
 .phase-table th{
   font-family:'DM Mono',monospace;font-size:10px;
   letter-spacing:.14em;text-transform:uppercase;
@@ -512,7 +586,7 @@ h2.section-title {
 .risk-mitigation{font-size:12px;color:var(--teal);margin-top:5px;}
 
 /* ── COMPARISON TABLE ── */
-.comp-table{width:100%;border-collapse:collapse;}
+.comp-table{min-width:640px;width:100%;border-collapse:collapse;}
 .comp-table th{
   font-family:'DM Mono',monospace;font-size:9.5px;
   letter-spacing:.14em;text-transform:uppercase;
@@ -549,7 +623,10 @@ h2.section-title {
 
 /* ── BACK TO TOP ── */
 #btt{
-  position:fixed;bottom:28px;right:28px;z-index:100;
+  position:fixed;
+  bottom:max(16px,env(safe-area-inset-bottom,16px));
+  right:max(16px,env(safe-area-inset-right,16px));
+  z-index:100;
   width:40px;height:40px;border-radius:8px;
   background:var(--surface);border:1px solid var(--border2);
   color:var(--mist);font-size:16px;
@@ -559,11 +636,20 @@ h2.section-title {
 #btt.show{opacity:1;pointer-events:auto;}
 #btt:hover{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold);}
 
+/* phase cost summary row */
+.phase-cost-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;}
+@media(max-width:720px){.phase-cost-row{grid-template-columns:1fr;}}
+
 /* responsive */
 @media(max-width:560px){
   .fc-header{flex-direction:column;align-items:flex-start;gap:10px;}
   .fc-badges{display:none;}
-  h1.cover-title{font-size:48px;}
+  h1.cover-title{font-size:clamp(36px,11vw,48px);}
+  .nav-item{padding:12px 10px;font-size:10px;}
+  #nav .doc-link{padding:8px 10px;font-size:9px;}
+  .pitch-slide{padding:22px 18px;}
+  .phase-table th,.phase-table td{padding:10px 12px;font-size:12.5px;}
+  .callout{flex-direction:column;padding:20px 18px;}
 }
 </style>
 </head>
@@ -596,19 +682,30 @@ h2.section-title {
 <!-- ═══════════════════════════════════════
      STICKY NAV
 ═══════════════════════════════════════ -->
-<nav id="nav">
-  <a class="nav-item active" href="#roadmap">01 · Roadmap</a>
-  <a class="nav-item" href="#pitch">02 · Investor Pitch</a>
-  <a class="nav-item" href="#admin">03 · Admin &amp; Data</a>
-  <a class="nav-item" href="#competition">04 · Competition</a>
-  <a class="nav-item" href="#risks">05 · Risks</a>
-  <a class="nav-item" href="#phasing">06 · Build Order</a>
-  <span class="nav-spacer"></span>
-  <div class="doc-switch" aria-label="Docs navigation">
-    <a class="doc-link" href="index.html">Overview</a>
-    <a class="doc-link" href="pitch.html">Pitch</a>
-    <a class="doc-link" href="demand.html">Validation</a>
-    <a class="doc-link active" href="plansheet.html">Spec</a>
+<nav id="nav" class="site-nav">
+  <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="navPrimary" aria-label="Open menu">
+    <span class="nav-menu-icon" aria-hidden="true"><span></span></span>
+    Menu
+  </button>
+  <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+  <div class="nav-primary" id="navPrimary">
+    <p class="mobile-nav-label">On this page</p>
+    <a class="nav-item active" href="#roadmap">01 · Roadmap</a>
+    <a class="nav-item" href="#pitch">02 · Investor Pitch</a>
+    <a class="nav-item" href="#admin">03 · Admin &amp; Data</a>
+    <a class="nav-item" href="#competition">04 · Competition</a>
+    <a class="nav-item" href="#risks">05 · Risks</a>
+    <a class="nav-item" href="#phasing">06 · Build Order</a>
+    <span class="nav-spacer"></span>
+    <p class="mobile-nav-label nav-doc-label">Documents</p>
+    <div class="doc-switch" aria-label="Docs navigation">
+      <a class="doc-link" href="../index.html">Overview</a>
+      <a class="doc-link" href="pitch.html">Pitch</a>
+      <a class="doc-link" href="demand.html">Validation</a>
+      <a class="doc-link active" href="plansheet.html">Spec</a>
+      <a class="doc-link" href="../mockup/index.html">Mockups</a>
+      <a class="doc-link" href="../reference/index.html">Reference</a>
+    </div>
   </div>
   <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">Theme</button>
 </nav>
@@ -1005,7 +1102,7 @@ h2.section-title {
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
         <a class="nav-item" href="pitch.html" style="border-bottom:none;padding:10px 12px;border-radius:10px;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold2);">Open Pitch →</a>
         <a class="nav-item" href="demand.html" style="border-bottom:none;padding:10px 12px;border-radius:10px;background:var(--surface3);border:1px solid var(--border2);color:var(--mist2);">Open Validation Library</a>
-        <a class="nav-item" href="index.html" style="border-bottom:none;padding:10px 12px;border-radius:10px;background:transparent;border:1px solid var(--border2);color:var(--mist2);">Open Overview</a>
+        <a class="nav-item" href="../index.html" style="border-bottom:none;padding:10px 12px;border-radius:10px;background:transparent;border:1px solid var(--border2);color:var(--mist2);">Open Overview</a>
       </div>
     </div>
   </div>
@@ -1254,7 +1351,7 @@ h2.section-title {
     </div>
   </div>
 
-  <div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r2);" class="fade-in">
+  <div class="phase-table-wrap fade-in" style="border:1px solid var(--border);">
     <table class="phase-table">
       <thead>
         <tr>
@@ -1359,7 +1456,7 @@ h2.section-title {
     </table>
   </div>
 
-  <div style="margin-top:32px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" class="fade-in">
+  <div class="phase-cost-row fade-in">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;">
       <div style="font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--mist);margin-bottom:12px;text-transform:uppercase;">Phase 1 Total</div>
       <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--gold2);">$24–28K</div>
@@ -1400,6 +1497,22 @@ h2.section-title {
     localStorage.setItem('dibbs_theme',next);
     sync();
   });
+})();
+
+(function(){
+  const btn=document.getElementById('navMenuBtn');
+  const bd=document.getElementById('navBackdrop');
+  const primary=document.getElementById('navPrimary');
+  if(!btn||!primary)return;
+  function setOpen(o){
+    document.body.classList.toggle('nav-open',o);
+    btn.setAttribute('aria-expanded',o);
+    btn.setAttribute('aria-label',o?'Close menu':'Open menu');
+  }
+  btn.addEventListener('click',()=>setOpen(!document.body.classList.contains('nav-open')));
+  if(bd)bd.addEventListener('click',()=>setOpen(false));
+  primary.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false);});
 })();
 
 // Progress bar

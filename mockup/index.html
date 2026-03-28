@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex" />
+  <meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex" />
+  <meta name="bingbot" content="noindex,nofollow,noarchive,nosnippet,noimageindex" />
+  <title>Sourced — Mobile mockups · Screen map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+
+  <div class="catalog-shell">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+
+    <header class="catalog-top">
+      <div class="catalog-inner">
+        <div class="catalog-mockup-bar catalog-mockup-bar--embed">
+          <nav class="catalog-doc-switch" aria-label="Site navigation">
+            <a class="catalog-doc-link" href="../index.html">Overview</a>
+            <a class="catalog-doc-link is-active" href="index.html">Screen map</a>
+            <a class="catalog-doc-link" href="app.html#splash">App</a>
+            <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+            <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+            <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+            <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+          </nav>
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+        </div>
+        <div class="cover-eyebrow">Sourced by Dibbs 2.0 · Client walkthrough</div>
+        <div class="catalog-head">
+          <div>
+            <span class="tag">UX prompts 1–15 · CFUX-∞</span>
+            <h1 class="catalog-title">Mobile <em>screen map</em></h1>
+          </div>
+        </div>
+        <p class="lede">
+          Static HTML mocks implement the <strong>copy / flow / IA</strong> from the Cursor UX prompts (splash → onboarding → role → signup → first-requirement wizard → dashboard → posting → live status → bids → order → savings → notifications → settings), plus the <strong>voice RFQ demo loop</strong> (outreach → split table). <strong>Client walkthrough:</strong> open <a class="link-teal" href="app.html#splash"><code>app.html</code></a> for a hash-routed single-page flow (<code>#onboard</code>, <code>#home</code>, <code>#compare</code>, …). In-device chrome follows <a class="link-teal" href="../docs/DESIGN_RULES.md">docs/DESIGN_RULES.md</a> (Syne / Inter / DM Mono, gold accents). Open any row below to jump into the app, or open a standalone <code>.html</code> file. Use <code>css/flows.css</code> for onboarding, forms, dashboard shells, timelines. <strong>Maps</strong> use <a class="link-teal" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> + CARTO dark tiles (<code>css/maps.css</code>, <code>js/mockup-maps.js</code>). Every screen shares this catalog chrome via <code>css/catalog-shell.css</code>.
+        </p>
+        <div class="nav-row">
+          <a class="btn primary" href="app.html#splash">Splash → onboarding →</a>
+          <a class="btn ghost" href="app.html#onboard">Onboarding only</a>
+          <a class="btn ghost" href="app.html#home">Dashboard</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="catalog-main">
+      <div class="catalog-inner">
+
+        <div class="table-block">
+          <p class="section-label">Prompts 1–4 · Entry &amp; activation</p>
+          <div class="table-scroll" role="region" aria-label="Screens table 1" tabindex="0">
+            <table class="mock-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Screen</th>
+                  <th class="cfux">P</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="location.href='app.html#splash'"><td>—</td><td>Splash</td><td class="cfux">1</td><td>Logo + “Procurement on autopilot” · auto-advance 1.8s → onboarding</td></tr>
+                <tr onclick="location.href='app.html#onboard'"><td>—</td><td>Onboarding</td><td class="cfux">1</td><td>3 slides · <strong style="color:var(--catalog-ui-white);font-weight:600;">CSS motion illos</strong> (site/phone/bids · AI→suppliers · savings) · dots · Skip · Get Started</td></tr>
+                <tr onclick="location.href='app.html#role-select'"><td>—</td><td>Role select</td><td class="cfux">2</td><td>Contractor vs Supplier cards · Continue</td></tr>
+                <tr onclick="location.href='app.html#signup-contractor'"><td>—</td><td>Sign up · step 1</td><td class="cfux">3</td><td>Google + 4 fields · inline validation mock</td></tr>
+                <tr onclick="location.href='app.html#signup-contractor-2'"><td>—</td><td>Sign up · step 2</td><td class="cfux">3</td><td>Password · strength · Create Account → wizard</td></tr>
+                <tr onclick="location.href='app.html#signup-supplier'"><td>—</td><td>Supplier sign up</td><td class="cfux">—</td><td>Stub → supplier dashboard</td></tr>
+                <tr onclick="location.href='app.html#wizard-welcome'"><td>—</td><td>Wizard welcome</td><td class="cfux">4</td><td>Animated AI power-up · Post first requirement / skip</td></tr>
+                <tr onclick="location.href='app.html#wizard-req-1'"><td>—</td><td>Wizard · material</td><td class="cfux">4</td><td>Chips · qty · units</td></tr>
+                <tr onclick="location.href='app.html#wizard-req-2'"><td>—</td><td>Wizard · delivery</td><td class="cfux">4</td><td>Date · address · live map · Post Requirement</td></tr>
+                <tr onclick="location.href='app.html#wizard-ai-handoff'"><td>—</td><td>AI handoff</td><td class="cfux">4</td><td>Live clock · <strong style="color:var(--catalog-ui-white);font-weight:600;">real map</strong> · agent cards · terminal log · Dashboard</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-block">
+          <p class="section-label">Prompts 5–9 · Contractor core + demo loop</p>
+          <div class="table-scroll" role="region" aria-label="Screens table 2" tabindex="0">
+            <table class="mock-table">
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>Screen</th>
+                  <th class="cfux">P</th>
+                  <th>What you see</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="location.href='app.html#home'"><td>—</td><td>Home dashboard</td><td class="cfux">5</td><td>Banner · stats · reqs · map chip · bids · activity · savings · tabs</td></tr>
+                <tr onclick="location.href='app.html#new-rfq'"><td>03</td><td>New requirement</td><td class="cfux">6</td><td>Cancel / Save · steps · voice + parsed RFQ (demo)</td></tr>
+                <tr onclick="location.href='app.html#outreach'"><td>04</td><td>Outreach</td><td class="cfux">—</td><td>Discovery ladder · <strong style="color:var(--catalog-ui-white);font-weight:600;">live coverage map</strong> (OSM)</td></tr>
+                <tr onclick="location.href='app.html#tracker'"><td>05</td><td>AI Working</td><td class="cfux">7</td><td>Hero · map · timeline · agents · View bids</td></tr>
+                <tr onclick="location.href='app.html#compare'"><td>06</td><td>Bid comparison</td><td class="cfux">8</td><td>Context bar · AI callout · split table</td></tr>
+                <tr onclick="location.href='app.html#confirm'"><td>07</td><td>Confirm order</td><td class="cfux">8–9</td><td>Sheet-style summary (demo)</td></tr>
+                <tr onclick="location.href='app.html#success'"><td>08</td><td>Order confirmed</td><td class="cfux">9</td><td>Savings hero · referral · next requirement</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-block">
+          <p class="section-label">Prompts 10–15 · Supplier &amp; account</p>
+          <div class="table-scroll" role="region" aria-label="Screens table 3" tabindex="0">
+            <table class="mock-table">
+              <thead>
+                <tr>
+                  <th>—</th>
+                  <th>Screen</th>
+                  <th class="cfux">P</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="location.href='app.html#supplier-dashboard'"><td>—</td><td>Supplier home</td><td class="cfux">10</td><td>Open requests · my bids · wins · tabs</td></tr>
+                <tr onclick="location.href='app.html#supplier-bid-submit'"><td>—</td><td>Submit bid</td><td class="cfux">11</td><td>Requirement card · market intel · price · validity</td></tr>
+                <tr onclick="location.href='app.html#order-tracking'"><td>—</td><td>Order tracking</td><td class="cfux">12</td><td>Map · timeline · supplier contact</td></tr>
+                <tr onclick="location.href='app.html#savings-report'"><td>—</td><td>Savings report</td><td class="cfux">13</td><td>Period · chart · categories · insight</td></tr>
+                <tr onclick="location.href='app.html#notifications'"><td>—</td><td>Notifications</td><td class="cfux">14</td><td>Grouped list · filters</td></tr>
+                <tr onclick="location.href='app.html#settings-account'"><td>—</td><td>Account</td><td class="cfux">15</td><td>Profile · subscription · toggles · sign out</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="guide-foot">
+          <strong>Recommended path (app):</strong> <code>app.html#splash</code> → <code>#onboard</code> → <code>#role-select</code> → <code>#signup-contractor</code> → <code>#wizard-*</code> → <code>#home</code>. <strong>Demo loop:</strong> <code>#home</code> → <code>#new-rfq</code> → <code>#outreach</code> → <code>#tracker</code> → <code>#compare</code> → <code>#confirm</code> → <code>#success</code>. Outer chrome matches the repo <strong>overview</strong> (<code>../index.html</code>): same gold tokens, grid, doc switcher, theme, progress bar via <code>css/catalog-shell.css</code>. Phone UI uses <code>css/shared.css</code>. Sales docs in <code>../site/</code>; reference hub <code>../reference/index.html</code>; UX framework <code>reference/sourced-ux-framework.html</code>.
+        </p>
+      </div>
+    </main>
+
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mockup catalog · March 2026 · <a href="../index.html">Main overview</a></div>
+    </footer>
+  </div>
+
+  <script src="js/catalog-shell.js"></script>
+</body>
+</html>

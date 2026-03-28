@@ -63,6 +63,7 @@ html[data-theme="light"]{
   --gold-border: rgba(212,168,67,.30);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
+img, video { max-width:100%; height:auto; }
 html { scroll-behavior:smooth; }
 body {
   font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -135,10 +136,14 @@ body {
 /* ── DATELINE STRIP ── */
 .dateline-strip {
   background:var(--surface);
-  padding:12px clamp(20px,6vw,80px);
-  display:flex;gap:32px;align-items:center;
+  padding:12px clamp(16px,4vw,80px);
+  display:flex;gap:20px 32px;align-items:center;
   flex-wrap:wrap;
   border-bottom:1px solid var(--border2);
+}
+@media(max-width:768px){
+  .dateline-strip{flex-direction:column;align-items:stretch;}
+  .dl-links{margin-left:0;width:100%;justify-content:flex-start;}
 }
 .dl-item {
   font-family:'DM Mono',monospace;
@@ -151,7 +156,7 @@ body {
 /* nav links + theme */
 .dl-links{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .doc-switch{
-  display:flex;align-items:center;gap:6px;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
   padding:6px;border-radius:999px;
   background:rgba(255,255,255,.03);
   border:1px solid var(--border2);
@@ -184,6 +189,72 @@ html[data-theme="light"] .doc-switch{background:rgba(26,22,18,.03);}
 .theme-toggle:hover{border-color:var(--border2);color:var(--white);background:var(--surface2);}
 .theme-toggle{will-change:transform;}
 .theme-toggle:hover{transform:translateY(-1px);}
+
+/* Mobile doc menu (hamburger + drawer) */
+.site-nav .nav-menu-btn{
+  display:none;align-items:center;justify-content:center;gap:10px;
+  min-height:44px;padding:0 14px;margin-right:4px;border-radius:10px;
+  border:1px solid var(--border2);background:var(--surface);color:var(--mist2);
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;flex-shrink:0;
+}
+.site-nav .nav-menu-btn .nav-menu-icon{width:18px;height:14px;position:relative;display:block;flex-shrink:0;}
+.site-nav .nav-menu-btn .nav-menu-icon::before,
+.site-nav .nav-menu-btn .nav-menu-icon::after,
+.site-nav .nav-menu-btn .nav-menu-icon span{
+  position:absolute;left:0;right:0;height:2px;background:currentColor;border-radius:1px;
+  transition:transform .2s,opacity .2s;
+}
+.site-nav .nav-menu-btn .nav-menu-icon::before{content:'';top:0;}
+.site-nav .nav-menu-btn .nav-menu-icon span{top:6px;display:block;}
+.site-nav .nav-menu-btn .nav-menu-icon::after{content:'';bottom:0;}
+body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::before{transform:translateY(6px) rotate(45deg);}
+body.nav-open .site-nav .nav-menu-btn .nav-menu-icon span{opacity:0;}
+body.nav-open .site-nav .nav-menu-btn .nav-menu-icon::after{transform:translateY(-6px) rotate(-45deg);}
+.site-nav .nav-backdrop{
+  display:none;position:fixed;left:0;right:0;bottom:0;
+  top:calc(48px + env(safe-area-inset-top,0px));z-index:198;
+  background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s ease;pointer-events:none;
+}
+body.nav-open .site-nav .nav-backdrop{opacity:1;pointer-events:auto;}
+.site-nav .nav-primary{display:contents;}
+.mobile-nav-label{
+  display:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);padding:10px 18px 6px;margin:0;
+}
+@media(max-width:768px){
+  body.nav-open{overflow:hidden;}
+  .site-nav .nav-menu-btn{display:inline-flex;}
+  .site-nav .nav-backdrop{display:block;}
+  .dl-links.site-nav{
+    flex-wrap:nowrap;width:100%;margin-left:0;
+    padding:8px 0 4px;align-items:center;gap:8px;
+  }
+  .dl-links.site-nav .nav-primary{
+    display:flex;flex-direction:column;align-items:stretch;position:fixed;
+    left:0;right:auto;width:min(100%,360px);bottom:0;top:0;
+    padding-top:calc(52px + env(safe-area-inset-top,0px));
+    background:var(--surface);border-right:1px solid var(--border2);z-index:199;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:12px 0 40px rgba(0,0,0,.4);
+  }
+  body.nav-open .dl-links.site-nav .nav-primary{transform:translateX(0);}
+  .mobile-nav-label{display:block;}
+  .dl-links.site-nav .doc-switch{
+    flex-direction:column;align-items:stretch;margin:0 12px 20px;padding:8px;
+    border-radius:12px;gap:4px;flex-wrap:nowrap;
+  }
+  .dl-links.site-nav .doc-switch .dl-a{
+    text-align:left;padding:14px 16px;border-radius:10px;font-size:11px;
+    white-space:normal;line-height:1.35;
+  }
+  .dl-links.site-nav .theme-toggle{margin-left:auto;flex-shrink:0;}
+}
+@media(max-width:768px) and (prefers-reduced-motion:reduce){
+  .dl-links.site-nav .nav-primary{transition:none;}
+  .site-nav .nav-backdrop{transition:none;}
+}
 
 /* ── LAYOUT ── */
 .page {
@@ -429,7 +500,7 @@ html[data-theme="light"] .doc-switch{background:rgba(26,22,18,.03);}
 
 /* ── COMPARISON TABLE ── */
 .comp-wrap{overflow-x:auto;border:2px solid var(--ink);border-radius:var(--r);}
-.comp-table{width:100%;border-collapse:collapse;}
+.comp-table{min-width:640px;width:100%;border-collapse:collapse;}
 .comp-table th {
   font-family:'IBM Plex Mono',monospace;font-size:9.5px;
   letter-spacing:.14em;text-transform:uppercase;
@@ -719,6 +790,21 @@ footer{
 footer{background:var(--black);border-top:1px solid var(--border2);}
 .footer-logo{font-family:'Syne',sans-serif;color:var(--gold);}
 .footer-note{font-family:'DM Mono',monospace;color:var(--mist);}
+
+.compare-timelines{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px;}
+@media(max-width:768px){.compare-timelines{grid-template-columns:1fr;}}
+.why-now-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px;}
+@media(max-width:768px){.why-now-grid{grid-template-columns:1fr;}}
+.options-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:48px;}
+@media(max-width:900px){.options-row{grid-template-columns:1fr;}}
+@media(max-width:700px){
+  .hero-stats .hstat:nth-child(2n){border-right:none;}
+}
+@media(max-width:560px){
+  .masthead-title{font-size:clamp(32px,9vw,44px);}
+  .section-rule h2{font-size:clamp(18px,5vw,24px);}
+  .pullquote blockquote{font-size:clamp(16px,4.5vw,22px);}
+}
 </style>
 </head>
 <body>
@@ -738,12 +824,22 @@ footer{background:var(--black);border-top:1px solid var(--border2);}
   <div class="dl-item">Market <strong>$2 Trillion US Construction</strong></div>
   <div class="dl-item">Problem <strong>Procurement & Sourcing</strong></div>
   <div class="dl-item">Verdict <strong>Unserved. Urgent. Now.</strong></div>
-  <div class="dl-links">
-    <div class="doc-switch" aria-label="Docs navigation">
-      <a class="dl-a" href="index.html">Overview</a>
-      <a class="dl-a" href="pitch.html">Pitch</a>
-      <a class="dl-a active" href="demand.html">Validation</a>
-      <a class="dl-a" href="plansheet.html">Spec</a>
+  <div class="dl-links site-nav">
+    <button type="button" class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="navPrimary" aria-label="Open menu">
+      <span class="nav-menu-icon" aria-hidden="true"><span></span></span>
+      Menu
+    </button>
+    <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+    <div class="nav-primary" id="navPrimary">
+      <p class="mobile-nav-label">Documents</p>
+      <div class="doc-switch" aria-label="Docs navigation">
+        <a class="dl-a" href="../index.html">Overview</a>
+        <a class="dl-a" href="pitch.html">Pitch</a>
+        <a class="dl-a active" href="demand.html">Validation</a>
+        <a class="dl-a" href="plansheet.html">Spec</a>
+        <a class="dl-a" href="../mockup/index.html">Mockups</a>
+        <a class="dl-a" href="../reference/index.html">Reference</a>
+      </div>
     </div>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
@@ -981,7 +1077,7 @@ footer{background:var(--black);border-top:1px solid var(--border2);}
     <span class="section-tag">What today looks like vs. what's possible</span>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px;" class="fi">
+  <div class="compare-timelines fi">
     <div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);padding:10px 0;border-bottom:2px solid var(--red);margin-bottom:0;">Today — The Old Way</div>
       <div class="timeline">
@@ -1042,7 +1138,7 @@ footer{background:var(--black);border-top:1px solid var(--border2);}
     <span class="section-tag">Market timing · Technology maturity · Competitive window</span>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px;" class="fi">
+  <div class="why-now-grid fi">
     <div class="data-callout">
       <div class="dc-label">🤖 AI Voice Agents — Now Ready</div>
       <div class="dc-title">The phone call problem is solved</div>
@@ -1124,7 +1220,7 @@ footer{background:var(--black);border-top:1px solid var(--border2);}
     <span class="section-tag">De-risked · Phase-gated · Sprint-by-sprint commitment</span>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:48px;" class="fi">
+  <div class="options-row fi">
     <div class="data-callout green">
       <div class="dc-label">Option 01 · Lowest Risk</div>
       <div class="dc-title">The Validation Sprint</div>
@@ -1175,6 +1271,22 @@ footer{background:var(--black);border-top:1px solid var(--border2);}
     localStorage.setItem('dibbs_theme',next);
     sync();
   });
+})();
+
+(function(){
+  const btn=document.getElementById('navMenuBtn');
+  const bd=document.getElementById('navBackdrop');
+  const primary=document.getElementById('navPrimary');
+  if(!btn||!primary)return;
+  function setOpen(o){
+    document.body.classList.toggle('nav-open',o);
+    btn.setAttribute('aria-expanded',o);
+    btn.setAttribute('aria-label',o?'Close menu':'Open menu');
+  }
+  btn.addEventListener('click',()=>setOpen(!document.body.classList.contains('nav-open')));
+  if(bd)bd.addEventListener('click',()=>setOpen(false));
+  primary.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setOpen(false)));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false);});
 })();
 
 // Progress bar

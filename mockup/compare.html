@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Sourced — Compare bids (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/catalog-shell.css" />
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/flows.css" />
+  <style>
+    .bid-table-wrap {
+      overflow-x: auto;
+      margin: 0 -4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .bid-table {
+      width: 100%;
+      min-width: 300px;
+      border-collapse: collapse;
+      font-size: 10px;
+    }
+    .bid-table th {
+      font-family: "DM Mono", monospace;
+      font-size: 7px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-align: left;
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border2);
+      background: var(--surface2);
+    }
+    .bid-table th:not(:first-child) { text-align: right; }
+    .bid-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+      color: var(--mist2);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+    .bid-table td:first-child {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--heading);
+    }
+    .bid-table td:not(:first-child) { text-align: right; }
+    .bid-table tr.split td {
+      background: var(--ux-green-dim);
+      color: var(--heading);
+      font-weight: 600;
+    }
+    .bid-table tr.split td:first-child {
+      border-left: 2px solid var(--ux-green);
+      padding-left: 8px;
+    }
+    .save-banner {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--ux-green-border);
+      background: var(--ux-green-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .save-banner strong {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ux-green);
+    }
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--ux-green-border);
+      background: var(--ux-green-dim);
+      color: var(--ux-green);
+      margin-bottom: 10px;
+    }
+    .expiry-line {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ux-amber);
+      margin: 8px 0 0;
+    }
+    .not-ready {
+      font-size: 11px;
+      color: var(--mist);
+      margin-top: 12px;
+      text-align: center;
+    }
+    .ctx-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      margin: 0 0 10px;
+      border-radius: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--mist2);
+    }
+  </style>
+</head>
+<body class="catalog-body">
+  <div id="doc-progress" aria-hidden="true"></div>
+  <div class="catalog-shell catalog-shell--mockup">
+    <div class="catalog-noise" aria-hidden="true"></div>
+    <div class="catalog-grid" aria-hidden="true"></div>
+    <header class="catalog-top catalog-top--compact">
+      <div class="catalog-inner catalog-mockup-bar">
+        <nav class="catalog-doc-switch" aria-label="Site navigation">
+          <a class="catalog-doc-link" href="../index.html">Overview</a>
+          <a class="catalog-doc-link" href="index.html">Screen map</a>
+          <a class="catalog-doc-link" href="../site/pitch.html">Pitch</a>
+          <a class="catalog-doc-link" href="../site/demand.html">Validation</a>
+          <a class="catalog-doc-link" href="../site/plansheet.html">Spec</a>
+          <a class="catalog-doc-link" href="../reference/index.html">Reference</a>
+        </nav>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light or dark theme">Theme</button>
+      </div>
+    </header>
+    <main class="catalog-main catalog-main--mockup">
+      <div class="mockup-page mockup-page--in-shell">
+  <p class="mockup-label">Prompt 8 · Bid comparison (table + AI callout)</p>
+
+  <div class="device" aria-label="Phone frame">
+    <div class="device__inner">
+      <div class="device__notch" aria-hidden="true"></div>
+      <div class="device__screen device__screen--design-rules">
+        <div class="screen">
+          <div class="screen__status">
+            <span>9:41</span>
+            <span class="screen__status-icons">●●●</span>
+          </div>
+          <header class="app-header">
+            <a class="app-header__back" href="tracker.html" aria-label="Back">←</a>
+            <div class="app-header__mid">
+              <p class="app-header__title">4 Bids Ready</p>
+              <p class="app-header__sub">¾″ EMT · 500 ft · Apr 4</p>
+            </div>
+            <div class="app-header__step" style="color:var(--ux-amber)">Expires<br /><span style="color:var(--ux-amber)" data-mock-mmss-down>17:44</span></div>
+          </header>
+
+          <div class="screen__scroll">
+            <div class="ctx-bar">
+              <span>500ft ¾″ EMT · Apr 4</span>
+              <span style="font-family:var(--font-mono);font-size:9px;color:var(--ux-green)">Mkt avg $4.62/ft</span>
+            </div>
+            <div class="ai-callout mock-ai-callout-live">
+              <strong>AI recommends Cranston Building Supply</strong> — 14.5% below market<br />
+              <span style="font-size:12px;color:var(--mist2)">Ranked by price, delivery speed, and 142-order track record.</span><br />
+              <a href="order-tracking.html">Why this? →</a>
+            </div>
+            <span class="ai-badge" aria-hidden="true">◈ AI RECOMMENDED row in table</span>
+            <p class="app-p" style="font-size:12px;margin-top:4px">Scannable in 30s — split mix beats any single supplier after negotiation.</p>
+            <p class="expiry-line">Top bid expires in 18h 44m · Not ready? Bids saved 24h.</p>
+
+            <p class="app-eyebrow">Line items</p>
+            <div class="app-card" style="padding:10px 12px">
+              <div class="bid-table-wrap">
+                <table class="bid-table compare-live-table">
+                  <thead>
+                    <tr>
+                      <th>Supplier</th>
+                      <th>Ply</th>
+                      <th>Joist</th>
+                      <th>Hdw</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Atlas</td>
+                      <td>$1,820</td>
+                      <td>$960</td>
+                      <td>$280</td>
+                      <td>$3,060</td>
+                    </tr>
+                    <tr>
+                      <td>NE Bldg</td>
+                      <td>$1,650</td>
+                      <td>$1,080</td>
+                      <td>$310</td>
+                      <td>$3,040</td>
+                    </tr>
+                    <tr>
+                      <td>Metro</td>
+                      <td>$1,940</td>
+                      <td>$880</td>
+                      <td>$260</td>
+                      <td>$3,080</td>
+                    </tr>
+                    <tr>
+                      <td>Prov. Hdw</td>
+                      <td>$1,710</td>
+                      <td>$1,020</td>
+                      <td>$295</td>
+                      <td>$3,025</td>
+                    </tr>
+                    <tr class="split">
+                      <td>✦ Best Value · AI split</td>
+                      <td>NE</td>
+                      <td>Metro</td>
+                      <td>Metro</td>
+                      <td>$2,790</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="save-banner mock-save-reveal">
+              <div>
+                <p class="app-card__meta" style="margin-bottom:2px;color:var(--ux-green)">You save vs. market average</p>
+                <p style="font-size:11px;color:var(--mist2);margin:0">Pre-computed — no mental math</p>
+              </div>
+              <strong>−$235</strong>
+            </div>
+            <p class="not-ready">Not ready? Bids are saved for 24 hours.</p>
+          </div>
+
+          <div class="app-actions">
+            <a href="confirm.html" class="btn btn--primary">Accept This Bid</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flow-strip" aria-label="Mockup flow navigation">
+    <a class="flow-strip__btn" href="tracker.html">← Prev</a>
+    <div class="flow-strip__step"><span class="flow-strip__index">06 · Compare</span>CFUX 09</div>
+    <a class="flow-strip__btn flow-strip__btn--primary" href="confirm.html">Next →</a>
+  </nav>
+  <p class="catalog-link"><a href="index.html">All screens &amp; flow</a></p>
+      </div>
+    </main>
+    <footer class="doc-footer">
+      <div class="doc-footer-logo">Sourced · Dibbs 2.0</div>
+      <div class="doc-footer-note">Mobile mockup · <a href="index.html">Screen map</a></div>
+    </footer>
+  </div>
+  <script src="js/catalog-shell.js"></script>
+</body>
+</html>
