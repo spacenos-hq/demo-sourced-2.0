@@ -123,6 +123,12 @@
       }
 
       window.scrollTo(0, 0);
+      requestAnimationFrame(function () {
+        window.dispatchEvent(new Event("resize"));
+      });
+      setTimeout(function () {
+        window.dispatchEvent(new Event("resize"));
+      }, 200);
     }).catch(function () {
       outlet.innerHTML =
         '<p class="mockup-label" style="padding:24px">Could not load screen. Serve the mockup folder over HTTP (not file://).</p>';
